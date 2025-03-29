@@ -1,0 +1,17 @@
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\bin\Debug\net8.0-windows\LTI_Mikrotik.exe
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\bin\Debug\net8.0-windows\LTI_Mikrotik.deps.json
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\bin\Debug\net8.0-windows\LTI_Mikrotik.runtimeconfig.json
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\bin\Debug\net8.0-windows\LTI_Mikrotik.dll
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\bin\Debug\net8.0-windows\LTI_Mikrotik.pdb
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikrotik.Form1.resources
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikrotik.csproj.GenerateResource.cache
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikrotik.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikrotik.AssemblyInfoInputs.cache
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikrotik.AssemblyInfo.cs
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikrotik.csproj.CoreCompileInputs.cache
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikrotik.sourcelink.json
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikrotik.dll
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\refint\LTI_Mikrotik.dll
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikrotik.pdb
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikrotik.genruntimeconfig.cache
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\ref\LTI_Mikrotik.dll
