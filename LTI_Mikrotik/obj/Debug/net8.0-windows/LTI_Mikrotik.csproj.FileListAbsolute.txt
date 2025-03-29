@@ -15,3 +15,6 @@ C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\re
 C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikrotik.pdb
 C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikrotik.genruntimeconfig.cache
 C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\ref\LTI_Mikrotik.dll
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\bin\Debug\net8.0-windows\Newtonsoft.Json.dll
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikrotik.csproj.AssemblyReference.cache
+C:\Users\joaom\Documents\GitHub\LTI-TL1\LTI_Mikrotik\obj\Debug\net8.0-windows\LTI_Mikr.A932C3FF.Up2Date

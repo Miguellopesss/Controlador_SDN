@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "5WQWP0FoiWM=",
+  "dgSpecHash": "dSx431q6ve0=",
   "success": true,
   "projectFilePath": "C:\\Users\\joaom\\Documents\\GitHub\\LTI-TL1\\LTI_Mikrotik\\LTI_Mikrotik.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\joaom\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
   "logs": []
 }
