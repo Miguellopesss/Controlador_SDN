@@ -17,7 +17,7 @@ o Ativar/desativar/configurar redes wireless ☑
 
 o Listar/criar/editar/apagar rotas estáticas ☑
 
-o Listar/criar/editar/apagar endereços IP
+o Listar/criar/editar/apagar endereços IP ☑
 
 o Listar/criar/editar/apagar servidores de DHCP
 
