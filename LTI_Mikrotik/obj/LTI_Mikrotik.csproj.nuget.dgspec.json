@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joaom\\Documents\\GitHub\\LTI-TL1\\LTI_Mikrotik\\LTI_Mikrotik.csproj": {}
+    "D:\\Documentos\\Universidade\\LTI\\LTI-TL1\\LTI_Mikrotik\\LTI_Mikrotik.csproj": {}
   },
   "projects": {
-    "C:\\Users\\joaom\\Documents\\GitHub\\LTI-TL1\\LTI_Mikrotik\\LTI_Mikrotik.csproj": {
+    "D:\\Documentos\\Universidade\\LTI\\LTI-TL1\\LTI_Mikrotik\\LTI_Mikrotik.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joaom\\Documents\\GitHub\\LTI-TL1\\LTI_Mikrotik\\LTI_Mikrotik.csproj",
+        "projectUniqueName": "D:\\Documentos\\Universidade\\LTI\\LTI-TL1\\LTI_Mikrotik\\LTI_Mikrotik.csproj",
         "projectName": "LTI_Mikrotik",
-        "projectPath": "C:\\Users\\joaom\\Documents\\GitHub\\LTI-TL1\\LTI_Mikrotik\\LTI_Mikrotik.csproj",
-        "packagesPath": "C:\\Users\\joaom\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joaom\\Documents\\GitHub\\LTI-TL1\\LTI_Mikrotik\\obj\\",
+        "projectPath": "D:\\Documentos\\Universidade\\LTI\\LTI-TL1\\LTI_Mikrotik\\LTI_Mikrotik.csproj",
+        "packagesPath": "C:\\Users\\migue\\.nuget\\packages\\",
+        "outputPath": "D:\\Documentos\\Universidade\\LTI\\LTI-TL1\\LTI_Mikrotik\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\joaom\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\migue\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
