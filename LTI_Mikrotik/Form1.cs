@@ -20,6 +20,8 @@ namespace LTI_Mikrotik
         private string urlLink = "http://192.168.1.145/rest/";
         private IpAddressEntry? enderecoSelecionado;
         private List<InterfaceGenerica> todasInterfaces = new List<InterfaceGenerica>();
+        private List<DnsStaticEntry> dnsStaticEntries = new List<DnsStaticEntry>();
+        private DnsStaticEntry? dnsStaticSelecionado;
 
 
         public Form1()
@@ -33,11 +35,16 @@ namespace LTI_Mikrotik
 
         private async void Form1_Load(object sender, EventArgs e)
         {
+
+
             await CarregarPerfisDeSegurancaAsync();
             await CarregarInterfacesWireless();
             await CarregarTodasInterfaces();
             await CarregarRotas();
             await CarregarEnderecosIP();
+            await CarregarDnsAsync();
+            await CarregarDnsStaticAsync();
+
 
 
         }
@@ -626,6 +633,247 @@ namespace LTI_Mikrotik
             }
         }
 
+        private async Task CarregarDnsAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(urlLink + "ip/dns");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var dnsInfo = JsonSerializer.Deserialize<DnsInfo>(json);
+
+                    listBox6.Items.Clear();
+                    listBox6.Items.Add($"Servers: {dnsInfo?.Servers}");
+                    listBox6.Items.Add($"Dynamic Servers: {dnsInfo?.DynamicServers}");
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao obter DNS:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar DNS: " + ex.Message);
+            }
+        }
+
+        private async Task CarregarDnsStaticAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(urlLink + "ip/dns/static");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var dnsStaticEntriesTemp = JsonSerializer.Deserialize<List<DnsStaticEntry>>(json);
+                    dnsStaticEntries = dnsStaticEntriesTemp ?? new List<DnsStaticEntry>();
+
+                    listBox7.Items.Clear();
+
+                    if (dnsStaticEntries != null)
+                    {
+                        foreach (var entrada in dnsStaticEntries)
+                        {
+                            if (entrada != null)
+                            {
+                                listBox7.Items.Add(entrada.ToString() ?? string.Empty);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao obter DNS Static:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar DNS Static: " + ex.Message);
+            }
+        }
+
+
+
+
+
+        private void listBox7_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = listBox7.SelectedIndex;
+            if (index >= 0 && index < dnsStaticEntries.Count)
+            {
+                dnsStaticSelecionado = dnsStaticEntries[index];
+
+                // Preencher os campos
+                textBox11.Text = dnsStaticSelecionado.Name;
+                textBox13.Text = dnsStaticSelecionado.Address;
+                comboBox3.SelectedItem = "A"; // Fixo, se só tiveres esse
+            }
+        }
+
+
+
+
+        private async void button17_Click_1(object sender, EventArgs e)
+        {
+            if (dnsStaticSelecionado == null)
+            {
+                MessageBox.Show("Seleciona uma entrada DNS static.");
+                return;
+            }
+
+            var body = new Dictionary<string, string>
+            {
+                ["disabled"] = "false"
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+            var request = new HttpRequestMessage(new HttpMethod("PATCH"), $"{urlLink}ip/dns/static/{dnsStaticSelecionado.Id}")
+            {
+                Content = content
+            };
+
+            HttpResponseMessage response = await client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("DNS static ativado com sucesso.");
+                await CarregarDnsStaticAsync();
+            }
+            else
+            {
+                string erro = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"Erro ao ativar:\n{response.StatusCode}\n{erro}");
+            }
+        }
+
+
+
+        private async void button16_Click(object sender, EventArgs e)
+        {
+            if (dnsStaticSelecionado == null)
+            {
+                MessageBox.Show("Seleciona uma entrada DNS static.");
+                return;
+            }
+
+            var body = new Dictionary<string, string>
+            {
+                ["disabled"] = "true"
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+            var request = new HttpRequestMessage(new HttpMethod("PATCH"), $"{urlLink}ip/dns/static/{dnsStaticSelecionado.Id}")
+            {
+                Content = content
+            };
+
+            HttpResponseMessage response = await client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("DNS static desativado com sucesso.");
+                await CarregarDnsStaticAsync();
+            }
+            else
+            {
+                string erro = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"Erro ao desativar:\n{response.StatusCode}\n{erro}");
+            }
+        }
+
+        private async void button14_Click(object sender, EventArgs e)
+        {
+            string novosServers = textBox12.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(novosServers))
+            {
+                MessageBox.Show("Insere pelo menos um servidor DNS.");
+                return;
+            }
+
+            var body = new Dictionary<string, string>
+    {
+        { "servers", novosServers }
+    };
+
+            var json = JsonSerializer.Serialize(body);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                HttpResponseMessage response = await client.PostAsync($"{urlLink}ip/dns/set", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("DNS atualizado com sucesso.");
+                    await CarregarDnsAsync();
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao atualizar DNS:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+        private async void button15_Click(object sender, EventArgs e)
+        {
+            if (dnsStaticSelecionado == null)
+            {
+                MessageBox.Show("Seleciona uma entrada DNS static.");
+                return;
+            }
+
+            string name = textBox11.Text.Trim();
+            string type = comboBox3.SelectedItem?.ToString() ?? "";
+            string address = textBox13.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(type) || string.IsNullOrWhiteSpace(address))
+            {
+                MessageBox.Show("Preenche todos os campos.");
+                return;
+            }
+
+            var body = new Dictionary<string, string>
+            {
+                ["name"] = name,
+                ["type"] = type,
+                ["address"] = address
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+            var request = new HttpRequestMessage(new HttpMethod("PATCH"), $"{urlLink}ip/dns/static/{dnsStaticSelecionado.Id}")
+            {
+                Content = content
+            };
+
+            try
+            {
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Entrada DNS static atualizada com sucesso.");
+                    await CarregarDnsStaticAsync();
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao atualizar:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
 
     }
 
@@ -696,6 +944,29 @@ namespace LTI_Mikrotik
             return $"Address: {Address} - Network: {Network} - Interface: {Interface}";
         }
     }
+
+    public class DnsInfo
+    {
+        [JsonPropertyName("servers")] public string Servers { get; set; } = string.Empty;
+        [JsonPropertyName("dynamic-servers")] public string DynamicServers { get; set; } = string.Empty;
+    }
+
+
+
+    public class DnsStaticEntry
+    {
+        [JsonPropertyName(".id")] public string Id { get; set; } = string.Empty;
+        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("type")] public string Type { get; set; } = string.Empty;
+        [JsonPropertyName("address")] public string Address { get; set; } = string.Empty;
+
+        public override string ToString()
+        {
+            return $"Name: {Name} -> Address: {Address}";
+        }
+    }
+
+
 
 
     public class SecurityProfile : Dictionary<string, string>
