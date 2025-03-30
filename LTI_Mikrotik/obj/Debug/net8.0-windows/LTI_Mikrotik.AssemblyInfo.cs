@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LTI_Mikrotik")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+98c661b074aee3f9d2b6c9c98ded74e649214dbb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0ce9e2bf6dd2cca8f7134a55b7a4a59f23d14634")]
 [assembly: System.Reflection.AssemblyProductAttribute("LTI_Mikrotik")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LTI_Mikrotik")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

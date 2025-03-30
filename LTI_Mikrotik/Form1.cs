@@ -15,6 +15,12 @@ namespace LTI_Mikrotik
     {
         private readonly HttpClient client = new HttpClient();
         private List<SecurityProfile> perfisSeguranca = new List<SecurityProfile>();
+        private RotaIP? rotaSelecionada;
+        private List<IpAddressEntry> enderecosIp = new();
+        private string urlLink = "http://192.168.1.145/rest/";
+        private IpAddressEntry? enderecoSelecionado;
+        private List<InterfaceGenerica> todasInterfaces = new List<InterfaceGenerica>();
+
 
         public Form1()
         {
@@ -29,13 +35,18 @@ namespace LTI_Mikrotik
         {
             await CarregarPerfisDeSegurancaAsync();
             await CarregarInterfacesWireless();
+            await CarregarTodasInterfaces();
+            await CarregarRotas();
+            await CarregarEnderecosIP();
+
+
         }
 
         private async Task CarregarInterfacesWireless()
         {
             try
             {
-                HttpResponseMessage response = await client.GetAsync("http://192.168.1.145/rest/interface/wireless");
+                HttpResponseMessage response = await client.GetAsync(urlLink + "interface/wireless");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -70,7 +81,7 @@ namespace LTI_Mikrotik
             var payload = new Dictionary<string, string> { { ".id", id } };
             var content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await client.PostAsync($"http://192.168.1.145/rest/interface/wireless/{comando}", content);
+            HttpResponseMessage response = await client.PostAsync($"{urlLink}interface/wireless/{comando}", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -105,7 +116,7 @@ namespace LTI_Mikrotik
             await CarregarInterfacesWireless();
         }
 
-        private async void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBox1.SelectedItem is WirelessInterface iface)
             {
@@ -116,41 +127,39 @@ namespace LTI_Mikrotik
                 SSID.Text = iface.SSID;
                 SecurityProf.Text = iface.SecurityProfile;
 
-                // Atualiza os itens da comboBox Band com base no nome da interface
                 Band.Items.Clear();
                 if (iface.Name == "wlan2")
                 {
                     Band.Items.AddRange(new object[] {
-                    "5ghz-a", "5ghz-onlyn", "5ghz-a/n", "5ghz-a/n/ac",
-                    "5ghz-onlyac", "5ghz-n/ac"
-                });
+                "5ghz-a", "5ghz-onlyn", "5ghz-a/n", "5ghz-a/n/ac",
+                "5ghz-onlyac", "5ghz-n/ac"
+            });
                 }
                 else
                 {
                     Band.Items.AddRange(new object[] {
-                    "2ghz-b", "2ghz-onlyg", "2ghz-b/g", "2ghz-onlyn",
-                    "2ghz-b/g/n", "2ghz-g/n"
-                });
+                "2ghz-b", "2ghz-onlyg", "2ghz-b/g", "2ghz-onlyn",
+                "2ghz-b/g/n", "2ghz-g/n"
+            });
                 }
 
                 Band.Text = iface.Band;
-
             }
-
-
         }
+
 
         private async Task CarregarPerfisDeSegurancaAsync()
         {
             try
             {
-                HttpResponseMessage response = await client.GetAsync("http://192.168.1.145/rest/interface/wireless/security-profiles");
+                HttpResponseMessage response = await client.GetAsync(urlLink + "interface/wireless/security-profiles");
 
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
 
-                    perfisSeguranca = JsonSerializer.Deserialize<List<SecurityProfile>>(json);
+                    var perfisSegurancaTemp = JsonSerializer.Deserialize<List<SecurityProfile>>(json);
+                    perfisSeguranca = perfisSegurancaTemp ?? new List<SecurityProfile>();
 
                     SecurityProf.Items.Clear();
 
@@ -201,12 +210,12 @@ namespace LTI_Mikrotik
                 };
 
                 string debugJson = JsonSerializer.Serialize(novoObjeto, new JsonSerializerOptions { WriteIndented = true });
-                System.Diagnostics.Debug.WriteLine(debugJson); // Mostra na janela de saída do Visual Studio
+                System.Diagnostics.Debug.WriteLine(debugJson);
 
 
                 var content = new StringContent(debugJson, Encoding.UTF8, "application/json");
 
-                var request = new HttpRequestMessage(new HttpMethod("PATCH"), $"http://192.168.1.145/rest/interface/wireless/{iface.Id}")
+                var request = new HttpRequestMessage(new HttpMethod("PATCH"), $"{urlLink}interface/wireless/{iface.Id}")
                 {
                     Content = content
                 };
@@ -230,22 +239,407 @@ namespace LTI_Mikrotik
             }
         }
 
+
+        private async Task CarregarTodasInterfaces()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(urlLink + "interface");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var interfacesTemp = JsonSerializer.Deserialize<List<InterfaceGenerica>>(json);
+                    todasInterfaces = interfacesTemp ?? new List<InterfaceGenerica>();
+
+                    listBox3.Items.Clear();
+                    comboBox1.Items.Clear();
+                    comboBox2.Items.Clear();
+
+                    if (todasInterfaces != null)
+                    {
+                        foreach (var iface in todasInterfaces)
+                        {
+                            listBox3.Items.Add(iface);
+                            comboBox1.Items.Add(iface.Name);
+                            comboBox2.Items.Add(iface.Name);
+                        }
+                    }
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao obter interfaces:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+
+
+        private async Task CarregarRotas()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(urlLink + "ip/route");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var rotas = JsonSerializer.Deserialize<List<RotaIP>>(json);
+
+                    listBox4.Items.Clear();
+
+                    if (rotas != null)
+                    {
+                        foreach (var rota in rotas)
+                        {
+                            if (!string.IsNullOrWhiteSpace(rota.Gateway))
+                                listBox4.Items.Add(rota);
+                        }
+                    }
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao carregar rotas:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+
+        private async void button8_Click_1(object sender, EventArgs e)
+        {
+            if (rotaSelecionada == null)
+            {
+                MessageBox.Show("Seleciona uma rota primeiro.");
+                return;
+            }
+
+            var rotaAtualizada = new Dictionary<string, string>
+    {
+        { "dst-address", textBox1.Text },
+        { "gateway", textBox2.Text }
+    };
+
+            var content = new StringContent(JsonSerializer.Serialize(rotaAtualizada), Encoding.UTF8, "application/json");
+
+            var request = new HttpRequestMessage(new HttpMethod("PATCH"), $"{urlLink}ip/route/{rotaSelecionada.Id}")
+            {
+                Content = content
+            };
+
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Rota atualizada com sucesso.");
+                await CarregarRotas(); // Atualiza a listBox4
+            }
+            else
+            {
+                string erro = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"Erro ao atualizar rota:\n{response.StatusCode}\n{erro}");
+            }
+        }
+
+        private void listBox4_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (listBox4.SelectedItem is RotaIP rota)
+            {
+                rotaSelecionada = rota;
+                textBox1.Text = rota.DstAddress;
+                textBox2.Text = rota.Gateway;
+            }
+        }
+
+        private async void button7_Click(object sender, EventArgs e)
+        {
+            if (rotaSelecionada == null)
+            {
+                MessageBox.Show("Seleciona uma rota primeiro.");
+                return;
+            }
+
+            var confirm = MessageBox.Show(
+                $"Tens a certeza que queres apagar a rota {rotaSelecionada.DstAddress} via {rotaSelecionada.Gateway}?",
+                "Confirmar remoção",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+
+            if (confirm != DialogResult.Yes)
+                return;
+
+            try
+            {
+                HttpResponseMessage response = await client.DeleteAsync($"{urlLink}ip/route/{rotaSelecionada.Id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Rota apagada com sucesso.");
+                    await CarregarRotas();
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao apagar rota:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro inesperado: " + ex.Message);
+            }
+        }
+
+        private async void button9_Click(object sender, EventArgs e)
+        {
+            string dstAddress = textBox3.Text.Trim();
+            string gateway = textBox4.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(dstAddress) || string.IsNullOrWhiteSpace(gateway))
+            {
+                MessageBox.Show("Preenche o Dst. Address e o Gateway.");
+                return;
+            }
+
+            var novaRota = new Dictionary<string, string>
+            {
+                { "dst-address", dstAddress },
+                { "gateway", gateway }
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(novaRota), Encoding.UTF8, "application/json");
+
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Put, urlLink + "ip/route")
+                {
+                    Content = content
+                };
+
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Rota criada com sucesso.");
+                    await CarregarRotas();
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao criar a rota:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro inesperado: " + ex.Message);
+            }
+        }
+
+        private async Task CarregarEnderecosIP()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(urlLink + "ip/address");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var enderecosIpTemp = JsonSerializer.Deserialize<List<IpAddressEntry>>(json);
+                    enderecosIp = enderecosIpTemp ?? new List<IpAddressEntry>();
+
+                    listBox5.Items.Clear();
+
+                    if (enderecosIp != null)
+                    {
+                        foreach (var ip in enderecosIp)
+                            listBox5.Items.Add(ip);
+                    }
+                }
+
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao buscar IPs:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar IPs: " + ex.Message);
+            }
+        }
+
+        private void listBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBox5.SelectedItem is IpAddressEntry ip)
+            {
+                enderecoSelecionado = ip;
+                textBox7.Text = ip.Address;
+                textBox8.Text = ip.Network;
+                comboBox1.SelectedItem = ip.Interface;
+            }
+        }
+
+
+        private async void button11_Click(object sender, EventArgs e)
+        {
+            if (enderecoSelecionado == null)
+            {
+                MessageBox.Show("Seleciona um endereço IP da lista.");
+                return;
+            }
+
+            var novo = new Dictionary<string, string>
+            {
+                ["address"] = textBox7.Text,
+                ["network"] = textBox8.Text,
+                ["interface"] = comboBox1.SelectedItem?.ToString() ?? ""
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(novo), Encoding.UTF8, "application/json");
+
+            var request = new HttpRequestMessage(new HttpMethod("PATCH"),
+                $"{urlLink}ip/address/{enderecoSelecionado.Id}")
+            {
+                Content = content
+            };
+
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Endereço atualizado com sucesso.");
+                await CarregarEnderecosIP();
+            }
+            else
+            {
+                string erro = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"Erro ao atualizar endereço:\n{response.StatusCode}\n{erro}");
+            }
+        }
+
+        private async void button12_Click_1(object sender, EventArgs e)
+        {
+            if (enderecoSelecionado == null)
+            {
+                MessageBox.Show("Seleciona um endereço IP da lista.");
+                return;
+            }
+
+            var confirm = MessageBox.Show(
+                $"Tens a certeza que queres apagar o endereço:\n{enderecoSelecionado.Address}?",
+                "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (confirm != DialogResult.Yes)
+                return;
+
+            try
+            {
+                HttpResponseMessage response = await client.DeleteAsync($"{urlLink}ip/address/{enderecoSelecionado.Id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Endereço apagado com sucesso.");
+                    await CarregarEnderecosIP(); // atualiza a lista
+                    enderecoSelecionado = null;
+                    textBox7.Clear();
+                    textBox8.Clear();
+                    comboBox1.SelectedIndex = -1;
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao apagar o endereço:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+        private async void button10_Click(object sender, EventArgs e)
+        {
+            string address = textBox5.Text.Trim();
+            string network = textBox6.Text.Trim();
+            string iface = comboBox2.SelectedItem?.ToString() ?? "";
+
+            if (string.IsNullOrWhiteSpace(address) || string.IsNullOrWhiteSpace(iface))
+            {
+                MessageBox.Show("Preenche todos os campos.");
+                return;
+            }
+
+            // Preenche o network automaticamente se estiver vazio
+            if (string.IsNullOrWhiteSpace(network))
+            {
+                int barraIndex = address.IndexOf('/');
+                if (barraIndex != -1)
+                    network = address[..barraIndex];
+                else
+                    network = address;
+            }
+
+            var novoEndereco = new Dictionary<string, string>
+            {
+                ["address"] = address,
+                ["network"] = network,
+                ["interface"] = iface
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(novoEndereco), Encoding.UTF8, "application/json");
+
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{urlLink}ip/address")
+            {
+                Content = content
+            };
+
+            try
+            {
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Endereço criado com sucesso.");
+                    await CarregarEnderecosIP();
+                    textBox5.Clear();
+                    textBox6.Clear();
+                    comboBox2.SelectedIndex = -1;
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao criar endereço:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+
     }
 
     public class WirelessInterface
     {
-        [JsonPropertyName(".id")] public string Id { get; set; }
-        [JsonPropertyName("name")] public string Name { get; set; }
-        [JsonPropertyName("ssid")] public string SSID { get; set; }
-        [JsonPropertyName("frequency")] public string Frequency { get; set; }
-        [JsonPropertyName("mode")] public string Mode { get; set; }
-        [JsonPropertyName("band")] public string Band { get; set; }
-        [JsonPropertyName("channel-width")] public string ChannelWidth { get; set; }
-        [JsonPropertyName("security-profile")] public string SecurityProfile { get; set; }
-
-        [JsonPropertyName("disabled")]
-        public string DisabledRaw { get; set; }
-
+        [JsonPropertyName(".id")] public string Id { get; set; } = string.Empty;
+        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("ssid")] public string SSID { get; set; } = string.Empty;
+        [JsonPropertyName("frequency")] public string Frequency { get; set; } = string.Empty;
+        [JsonPropertyName("mode")] public string Mode { get; set; } = string.Empty;
+        [JsonPropertyName("band")] public string Band { get; set; } = string.Empty;
+        [JsonPropertyName("channel-width")] public string ChannelWidth { get; set; } = string.Empty;
+        [JsonPropertyName("security-profile")] public string SecurityProfile { get; set; } = string.Empty;
+        [JsonPropertyName("disabled")] public string DisabledRaw { get; set; } = string.Empty;
         public bool Disabled => DisabledRaw == "true";
 
         public override string ToString()
@@ -254,6 +648,55 @@ namespace LTI_Mikrotik
             return $"{Name} - {Mode} - {Band} - {ChannelWidth} - {SSID} - {Frequency} - {estado}";
         }
     }
+
+    public class InterfaceGenerica
+    {
+        [JsonPropertyName(".id")]
+        public string Id { get; set; } = string.Empty;
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; } = string.Empty;
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; } = string.Empty;
+
+        public override string ToString()
+        {
+            return $"Name: {Name} - Type: {Type}";
+        }
+    }
+
+    public class RotaIP
+    {
+        [JsonPropertyName(".id")]
+        public string Id { get; set; } = string.Empty;
+
+        [JsonPropertyName("dst-address")]
+        public string DstAddress { get; set; } = string.Empty;
+
+        [JsonPropertyName("gateway")]
+        public string Gateway { get; set; } = string.Empty;
+
+        public override string ToString()
+        {
+            return $"Dst Address: {DstAddress} - Gateway: {Gateway}";
+        }
+    }
+
+ 
+    public class IpAddressEntry
+    {
+        [JsonPropertyName(".id")] public string Id { get; set; } = string.Empty;
+        [JsonPropertyName("address")] public string Address { get; set; } = string.Empty;
+        [JsonPropertyName("network")] public string Network { get; set; } = string.Empty;
+        [JsonPropertyName("interface")] public string Interface { get; set; } = string.Empty;
+
+        public override string ToString()
+        {
+            return $"Address: {Address} - Network: {Network} - Interface: {Interface}";
+        }
+    }
+
 
     public class SecurityProfile : Dictionary<string, string>
     {

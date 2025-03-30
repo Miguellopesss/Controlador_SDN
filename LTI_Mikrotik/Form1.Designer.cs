@@ -30,6 +30,8 @@
         {
             tabControl1 = new TabControl();
             tabPage6 = new TabPage();
+            label9 = new Label();
+            listBox3 = new ListBox();
             tabPage1 = new TabPage();
             groupBox1 = new GroupBox();
             Mode = new ComboBox();
@@ -58,10 +60,83 @@
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
             tabPage5 = new TabPage();
+            groupBox3 = new GroupBox();
+            textBox3 = new TextBox();
+            textBox4 = new TextBox();
+            button9 = new Button();
+            label11 = new Label();
+            label12 = new Label();
+            groupBox2 = new GroupBox();
+            textBox2 = new TextBox();
+            textBox1 = new TextBox();
+            button8 = new Button();
+            label15 = new Label();
+            label16 = new Label();
+            button7 = new Button();
+            label10 = new Label();
+            listBox4 = new ListBox();
+            tabPage7 = new TabPage();
+            tabPage8 = new TabPage();
+            groupBox4 = new GroupBox();
+            label21 = new Label();
+            comboBox2 = new ComboBox();
+            textBox5 = new TextBox();
+            textBox6 = new TextBox();
+            button10 = new Button();
+            label13 = new Label();
+            label14 = new Label();
+            groupBox5 = new GroupBox();
+            comboBox1 = new ComboBox();
+            label20 = new Label();
+            textBox7 = new TextBox();
+            textBox8 = new TextBox();
+            button11 = new Button();
+            label17 = new Label();
+            label18 = new Label();
+            button12 = new Button();
+            label19 = new Label();
+            listBox5 = new ListBox();
+            groupBox6 = new GroupBox();
+            groupBox7 = new GroupBox();
+            textBox12 = new TextBox();
+            button14 = new Button();
+            label25 = new Label();
+            label26 = new Label();
+            listBox6 = new ListBox();
+            button16 = new Button();
+            button17 = new Button();
+            listBox7 = new ListBox();
+            label27 = new Label();
+            groupBox8 = new GroupBox();
+            textBox11 = new TextBox();
+            textBox13 = new TextBox();
+            button15 = new Button();
+            label24 = new Label();
+            label28 = new Label();
+            label29 = new Label();
+            comboBox3 = new ComboBox();
+            comboBox4 = new ComboBox();
+            label22 = new Label();
+            textBox9 = new TextBox();
+            textBox10 = new TextBox();
+            button13 = new Button();
+            label23 = new Label();
+            label30 = new Label();
             tabControl1.SuspendLayout();
+            tabPage6.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox1.SuspendLayout();
             tabPage2.SuspendLayout();
+            tabPage4.SuspendLayout();
+            tabPage5.SuspendLayout();
+            groupBox3.SuspendLayout();
+            groupBox2.SuspendLayout();
+            tabPage8.SuspendLayout();
+            groupBox4.SuspendLayout();
+            groupBox5.SuspendLayout();
+            groupBox6.SuspendLayout();
+            groupBox7.SuspendLayout();
+            groupBox8.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl1
@@ -72,6 +147,8 @@
             tabControl1.Controls.Add(tabPage3);
             tabControl1.Controls.Add(tabPage4);
             tabControl1.Controls.Add(tabPage5);
+            tabControl1.Controls.Add(tabPage7);
+            tabControl1.Controls.Add(tabPage8);
             tabControl1.Location = new Point(31, 39);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -80,12 +157,32 @@
             // 
             // tabPage6
             // 
+            tabPage6.Controls.Add(label9);
+            tabPage6.Controls.Add(listBox3);
             tabPage6.Location = new Point(4, 29);
             tabPage6.Name = "tabPage6";
             tabPage6.Size = new Size(1256, 668);
             tabPage6.TabIndex = 5;
             tabPage6.Text = "Interfaces";
             tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(245, 36);
+            label9.Name = "label9";
+            label9.Size = new Size(73, 20);
+            label9.TabIndex = 2;
+            label9.Text = "Interfaces";
+            // 
+            // listBox3
+            // 
+            listBox3.BackColor = Color.Gainsboro;
+            listBox3.FormattingEnabled = true;
+            listBox3.Location = new Point(28, 74);
+            listBox3.Name = "listBox3";
+            listBox3.Size = new Size(550, 464);
+            listBox3.TabIndex = 1;
             // 
             // tabPage1
             // 
@@ -313,7 +410,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(173, 36);
+            label2.Location = new Point(189, 44);
             label2.Name = "label2";
             label2.Size = new Size(177, 20);
             label2.TabIndex = 6;
@@ -356,6 +453,15 @@
             // 
             // tabPage4
             // 
+            tabPage4.Controls.Add(groupBox8);
+            tabPage4.Controls.Add(label27);
+            tabPage4.Controls.Add(listBox7);
+            tabPage4.Controls.Add(button16);
+            tabPage4.Controls.Add(button17);
+            tabPage4.Controls.Add(groupBox6);
+            tabPage4.Controls.Add(groupBox7);
+            tabPage4.Controls.Add(label26);
+            tabPage4.Controls.Add(listBox6);
             tabPage4.Location = new Point(4, 29);
             tabPage4.Name = "tabPage4";
             tabPage4.Size = new Size(1256, 668);
@@ -365,12 +471,619 @@
             // 
             // tabPage5
             // 
+            tabPage5.Controls.Add(groupBox3);
+            tabPage5.Controls.Add(groupBox2);
+            tabPage5.Controls.Add(button7);
+            tabPage5.Controls.Add(label10);
+            tabPage5.Controls.Add(listBox4);
             tabPage5.Location = new Point(4, 29);
             tabPage5.Name = "tabPage5";
             tabPage5.Size = new Size(1256, 668);
             tabPage5.TabIndex = 4;
             tabPage5.Text = "Static Route";
             tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            groupBox3.BackColor = Color.Gainsboro;
+            groupBox3.Controls.Add(textBox3);
+            groupBox3.Controls.Add(textBox4);
+            groupBox3.Controls.Add(button9);
+            groupBox3.Controls.Add(label11);
+            groupBox3.Controls.Add(label12);
+            groupBox3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox3.Location = new Point(715, 326);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(361, 213);
+            groupBox3.TabIndex = 20;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Criar Rota";
+            // 
+            // textBox3
+            // 
+            textBox3.Location = new Point(207, 46);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(125, 27);
+            textBox3.TabIndex = 20;
+            // 
+            // textBox4
+            // 
+            textBox4.Location = new Point(207, 102);
+            textBox4.Name = "textBox4";
+            textBox4.Size = new Size(125, 27);
+            textBox4.TabIndex = 21;
+            // 
+            // button9
+            // 
+            button9.Location = new Point(217, 157);
+            button9.Name = "button9";
+            button9.Size = new Size(100, 33);
+            button9.TabIndex = 17;
+            button9.Text = "Criar ";
+            button9.UseVisualStyleBackColor = true;
+            button9.Click += button9_Click;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(63, 105);
+            label11.Name = "label11";
+            label11.Size = new Size(66, 20);
+            label11.TabIndex = 12;
+            label11.Text = "Gateway";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(63, 49);
+            label12.Name = "label12";
+            label12.Size = new Size(91, 20);
+            label12.TabIndex = 11;
+            label12.Text = "Dst. Address";
+            // 
+            // groupBox2
+            // 
+            groupBox2.BackColor = Color.Gainsboro;
+            groupBox2.Controls.Add(textBox2);
+            groupBox2.Controls.Add(textBox1);
+            groupBox2.Controls.Add(button8);
+            groupBox2.Controls.Add(label15);
+            groupBox2.Controls.Add(label16);
+            groupBox2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox2.Location = new Point(715, 75);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(361, 213);
+            groupBox2.TabIndex = 19;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Configurar Rota";
+            // 
+            // textBox2
+            // 
+            textBox2.Location = new Point(207, 106);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(125, 27);
+            textBox2.TabIndex = 19;
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(207, 47);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(125, 27);
+            textBox1.TabIndex = 18;
+            // 
+            // button8
+            // 
+            button8.Location = new Point(217, 161);
+            button8.Name = "button8";
+            button8.Size = new Size(100, 33);
+            button8.TabIndex = 17;
+            button8.Text = "Atualizar";
+            button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click_1;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(63, 109);
+            label15.Name = "label15";
+            label15.Size = new Size(66, 20);
+            label15.TabIndex = 12;
+            label15.Text = "Gateway";
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(63, 50);
+            label16.Name = "label16";
+            label16.Size = new Size(91, 20);
+            label16.TabIndex = 11;
+            label16.Text = "Dst. Address";
+            // 
+            // button7
+            // 
+            button7.Location = new Point(464, 75);
+            button7.Name = "button7";
+            button7.Size = new Size(105, 38);
+            button7.TabIndex = 4;
+            button7.Text = "Apagar";
+            button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(166, 42);
+            label10.Name = "label10";
+            label10.Size = new Size(107, 20);
+            label10.TabIndex = 3;
+            label10.Text = "Rotas Estáticas";
+            // 
+            // listBox4
+            // 
+            listBox4.BackColor = Color.Gainsboro;
+            listBox4.FormattingEnabled = true;
+            listBox4.Location = new Point(33, 75);
+            listBox4.Name = "listBox4";
+            listBox4.Size = new Size(406, 464);
+            listBox4.TabIndex = 2;
+            listBox4.SelectedIndexChanged += listBox4_SelectedIndexChanged_1;
+            // 
+            // tabPage7
+            // 
+            tabPage7.Location = new Point(4, 29);
+            tabPage7.Name = "tabPage7";
+            tabPage7.Size = new Size(1256, 668);
+            tabPage7.TabIndex = 6;
+            tabPage7.Text = "Perfis de Segurança";
+            tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // tabPage8
+            // 
+            tabPage8.Controls.Add(groupBox4);
+            tabPage8.Controls.Add(groupBox5);
+            tabPage8.Controls.Add(button12);
+            tabPage8.Controls.Add(label19);
+            tabPage8.Controls.Add(listBox5);
+            tabPage8.Location = new Point(4, 29);
+            tabPage8.Name = "tabPage8";
+            tabPage8.Size = new Size(1256, 668);
+            tabPage8.TabIndex = 7;
+            tabPage8.Text = "IP Address";
+            tabPage8.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            groupBox4.BackColor = Color.Gainsboro;
+            groupBox4.Controls.Add(label21);
+            groupBox4.Controls.Add(comboBox2);
+            groupBox4.Controls.Add(textBox5);
+            groupBox4.Controls.Add(textBox6);
+            groupBox4.Controls.Add(button10);
+            groupBox4.Controls.Add(label13);
+            groupBox4.Controls.Add(label14);
+            groupBox4.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox4.Location = new Point(716, 344);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(361, 253);
+            groupBox4.TabIndex = 25;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Criar Endereço IP";
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Location = new Point(63, 158);
+            label21.Name = "label21";
+            label21.Size = new Size(67, 20);
+            label21.TabIndex = 27;
+            label21.Text = "Interface";
+            // 
+            // comboBox2
+            // 
+            comboBox2.FormattingEnabled = true;
+            comboBox2.Location = new Point(204, 158);
+            comboBox2.Name = "comboBox2";
+            comboBox2.Size = new Size(128, 28);
+            comboBox2.TabIndex = 27;
+            // 
+            // textBox5
+            // 
+            textBox5.Location = new Point(207, 46);
+            textBox5.Name = "textBox5";
+            textBox5.Size = new Size(125, 27);
+            textBox5.TabIndex = 20;
+            // 
+            // textBox6
+            // 
+            textBox6.Location = new Point(207, 102);
+            textBox6.Name = "textBox6";
+            textBox6.Size = new Size(125, 27);
+            textBox6.TabIndex = 21;
+            // 
+            // button10
+            // 
+            button10.Location = new Point(217, 205);
+            button10.Name = "button10";
+            button10.Size = new Size(100, 33);
+            button10.TabIndex = 17;
+            button10.Text = "Criar ";
+            button10.UseVisualStyleBackColor = true;
+            button10.Click += button10_Click;
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(63, 105);
+            label13.Name = "label13";
+            label13.Size = new Size(65, 20);
+            label13.TabIndex = 12;
+            label13.Text = "Network";
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(63, 49);
+            label14.Name = "label14";
+            label14.Size = new Size(62, 20);
+            label14.TabIndex = 11;
+            label14.Text = "Address";
+            // 
+            // groupBox5
+            // 
+            groupBox5.BackColor = Color.Gainsboro;
+            groupBox5.Controls.Add(comboBox1);
+            groupBox5.Controls.Add(label20);
+            groupBox5.Controls.Add(textBox7);
+            groupBox5.Controls.Add(textBox8);
+            groupBox5.Controls.Add(button11);
+            groupBox5.Controls.Add(label17);
+            groupBox5.Controls.Add(label18);
+            groupBox5.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox5.Location = new Point(716, 49);
+            groupBox5.Name = "groupBox5";
+            groupBox5.Size = new Size(361, 262);
+            groupBox5.TabIndex = 24;
+            groupBox5.TabStop = false;
+            groupBox5.Text = "Configurar Endereço IP";
+            // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(204, 163);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(128, 28);
+            comboBox1.TabIndex = 26;
+            // 
+            // label20
+            // 
+            label20.AutoSize = true;
+            label20.Location = new Point(63, 166);
+            label20.Name = "label20";
+            label20.Size = new Size(67, 20);
+            label20.TabIndex = 20;
+            label20.Text = "Interface";
+            // 
+            // textBox7
+            // 
+            textBox7.Location = new Point(204, 47);
+            textBox7.Name = "textBox7";
+            textBox7.Size = new Size(125, 27);
+            textBox7.TabIndex = 19;
+            // 
+            // textBox8
+            // 
+            textBox8.Location = new Point(204, 106);
+            textBox8.Name = "textBox8";
+            textBox8.Size = new Size(125, 27);
+            textBox8.TabIndex = 18;
+            // 
+            // button11
+            // 
+            button11.Location = new Point(217, 209);
+            button11.Name = "button11";
+            button11.Size = new Size(100, 33);
+            button11.TabIndex = 17;
+            button11.Text = "Atualizar";
+            button11.UseVisualStyleBackColor = true;
+            button11.Click += button11_Click;
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new Point(63, 109);
+            label17.Name = "label17";
+            label17.Size = new Size(65, 20);
+            label17.TabIndex = 12;
+            label17.Text = "Network";
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new Point(63, 50);
+            label18.Name = "label18";
+            label18.Size = new Size(62, 20);
+            label18.TabIndex = 11;
+            label18.Text = "Address";
+            // 
+            // button12
+            // 
+            button12.Location = new Point(542, 82);
+            button12.Name = "button12";
+            button12.Size = new Size(105, 38);
+            button12.TabIndex = 23;
+            button12.Text = "Apagar";
+            button12.UseVisualStyleBackColor = true;
+            button12.Click += button12_Click_1;
+            // 
+            // label19
+            // 
+            label19.AutoSize = true;
+            label19.Location = new Point(167, 49);
+            label19.Name = "label19";
+            label19.Size = new Size(93, 20);
+            label19.TabIndex = 22;
+            label19.Text = "Endereços IP";
+            // 
+            // listBox5
+            // 
+            listBox5.BackColor = Color.Gainsboro;
+            listBox5.FormattingEnabled = true;
+            listBox5.Location = new Point(34, 82);
+            listBox5.Name = "listBox5";
+            listBox5.Size = new Size(485, 464);
+            listBox5.TabIndex = 21;
+            listBox5.SelectedIndexChanged += listBox5_SelectedIndexChanged;
+            // 
+            // groupBox6
+            // 
+            groupBox6.BackColor = Color.Gainsboro;
+            groupBox6.Controls.Add(comboBox4);
+            groupBox6.Controls.Add(label22);
+            groupBox6.Controls.Add(textBox9);
+            groupBox6.Controls.Add(textBox10);
+            groupBox6.Controls.Add(button13);
+            groupBox6.Controls.Add(label23);
+            groupBox6.Controls.Add(label30);
+            groupBox6.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox6.Location = new Point(911, 303);
+            groupBox6.Name = "groupBox6";
+            groupBox6.Size = new Size(300, 270);
+            groupBox6.TabIndex = 25;
+            groupBox6.TabStop = false;
+            groupBox6.Text = "Criar DNS Estático";
+            // 
+            // groupBox7
+            // 
+            groupBox7.BackColor = Color.Gainsboro;
+            groupBox7.Controls.Add(textBox12);
+            groupBox7.Controls.Add(button14);
+            groupBox7.Controls.Add(label25);
+            groupBox7.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox7.Location = new Point(36, 303);
+            groupBox7.Name = "groupBox7";
+            groupBox7.Size = new Size(406, 159);
+            groupBox7.TabIndex = 24;
+            groupBox7.TabStop = false;
+            groupBox7.Text = "Configurar Server DNS";
+            // 
+            // textBox12
+            // 
+            textBox12.Location = new Point(180, 47);
+            textBox12.Name = "textBox12";
+            textBox12.Size = new Size(175, 27);
+            textBox12.TabIndex = 18;
+            // 
+            // button14
+            // 
+            button14.Location = new Point(217, 109);
+            button14.Name = "button14";
+            button14.Size = new Size(100, 33);
+            button14.TabIndex = 17;
+            button14.Text = "Atualizar";
+            button14.UseVisualStyleBackColor = true;
+            // 
+            // label25
+            // 
+            label25.AutoSize = true;
+            label25.Location = new Point(63, 50);
+            label25.Name = "label25";
+            label25.Size = new Size(56, 20);
+            label25.TabIndex = 11;
+            label25.Text = "Servers";
+            // 
+            // label26
+            // 
+            label26.AutoSize = true;
+            label26.Location = new Point(207, 33);
+            label26.Name = "label26";
+            label26.Size = new Size(39, 20);
+            label26.TabIndex = 22;
+            label26.Text = "DNS";
+            // 
+            // listBox6
+            // 
+            listBox6.BackColor = Color.Gainsboro;
+            listBox6.FormattingEnabled = true;
+            listBox6.Location = new Point(36, 67);
+            listBox6.Name = "listBox6";
+            listBox6.Size = new Size(406, 204);
+            listBox6.TabIndex = 21;
+            // 
+            // button16
+            // 
+            button16.BackColor = Color.Red;
+            button16.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button16.ForeColor = SystemColors.Control;
+            button16.Location = new Point(1099, 129);
+            button16.Name = "button16";
+            button16.Size = new Size(112, 46);
+            button16.TabIndex = 27;
+            button16.Text = "Desativar";
+            button16.UseVisualStyleBackColor = false;
+            // 
+            // button17
+            // 
+            button17.BackColor = Color.FromArgb(0, 192, 0);
+            button17.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button17.ForeColor = SystemColors.Control;
+            button17.Location = new Point(1099, 67);
+            button17.Name = "button17";
+            button17.Size = new Size(112, 46);
+            button17.TabIndex = 26;
+            button17.Text = "Ativar";
+            button17.UseVisualStyleBackColor = false;
+            // 
+            // listBox7
+            // 
+            listBox7.BackColor = Color.Gainsboro;
+            listBox7.FormattingEnabled = true;
+            listBox7.Location = new Point(673, 67);
+            listBox7.Name = "listBox7";
+            listBox7.Size = new Size(406, 204);
+            listBox7.TabIndex = 28;
+            // 
+            // label27
+            // 
+            label27.AutoSize = true;
+            label27.Location = new Point(828, 29);
+            label27.Name = "label27";
+            label27.Size = new Size(80, 20);
+            label27.TabIndex = 29;
+            label27.Text = "DNS Static";
+            // 
+            // groupBox8
+            // 
+            groupBox8.BackColor = Color.Gainsboro;
+            groupBox8.Controls.Add(comboBox3);
+            groupBox8.Controls.Add(label29);
+            groupBox8.Controls.Add(textBox11);
+            groupBox8.Controls.Add(textBox13);
+            groupBox8.Controls.Add(button15);
+            groupBox8.Controls.Add(label24);
+            groupBox8.Controls.Add(label28);
+            groupBox8.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox8.Location = new Point(541, 303);
+            groupBox8.Name = "groupBox8";
+            groupBox8.Size = new Size(300, 270);
+            groupBox8.TabIndex = 26;
+            groupBox8.TabStop = false;
+            groupBox8.Text = "Configurar DNS Estático";
+            // 
+            // textBox11
+            // 
+            textBox11.Location = new Point(154, 42);
+            textBox11.Name = "textBox11";
+            textBox11.Size = new Size(125, 27);
+            textBox11.TabIndex = 20;
+            // 
+            // textBox13
+            // 
+            textBox13.Location = new Point(154, 159);
+            textBox13.Name = "textBox13";
+            textBox13.Size = new Size(125, 27);
+            textBox13.TabIndex = 21;
+            // 
+            // button15
+            // 
+            button15.Location = new Point(166, 214);
+            button15.Name = "button15";
+            button15.Size = new Size(100, 33);
+            button15.TabIndex = 17;
+            button15.Text = "Atualizar";
+            button15.UseVisualStyleBackColor = true;
+            // 
+            // label24
+            // 
+            label24.AutoSize = true;
+            label24.Location = new Point(33, 101);
+            label24.Name = "label24";
+            label24.Size = new Size(40, 20);
+            label24.TabIndex = 12;
+            label24.Text = "Type";
+            // 
+            // label28
+            // 
+            label28.AutoSize = true;
+            label28.Location = new Point(33, 45);
+            label28.Name = "label28";
+            label28.Size = new Size(49, 20);
+            label28.TabIndex = 11;
+            label28.Text = "Name";
+            // 
+            // label29
+            // 
+            label29.AutoSize = true;
+            label29.Location = new Point(33, 162);
+            label29.Name = "label29";
+            label29.Size = new Size(62, 20);
+            label29.TabIndex = 22;
+            label29.Text = "Address";
+            // 
+            // comboBox3
+            // 
+            comboBox3.FormattingEnabled = true;
+            comboBox3.Location = new Point(154, 101);
+            comboBox3.Name = "comboBox3";
+            comboBox3.Size = new Size(125, 28);
+            comboBox3.TabIndex = 23;
+            // 
+            // comboBox4
+            // 
+            comboBox4.FormattingEnabled = true;
+            comboBox4.Location = new Point(148, 92);
+            comboBox4.Name = "comboBox4";
+            comboBox4.Size = new Size(125, 28);
+            comboBox4.TabIndex = 30;
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Location = new Point(27, 153);
+            label22.Name = "label22";
+            label22.Size = new Size(62, 20);
+            label22.TabIndex = 29;
+            label22.Text = "Address";
+            // 
+            // textBox9
+            // 
+            textBox9.Location = new Point(148, 33);
+            textBox9.Name = "textBox9";
+            textBox9.Size = new Size(125, 27);
+            textBox9.TabIndex = 27;
+            // 
+            // textBox10
+            // 
+            textBox10.Location = new Point(148, 150);
+            textBox10.Name = "textBox10";
+            textBox10.Size = new Size(125, 27);
+            textBox10.TabIndex = 28;
+            // 
+            // button13
+            // 
+            button13.Location = new Point(161, 214);
+            button13.Name = "button13";
+            button13.Size = new Size(100, 33);
+            button13.TabIndex = 26;
+            button13.Text = "Criar";
+            button13.UseVisualStyleBackColor = true;
+            // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Location = new Point(27, 92);
+            label23.Name = "label23";
+            label23.Size = new Size(40, 20);
+            label23.TabIndex = 25;
+            label23.Text = "Type";
+            // 
+            // label30
+            // 
+            label30.AutoSize = true;
+            label30.Location = new Point(27, 36);
+            label30.Name = "label30";
+            label30.Size = new Size(49, 20);
+            label30.TabIndex = 24;
+            label30.Text = "Name";
             // 
             // Form1
             // 
@@ -382,12 +1095,34 @@
             Text = "Form1";
             Load += Form1_Load;
             tabControl1.ResumeLayout(false);
+            tabPage6.ResumeLayout(false);
+            tabPage6.PerformLayout();
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
+            tabPage4.ResumeLayout(false);
+            tabPage4.PerformLayout();
+            tabPage5.ResumeLayout(false);
+            tabPage5.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            groupBox2.ResumeLayout(false);
+            groupBox2.PerformLayout();
+            tabPage8.ResumeLayout(false);
+            tabPage8.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
+            groupBox5.ResumeLayout(false);
+            groupBox5.PerformLayout();
+            groupBox6.ResumeLayout(false);
+            groupBox6.PerformLayout();
+            groupBox7.ResumeLayout(false);
+            groupBox7.PerformLayout();
+            groupBox8.ResumeLayout(false);
+            groupBox8.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -423,5 +1158,69 @@
         private Button button6;
         private TabPage tabPage6;
         private GroupBox groupBox1;
+        private Label label9;
+        private ListBox listBox3;
+        private TabPage tabPage7;
+        private ListBox listBox4;
+        private Label label10;
+        private Button button7;
+        private GroupBox groupBox3;
+        private TextBox textBox3;
+        private TextBox textBox4;
+        private Button button9;
+        private Label label11;
+        private Label label12;
+        private GroupBox groupBox2;
+        private TextBox textBox2;
+        private TextBox textBox1;
+        private Button button8;
+        private Label label15;
+        private Label label16;
+        private TabPage tabPage8;
+        private GroupBox groupBox4;
+        private TextBox textBox5;
+        private TextBox textBox6;
+        private Button button10;
+        private Label label13;
+        private Label label14;
+        private GroupBox groupBox5;
+        private TextBox textBox7;
+        private TextBox textBox8;
+        private Button button11;
+        private Label label17;
+        private Label label18;
+        private Button button12;
+        private Label label19;
+        private ListBox listBox5;
+        private Label label21;
+        private ComboBox comboBox2;
+        private ComboBox comboBox1;
+        private Label label20;
+        private Label label27;
+        private ListBox listBox7;
+        private Button button16;
+        private Button button17;
+        private GroupBox groupBox6;
+        private GroupBox groupBox7;
+        private TextBox textBox12;
+        private Button button14;
+        private Label label25;
+        private Label label26;
+        private ListBox listBox6;
+        private GroupBox groupBox8;
+        private TextBox textBox11;
+        private TextBox textBox13;
+        private Button button15;
+        private Label label24;
+        private Label label28;
+        private ComboBox comboBox3;
+        private Label label29;
+        private ComboBox comboBox4;
+        private Label label22;
+        private TextBox textBox9;
+        private TextBox textBox10;
+        private Button button13;
+        private Label label23;
+        private Label label30;
     }
 }
