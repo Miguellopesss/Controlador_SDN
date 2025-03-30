@@ -24,14 +24,39 @@ namespace LTI_Mikrotik
         private DnsStaticEntry? dnsStaticSelecionado;
 
 
-        public Form1()
+        public Form1(string username, string password)
         {
             InitializeComponent();
 
-            var byteArray = Encoding.ASCII.GetBytes("admin:proxmox123");
+            var byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+
+            this.FormClosed += Form1_FormClosed;
         }
+
+        private void Form1_FormClosed(object? sender, FormClosedEventArgs e)
+        {
+            var loginForm = Application.OpenForms["LoginForm"] as LoginForm;
+
+            if (loginForm != null)
+            {
+                var userControl = loginForm.Controls["User"] as TextBox;
+                var passwordControl = loginForm.Controls["Password"] as TextBox;
+
+                if (userControl != null && passwordControl != null)
+                {
+                    userControl.Text = "";
+                    passwordControl.Text = "";
+                }
+
+                loginForm.Show();
+            }
+        }
+
+
+
+
 
         private async void Form1_Load(object sender, EventArgs e)
         {
@@ -48,6 +73,8 @@ namespace LTI_Mikrotik
 
 
         }
+
+
 
         private async Task CarregarInterfacesWireless()
         {

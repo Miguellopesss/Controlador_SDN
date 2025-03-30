@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LTI_Mikrotik
@@ -16,39 +13,45 @@ namespace LTI_Mikrotik
         public LoginForm()
         {
             InitializeComponent();
+            Password.PasswordChar = '●'; // Protege a password
         }
-        private async void Login_Click(object sender, EventArgs e)
+
+        private async void Login_Click_1(object sender, EventArgs e)
         {
-            var urlLogin = "https://10.0.0.254/rest/interface";
+            var urlLogin = "http://192.168.1.145/rest/interface";
             string username = User.Text;
             string password = Password.Text;
 
             using (HttpClient httpClient = new HttpClient())
             {
-                // Ignorar a validação do certificado SSL
+                // Ignorar certificado SSL (caso uses HTTPS no futuro)
                 ServicePointManager.ServerCertificateValidationCallback += (sender2, cert, chain, sslPolicyErrors) => true;
 
                 var byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 
-                HttpResponseMessage response = await httpClient.GetAsync(urlLogin);
-                System.Diagnostics.Debug.WriteLine(response.StatusCode);
-
-                if (response.StatusCode == HttpStatusCode.OK)
+                try
                 {
-                    Environment.SetEnvironmentVariable("username", username);
-                    Environment.SetEnvironmentVariable("password", password);
+                    HttpResponseMessage response = await httpClient.GetAsync(urlLogin);
+                    System.Diagnostics.Debug.WriteLine(response.StatusCode);
 
-                    Form1 form1 = new Form1();
-                    form1.Show();
-                    this.Hide();
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        Form1 form1 = new Form1(username, password);
+                        form1.FormClosed += (s, args) => this.Show(); // Voltar ao Login ao fechar
+                        form1.Show();
+                        this.Hide();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Login falhou: credenciais inválidas.");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Login Failed");
+                    MessageBox.Show("Erro na ligação: " + ex.Message);
                 }
             }
         }
-
-        }
+    }
 }
