@@ -15,7 +15,7 @@ o Criar/editar/apagar perfis de segurança para utilizar nas redes wireless
 
 o Ativar/desativar/configurar redes wireless ☑
 
-o Listar/criar/editar/apagar rotas estáticas
+o Listar/criar/editar/apagar rotas estáticas ☑
 
 o Listar/criar/editar/apagar endereços IP
 
