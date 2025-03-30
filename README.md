@@ -21,5 +21,6 @@ o Listar/criar/editar/apagar endereços IP ☑
 
 o Listar/criar/editar/apagar servidores de DHCP
 
-o Ativar/desativar/configurar o servidor de DNS
+o Ativar/desativar/configurar o servidor de DNS ☑
+
 
