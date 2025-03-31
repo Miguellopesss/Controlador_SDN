@@ -19,7 +19,7 @@ o Listar/criar/editar/apagar rotas estáticas ☑
 
 o Listar/criar/editar/apagar endereços IP ☑
 
-o Listar/criar/editar/apagar servidores de DHCP
+o Listar/criar/editar/apagar servidores de DHCP ☑
 
 o Ativar/desativar/configurar o servidor de DNS ☑
 
