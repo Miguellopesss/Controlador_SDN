@@ -3,13 +3,13 @@
 
 
 
-o Controlar mais do que um dispositivo com a mesma aplicação
+o Controlar mais do que um dispositivo com a mesma aplicação ~~~~ ☑ (falta base de dados)
 
 o Listar todas as interfaces do dispositivo ☑
 
 o Listar apenas as interfaces wireless ☑
 
-o Listar/criar/editar/apagar interfaces bridge e respetivas portas associadas
+o Listar/criar/editar/apagar interfaces bridge e respetivas portas associadas ☑
 
 o Criar/editar/apagar perfis de segurança para utilizar nas redes wireless
 
@@ -19,7 +19,7 @@ o Listar/criar/editar/apagar rotas estáticas ☑
 
 o Listar/criar/editar/apagar endereços IP ☑
 
-o Listar/criar/editar/apagar servidores de DHCP
+o Listar/criar/editar/apagar servidores de DHCP ☑
 
 o Ativar/desativar/configurar o servidor de DNS ☑
 
