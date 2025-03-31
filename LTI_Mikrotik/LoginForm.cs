@@ -5,6 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.Json;
+using System.Net.Mail;
 
 namespace LTI_Mikrotik
 {
@@ -52,6 +54,53 @@ namespace LTI_Mikrotik
                     MessageBox.Show("Erro na ligação: " + ex.Message);
                 }
             }
+        }
+
+        private async void setMacAddress()
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                // Ignorar a validação do certificado SSL
+                ServicePointManager.ServerCertificateValidationCallback += (sender2, cert, chain, sslPolicyErrors) => true;
+
+                var byteArray = Encoding.ASCII.GetBytes("admin:admin");
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+
+                System.Diagnostics.Debug.WriteLine("testeeeeeeeee");
+                var endpoint = "https://10.0.0.254/rest/interface";
+
+                try
+                {
+                    HttpResponseMessage response = await httpClient.GetAsync(endpoint);
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    var jsonString = JsonSerializer.Deserialize<List<LoginInterface>>(responseBody);
+
+                    System.Diagnostics.Debug.WriteLine(responseBody);
+                    System.Diagnostics.Debug.WriteLine(jsonString);
+
+                    if (jsonString != null)
+                    {
+                        foreach (LoginInterface loginInterface in jsonString)
+                        {
+                            if (loginInterface.defaultName == "ether3")
+                            {
+                                macAddress.Text = loginInterface.macAddress;
+                                running.Text = loginInterface.running;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Erro: " + ex.Message);
+                }
+            }
+        }
+
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+            setMacAddress();
         }
     }
 }
