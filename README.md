@@ -3,7 +3,7 @@
 
 
 
-o Controlar mais do que um dispositivo com a mesma aplicação
+o Controlar mais do que um dispositivo com a mesma aplicação ~~~~ ☑ (falta base de dados)
 
 o Listar todas as interfaces do dispositivo ☑
 
