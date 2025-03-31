@@ -9,7 +9,7 @@ o Listar todas as interfaces do dispositivo ☑
 
 o Listar apenas as interfaces wireless ☑
 
-o Listar/criar/editar/apagar interfaces bridge e respetivas portas associadas
+o Listar/criar/editar/apagar interfaces bridge e respetivas portas associadas ☑
 
 o Criar/editar/apagar perfis de segurança para utilizar nas redes wireless
 
