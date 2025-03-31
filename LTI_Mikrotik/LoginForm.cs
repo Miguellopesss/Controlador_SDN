@@ -63,11 +63,11 @@ namespace LTI_Mikrotik
                 // Ignorar a validação do certificado SSL
                 ServicePointManager.ServerCertificateValidationCallback += (sender2, cert, chain, sslPolicyErrors) => true;
 
-                var byteArray = Encoding.ASCII.GetBytes("admin:admin");
+                var byteArray = Encoding.ASCII.GetBytes("admin:proxmox123");
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 
                 System.Diagnostics.Debug.WriteLine("testeeeeeeeee");
-                var endpoint = "https://10.0.0.254/rest/interface";
+                var endpoint = "http://192.168.1.145/rest/interface";
 
                 try
                 {
@@ -82,13 +82,17 @@ namespace LTI_Mikrotik
                     {
                         foreach (LoginInterface loginInterface in jsonString)
                         {
-                            if (loginInterface.defaultName == "ether3")
+                            // Procurar a primeira interface ativa com MAC address válido
+                            if (loginInterface.Running == "true" && !string.IsNullOrWhiteSpace(loginInterface.MacAddress))
                             {
-                                macAddress.Text = loginInterface.macAddress;
-                                running.Text = loginInterface.running;
+                                macAddress.Text = loginInterface.MacAddress;
+                                runningLabel.Text = loginInterface.DefaultName + " (ativa)";
+                                break; // Já encontrámos a interface desejada
                             }
                         }
                     }
+
+
                 }
                 catch (Exception ex)
                 {
@@ -101,6 +105,27 @@ namespace LTI_Mikrotik
         private void Login_Load(object sender, EventArgs e)
         {
             setMacAddress();
+
+            MNDPDiscovery.DiscoverDevices(device =>
+            {
+                Invoke(new Action(() =>
+                {
+                    System.Diagnostics.Debug.WriteLine($"[MNDP] {device}");
+                    System.Diagnostics.Debug.WriteLine(device.Identity);
+                    System.Diagnostics.Debug.WriteLine(device.MacAddress);
+                   
+                }));
+            });
         }
+
+
+        private void OnDeviceDiscovered(DeviceInfo deviceInfo)
+        {
+            Invoke(new Action(() =>
+            {
+                System.Diagnostics.Debug.WriteLine($"Dispositivo encontrado: {deviceInfo.Identity}, MAC: {deviceInfo.MacAddress}");
+            }));
+        }
+
     }
 }

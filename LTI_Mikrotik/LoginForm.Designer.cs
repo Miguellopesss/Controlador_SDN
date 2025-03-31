@@ -37,7 +37,7 @@
             label2 = new Label();
             label3 = new Label();
             macAddress = new Label();
-            running = new Label();
+            runningLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -45,23 +45,21 @@
             // 
             label1.Location = new Point(0, 0);
             label1.Name = "label1";
-            label1.Size = new Size(88, 17);
+            label1.Size = new Size(101, 23);
             label1.TabIndex = 2;
             // 
             // User
             // 
-            User.Location = new Point(338, 278);
-            User.Margin = new Padding(3, 2, 3, 2);
+            User.Location = new Point(386, 371);
             User.Name = "User";
-            User.Size = new Size(110, 23);
+            User.Size = new Size(125, 27);
             User.TabIndex = 1;
             // 
             // Password
             // 
-            Password.Location = new Point(338, 326);
-            Password.Margin = new Padding(3, 2, 3, 2);
+            Password.Location = new Point(386, 435);
             Password.Name = "Password";
-            Password.Size = new Size(110, 23);
+            Password.Size = new Size(125, 27);
             Password.TabIndex = 3;
             // 
             // Login
@@ -70,10 +68,9 @@
             Login.FlatAppearance.BorderColor = Color.Black;
             Login.FlatStyle = FlatStyle.Popup;
             Login.ForeColor = SystemColors.ActiveCaptionText;
-            Login.Location = new Point(508, 334);
-            Login.Margin = new Padding(3, 2, 3, 2);
+            Login.Location = new Point(581, 445);
             Login.Name = "Login";
-            Login.Size = new Size(91, 26);
+            Login.Size = new Size(104, 35);
             Login.TabIndex = 4;
             Login.Text = "Login";
             Login.UseVisualStyleBackColor = false;
@@ -85,10 +82,9 @@
             pictureBox1.ErrorImage = null;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
             pictureBox1.InitialImage = null;
-            pictureBox1.Location = new Point(255, 98);
-            pictureBox1.Margin = new Padding(3, 2, 3, 2);
+            pictureBox1.Location = new Point(291, 131);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(192, 154);
+            pictureBox1.Size = new Size(219, 205);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 5;
             pictureBox1.TabStop = false;
@@ -96,44 +92,44 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(265, 281);
+            label2.Location = new Point(303, 375);
             label2.Name = "label2";
-            label2.Size = new Size(39, 15);
+            label2.Size = new Size(49, 20);
             label2.TabIndex = 6;
             label2.Text = "Name";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(260, 328);
+            label3.Location = new Point(297, 437);
             label3.Name = "label3";
-            label3.Size = new Size(57, 15);
+            label3.Size = new Size(70, 20);
             label3.TabIndex = 7;
             label3.Text = "Password";
             // 
             // macAddress
             // 
             macAddress.AutoSize = true;
-            macAddress.Location = new Point(266, 35);
+            macAddress.Location = new Point(304, 47);
             macAddress.Name = "macAddress";
-            macAddress.Size = new Size(0, 15);
+            macAddress.Size = new Size(0, 20);
             macAddress.TabIndex = 8;
             // 
-            // running
+            // runningLabel
             // 
-            running.AutoSize = true;
-            running.Location = new Point(464, 35);
-            running.Name = "running";
-            running.Size = new Size(38, 15);
-            running.TabIndex = 9;
-            running.Text = "label5";
+            runningLabel.AutoSize = true;
+            runningLabel.Location = new Point(527, 47);
+            runningLabel.Name = "runningLabel";
+            runningLabel.Size = new Size(50, 20);
+            runningLabel.TabIndex = 9;
+            runningLabel.Text = "label5";
             // 
             // LoginForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(700, 400);
-            Controls.Add(running);
+            ClientSize = new Size(800, 533);
+            Controls.Add(runningLabel);
             Controls.Add(macAddress);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -142,7 +138,6 @@
             Controls.Add(Password);
             Controls.Add(User);
             Controls.Add(label1);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "LoginForm";
             Text = "LoginForm";
             Load += Login_Load;
@@ -161,6 +156,6 @@
         private Label label2;
         private Label label3;
         private Label macAddress;
-        private Label running;
+        private Label runningLabel;
     }
 }

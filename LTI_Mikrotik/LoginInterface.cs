@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace LTI_Mikrotik
 {
-    class LoginInterface
+    public class LoginInterface
     {
-        public string defaultName { get; set; } = string.Empty;
-        public string macAddress { get; set; } = string.Empty;
-        public string running { get; set; } = string.Empty;
+        [JsonPropertyName("default-name")]
+        public string DefaultName { get; set; } = string.Empty;
+
+        [JsonPropertyName("mac-address")]
+        public string MacAddress { get; set; } = string.Empty;
+
+        [JsonPropertyName("running")]
+        public string Running { get; set; } = string.Empty;
     }
 }

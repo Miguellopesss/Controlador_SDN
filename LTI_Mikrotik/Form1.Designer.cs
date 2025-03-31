@@ -58,6 +58,50 @@
             button5 = new Button();
             listBox2 = new ListBox();
             tabPage3 = new TabPage();
+            groupBox9 = new GroupBox();
+            label38 = new Label();
+            comboBox7 = new ComboBox();
+            label31 = new Label();
+            comboBox5 = new ComboBox();
+            textBox14 = new TextBox();
+            textBox15 = new TextBox();
+            button18 = new Button();
+            label32 = new Label();
+            label33 = new Label();
+            groupBox10 = new GroupBox();
+            label39 = new Label();
+            comboBox8 = new ComboBox();
+            comboBox6 = new ComboBox();
+            label34 = new Label();
+            textBox16 = new TextBox();
+            textBox17 = new TextBox();
+            button19 = new Button();
+            label35 = new Label();
+            label36 = new Label();
+            button20 = new Button();
+            label37 = new Label();
+            listBox8 = new ListBox();
+            tabPage9 = new TabPage();
+            groupBox11 = new GroupBox();
+            label40 = new Label();
+            comboBox9 = new ComboBox();
+            label41 = new Label();
+            textBox18 = new TextBox();
+            textBox19 = new TextBox();
+            button21 = new Button();
+            label42 = new Label();
+            label43 = new Label();
+            groupBox12 = new GroupBox();
+            label44 = new Label();
+            comboBox11 = new ComboBox();
+            textBox20 = new TextBox();
+            textBox21 = new TextBox();
+            button22 = new Button();
+            label46 = new Label();
+            label47 = new Label();
+            button23 = new Button();
+            label48 = new Label();
+            listBox9 = new ListBox();
             tabPage4 = new TabPage();
             groupBox8 = new GroupBox();
             comboBox3 = new ComboBox();
@@ -127,6 +171,12 @@
             tabPage1.SuspendLayout();
             groupBox1.SuspendLayout();
             tabPage2.SuspendLayout();
+            tabPage3.SuspendLayout();
+            groupBox9.SuspendLayout();
+            groupBox10.SuspendLayout();
+            tabPage9.SuspendLayout();
+            groupBox11.SuspendLayout();
+            groupBox12.SuspendLayout();
             tabPage4.SuspendLayout();
             groupBox8.SuspendLayout();
             groupBox6.SuspendLayout();
@@ -145,6 +195,7 @@
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
             tabControl1.Controls.Add(tabPage3);
+            tabControl1.Controls.Add(tabPage9);
             tabControl1.Controls.Add(tabPage4);
             tabControl1.Controls.Add(tabPage5);
             tabControl1.Controls.Add(tabPage7);
@@ -444,12 +495,440 @@
             // 
             // tabPage3
             // 
+            tabPage3.Controls.Add(groupBox9);
+            tabPage3.Controls.Add(groupBox10);
+            tabPage3.Controls.Add(button20);
+            tabPage3.Controls.Add(label37);
+            tabPage3.Controls.Add(listBox8);
             tabPage3.Location = new Point(4, 29);
             tabPage3.Name = "tabPage3";
             tabPage3.Size = new Size(1256, 668);
             tabPage3.TabIndex = 2;
             tabPage3.Text = "DHCP";
             tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox9
+            // 
+            groupBox9.BackColor = Color.Gainsboro;
+            groupBox9.Controls.Add(label38);
+            groupBox9.Controls.Add(comboBox7);
+            groupBox9.Controls.Add(label31);
+            groupBox9.Controls.Add(comboBox5);
+            groupBox9.Controls.Add(textBox14);
+            groupBox9.Controls.Add(textBox15);
+            groupBox9.Controls.Add(button18);
+            groupBox9.Controls.Add(label32);
+            groupBox9.Controls.Add(label33);
+            groupBox9.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox9.Location = new Point(714, 350);
+            groupBox9.Name = "groupBox9";
+            groupBox9.Size = new Size(361, 300);
+            groupBox9.TabIndex = 30;
+            groupBox9.TabStop = false;
+            groupBox9.Text = "Criar DHCP Server";
+            // 
+            // label38
+            // 
+            label38.AutoSize = true;
+            label38.Location = new Point(63, 211);
+            label38.Name = "label38";
+            label38.Size = new Size(95, 20);
+            label38.TabIndex = 28;
+            label38.Text = "Address Pool";
+            // 
+            // comboBox7
+            // 
+            comboBox7.FormattingEnabled = true;
+            comboBox7.Location = new Point(204, 211);
+            comboBox7.Name = "comboBox7";
+            comboBox7.Size = new Size(128, 28);
+            comboBox7.TabIndex = 29;
+            // 
+            // label31
+            // 
+            label31.AutoSize = true;
+            label31.Location = new Point(63, 158);
+            label31.Name = "label31";
+            label31.Size = new Size(67, 20);
+            label31.TabIndex = 27;
+            label31.Text = "Interface";
+            // 
+            // comboBox5
+            // 
+            comboBox5.FormattingEnabled = true;
+            comboBox5.Location = new Point(204, 158);
+            comboBox5.Name = "comboBox5";
+            comboBox5.Size = new Size(128, 28);
+            comboBox5.TabIndex = 27;
+            // 
+            // textBox14
+            // 
+            textBox14.Location = new Point(207, 46);
+            textBox14.Name = "textBox14";
+            textBox14.Size = new Size(125, 27);
+            textBox14.TabIndex = 20;
+            // 
+            // textBox15
+            // 
+            textBox15.Location = new Point(207, 102);
+            textBox15.Name = "textBox15";
+            textBox15.Size = new Size(125, 27);
+            textBox15.TabIndex = 21;
+            // 
+            // button18
+            // 
+            button18.Location = new Point(217, 255);
+            button18.Name = "button18";
+            button18.Size = new Size(100, 33);
+            button18.TabIndex = 17;
+            button18.Text = "Criar ";
+            button18.UseVisualStyleBackColor = true;
+            button18.Click += button18_Click;
+            // 
+            // label32
+            // 
+            label32.AutoSize = true;
+            label32.Location = new Point(63, 105);
+            label32.Name = "label32";
+            label32.Size = new Size(83, 20);
+            label32.TabIndex = 12;
+            label32.Text = "Lease Time";
+            // 
+            // label33
+            // 
+            label33.AutoSize = true;
+            label33.Location = new Point(63, 49);
+            label33.Name = "label33";
+            label33.Size = new Size(49, 20);
+            label33.TabIndex = 11;
+            label33.Text = "Name";
+            // 
+            // groupBox10
+            // 
+            groupBox10.BackColor = Color.Gainsboro;
+            groupBox10.Controls.Add(label39);
+            groupBox10.Controls.Add(comboBox8);
+            groupBox10.Controls.Add(comboBox6);
+            groupBox10.Controls.Add(label34);
+            groupBox10.Controls.Add(textBox16);
+            groupBox10.Controls.Add(textBox17);
+            groupBox10.Controls.Add(button19);
+            groupBox10.Controls.Add(label35);
+            groupBox10.Controls.Add(label36);
+            groupBox10.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox10.Location = new Point(714, 23);
+            groupBox10.Name = "groupBox10";
+            groupBox10.Size = new Size(361, 312);
+            groupBox10.TabIndex = 29;
+            groupBox10.TabStop = false;
+            groupBox10.Text = "Configurar DHCP Server";
+            // 
+            // label39
+            // 
+            label39.AutoSize = true;
+            label39.Location = new Point(63, 222);
+            label39.Name = "label39";
+            label39.Size = new Size(95, 20);
+            label39.TabIndex = 28;
+            label39.Text = "Address Pool";
+            // 
+            // comboBox8
+            // 
+            comboBox8.FormattingEnabled = true;
+            comboBox8.Location = new Point(204, 222);
+            comboBox8.Name = "comboBox8";
+            comboBox8.Size = new Size(128, 28);
+            comboBox8.TabIndex = 29;
+            // 
+            // comboBox6
+            // 
+            comboBox6.FormattingEnabled = true;
+            comboBox6.Location = new Point(204, 163);
+            comboBox6.Name = "comboBox6";
+            comboBox6.Size = new Size(128, 28);
+            comboBox6.TabIndex = 26;
+            // 
+            // label34
+            // 
+            label34.AutoSize = true;
+            label34.Location = new Point(63, 166);
+            label34.Name = "label34";
+            label34.Size = new Size(67, 20);
+            label34.TabIndex = 20;
+            label34.Text = "Interface";
+            // 
+            // textBox16
+            // 
+            textBox16.Location = new Point(204, 47);
+            textBox16.Name = "textBox16";
+            textBox16.Size = new Size(128, 27);
+            textBox16.TabIndex = 19;
+            // 
+            // textBox17
+            // 
+            textBox17.Location = new Point(204, 106);
+            textBox17.Name = "textBox17";
+            textBox17.Size = new Size(128, 27);
+            textBox17.TabIndex = 18;
+            // 
+            // button19
+            // 
+            button19.Location = new Point(217, 268);
+            button19.Name = "button19";
+            button19.Size = new Size(100, 33);
+            button19.TabIndex = 17;
+            button19.Text = "Atualizar";
+            button19.UseVisualStyleBackColor = true;
+            button19.Click += button19_Click;
+            // 
+            // label35
+            // 
+            label35.AutoSize = true;
+            label35.Location = new Point(63, 109);
+            label35.Name = "label35";
+            label35.Size = new Size(83, 20);
+            label35.TabIndex = 12;
+            label35.Text = "Lease Time";
+            // 
+            // label36
+            // 
+            label36.AutoSize = true;
+            label36.Location = new Point(63, 50);
+            label36.Name = "label36";
+            label36.Size = new Size(49, 20);
+            label36.TabIndex = 11;
+            label36.Text = "Name";
+            // 
+            // button20
+            // 
+            button20.Location = new Point(540, 67);
+            button20.Name = "button20";
+            button20.Size = new Size(105, 38);
+            button20.TabIndex = 28;
+            button20.Text = "Apagar";
+            button20.UseVisualStyleBackColor = true;
+            button20.Click += button20_Click_1;
+            // 
+            // label37
+            // 
+            label37.AutoSize = true;
+            label37.Location = new Point(235, 34);
+            label37.Name = "label37";
+            label37.Size = new Size(48, 20);
+            label37.TabIndex = 27;
+            label37.Text = "DHCP";
+            // 
+            // listBox8
+            // 
+            listBox8.BackColor = Color.Gainsboro;
+            listBox8.FormattingEnabled = true;
+            listBox8.Location = new Point(32, 67);
+            listBox8.Name = "listBox8";
+            listBox8.Size = new Size(485, 444);
+            listBox8.TabIndex = 26;
+            listBox8.SelectedIndexChanged += listBox8_SelectedIndexChanged_1;
+            // 
+            // tabPage9
+            // 
+            tabPage9.Controls.Add(groupBox11);
+            tabPage9.Controls.Add(groupBox12);
+            tabPage9.Controls.Add(button23);
+            tabPage9.Controls.Add(label48);
+            tabPage9.Controls.Add(listBox9);
+            tabPage9.Location = new Point(4, 29);
+            tabPage9.Name = "tabPage9";
+            tabPage9.Size = new Size(1256, 668);
+            tabPage9.TabIndex = 8;
+            tabPage9.Text = "Address Pool";
+            tabPage9.UseVisualStyleBackColor = true;
+            // 
+            // groupBox11
+            // 
+            groupBox11.BackColor = Color.Gainsboro;
+            groupBox11.Controls.Add(label40);
+            groupBox11.Controls.Add(comboBox9);
+            groupBox11.Controls.Add(label41);
+            groupBox11.Controls.Add(textBox18);
+            groupBox11.Controls.Add(textBox19);
+            groupBox11.Controls.Add(button21);
+            groupBox11.Controls.Add(label42);
+            groupBox11.Controls.Add(label43);
+            groupBox11.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox11.Location = new Point(717, 373);
+            groupBox11.Name = "groupBox11";
+            groupBox11.Size = new Size(361, 267);
+            groupBox11.TabIndex = 35;
+            groupBox11.TabStop = false;
+            groupBox11.Text = "Criar Address Pool";
+            // 
+            // label40
+            // 
+            label40.AutoSize = true;
+            label40.Location = new Point(63, 168);
+            label40.Name = "label40";
+            label40.Size = new Size(95, 20);
+            label40.TabIndex = 28;
+            label40.Text = "Address Pool";
+            // 
+            // comboBox9
+            // 
+            comboBox9.FormattingEnabled = true;
+            comboBox9.Location = new Point(204, 168);
+            comboBox9.Name = "comboBox9";
+            comboBox9.Size = new Size(128, 28);
+            comboBox9.TabIndex = 29;
+            // 
+            // label41
+            // 
+            label41.AutoSize = true;
+            label41.Location = new Point(63, 158);
+            label41.Name = "label41";
+            label41.Size = new Size(0, 20);
+            label41.TabIndex = 27;
+            // 
+            // textBox18
+            // 
+            textBox18.Location = new Point(207, 46);
+            textBox18.Name = "textBox18";
+            textBox18.Size = new Size(125, 27);
+            textBox18.TabIndex = 20;
+            // 
+            // textBox19
+            // 
+            textBox19.Location = new Point(207, 102);
+            textBox19.Name = "textBox19";
+            textBox19.Size = new Size(125, 27);
+            textBox19.TabIndex = 21;
+            // 
+            // button21
+            // 
+            button21.Location = new Point(217, 212);
+            button21.Name = "button21";
+            button21.Size = new Size(100, 33);
+            button21.TabIndex = 17;
+            button21.Text = "Criar ";
+            button21.UseVisualStyleBackColor = true;
+            // 
+            // label42
+            // 
+            label42.AutoSize = true;
+            label42.Location = new Point(63, 105);
+            label42.Name = "label42";
+            label42.Size = new Size(83, 20);
+            label42.TabIndex = 12;
+            label42.Text = "Lease Time";
+            // 
+            // label43
+            // 
+            label43.AutoSize = true;
+            label43.Location = new Point(63, 49);
+            label43.Name = "label43";
+            label43.Size = new Size(49, 20);
+            label43.TabIndex = 11;
+            label43.Text = "Name";
+            // 
+            // groupBox12
+            // 
+            groupBox12.BackColor = Color.Gainsboro;
+            groupBox12.Controls.Add(label44);
+            groupBox12.Controls.Add(comboBox11);
+            groupBox12.Controls.Add(textBox20);
+            groupBox12.Controls.Add(textBox21);
+            groupBox12.Controls.Add(button22);
+            groupBox12.Controls.Add(label46);
+            groupBox12.Controls.Add(label47);
+            groupBox12.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox12.Location = new Point(717, 66);
+            groupBox12.Name = "groupBox12";
+            groupBox12.Size = new Size(361, 268);
+            groupBox12.TabIndex = 34;
+            groupBox12.TabStop = false;
+            groupBox12.Text = "Configurar Address Pool";
+            // 
+            // label44
+            // 
+            label44.AutoSize = true;
+            label44.Location = new Point(63, 168);
+            label44.Name = "label44";
+            label44.Size = new Size(95, 20);
+            label44.TabIndex = 28;
+            label44.Text = "Address Pool";
+            // 
+            // comboBox11
+            // 
+            comboBox11.FormattingEnabled = true;
+            comboBox11.Location = new Point(204, 168);
+            comboBox11.Name = "comboBox11";
+            comboBox11.Size = new Size(128, 28);
+            comboBox11.TabIndex = 29;
+            // 
+            // textBox20
+            // 
+            textBox20.Location = new Point(204, 47);
+            textBox20.Name = "textBox20";
+            textBox20.Size = new Size(128, 27);
+            textBox20.TabIndex = 19;
+            // 
+            // textBox21
+            // 
+            textBox21.Location = new Point(204, 106);
+            textBox21.Name = "textBox21";
+            textBox21.Size = new Size(128, 27);
+            textBox21.TabIndex = 18;
+            // 
+            // button22
+            // 
+            button22.Location = new Point(217, 214);
+            button22.Name = "button22";
+            button22.Size = new Size(100, 33);
+            button22.TabIndex = 17;
+            button22.Text = "Atualizar";
+            button22.UseVisualStyleBackColor = true;
+            // 
+            // label46
+            // 
+            label46.AutoSize = true;
+            label46.Location = new Point(63, 109);
+            label46.Name = "label46";
+            label46.Size = new Size(83, 20);
+            label46.TabIndex = 12;
+            label46.Text = "Lease Time";
+            // 
+            // label47
+            // 
+            label47.AutoSize = true;
+            label47.Location = new Point(63, 50);
+            label47.Name = "label47";
+            label47.Size = new Size(49, 20);
+            label47.TabIndex = 11;
+            label47.Text = "Name";
+            // 
+            // button23
+            // 
+            button23.Location = new Point(543, 66);
+            button23.Name = "button23";
+            button23.Size = new Size(105, 38);
+            button23.TabIndex = 33;
+            button23.Text = "Apagar";
+            button23.UseVisualStyleBackColor = true;
+            // 
+            // label48
+            // 
+            label48.AutoSize = true;
+            label48.Location = new Point(216, 33);
+            label48.Name = "label48";
+            label48.Size = new Size(95, 20);
+            label48.TabIndex = 32;
+            label48.Text = "Address Pool";
+            // 
+            // listBox9
+            // 
+            listBox9.BackColor = Color.Gainsboro;
+            listBox9.FormattingEnabled = true;
+            listBox9.Location = new Point(35, 66);
+            listBox9.Name = "listBox9";
+            listBox9.Size = new Size(485, 444);
+            listBox9.TabIndex = 31;
             // 
             // tabPage4
             // 
@@ -1109,6 +1588,18 @@
             groupBox1.PerformLayout();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
+            tabPage3.ResumeLayout(false);
+            tabPage3.PerformLayout();
+            groupBox9.ResumeLayout(false);
+            groupBox9.PerformLayout();
+            groupBox10.ResumeLayout(false);
+            groupBox10.PerformLayout();
+            tabPage9.ResumeLayout(false);
+            tabPage9.PerformLayout();
+            groupBox11.ResumeLayout(false);
+            groupBox11.PerformLayout();
+            groupBox12.ResumeLayout(false);
+            groupBox12.PerformLayout();
             tabPage4.ResumeLayout(false);
             tabPage4.PerformLayout();
             groupBox8.ResumeLayout(false);
@@ -1228,5 +1719,49 @@
         private Button button13;
         private Label label23;
         private Label label30;
+        private GroupBox groupBox9;
+        private Label label31;
+        private ComboBox comboBox5;
+        private TextBox textBox14;
+        private TextBox textBox15;
+        private Button button18;
+        private Label label32;
+        private Label label33;
+        private GroupBox groupBox10;
+        private ComboBox comboBox6;
+        private Label label34;
+        private TextBox textBox16;
+        private TextBox textBox17;
+        private Button button19;
+        private Label label35;
+        private Label label36;
+        private Button button20;
+        private Label label37;
+        private ListBox listBox8;
+        private Label label38;
+        private ComboBox comboBox7;
+        private Label label39;
+        private ComboBox comboBox8;
+        private TabPage tabPage9;
+        private GroupBox groupBox11;
+        private Label label40;
+        private ComboBox comboBox9;
+        private Label label41;
+        private TextBox textBox18;
+        private TextBox textBox19;
+        private Button button21;
+        private Label label42;
+        private Label label43;
+        private GroupBox groupBox12;
+        private Label label44;
+        private ComboBox comboBox11;
+        private TextBox textBox20;
+        private TextBox textBox21;
+        private Button button22;
+        private Label label46;
+        private Label label47;
+        private Button button23;
+        private Label label48;
+        private ListBox listBox9;
     }
 }

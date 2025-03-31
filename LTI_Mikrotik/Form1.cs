@@ -22,6 +22,8 @@ namespace LTI_Mikrotik
         private List<InterfaceGenerica> todasInterfaces = new List<InterfaceGenerica>();
         private List<DnsStaticEntry> dnsStaticEntries = new List<DnsStaticEntry>();
         private DnsStaticEntry? dnsStaticSelecionado;
+        private List<DhcpServer> dhcpServers = new();
+        private DhcpServer? dhcpSelecionado;
 
 
         public Form1(string username, string password)
@@ -69,6 +71,8 @@ namespace LTI_Mikrotik
             await CarregarEnderecosIP();
             await CarregarDnsAsync();
             await CarregarDnsStaticAsync();
+            await CarregarDhcpServersAsync();
+            await CarregarAddressPoolsAsync();
 
 
 
@@ -289,6 +293,8 @@ namespace LTI_Mikrotik
                     listBox3.Items.Clear();
                     comboBox1.Items.Clear();
                     comboBox2.Items.Clear();
+                    comboBox6.Items.Clear();
+                    comboBox5.Items.Clear();
 
                     if (todasInterfaces != null)
                     {
@@ -297,6 +303,8 @@ namespace LTI_Mikrotik
                             listBox3.Items.Add(iface);
                             comboBox1.Items.Add(iface.Name);
                             comboBox2.Items.Add(iface.Name);
+                            comboBox6.Items.Add(iface.Name);
+                            comboBox5.Items.Add(iface.Name);
                         }
                     }
                 }
@@ -902,6 +910,203 @@ namespace LTI_Mikrotik
             }
         }
 
+        private async Task CarregarDhcpServersAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(urlLink + "ip/dhcp-server");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var dhcpServersTemp = JsonSerializer.Deserialize<List<DhcpServer>>(json);
+                    dhcpServers = dhcpServersTemp ?? new List<DhcpServer>();
+
+                    listBox8.Items.Clear();
+
+                    if (dhcpServers != null)
+                    {
+                        foreach (var server in dhcpServers)
+                            listBox8.Items.Add(server);
+                    }
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao obter servidores DHCP:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+
+        private void listBox8_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (listBox8.SelectedIndex >= 0 && listBox8.SelectedIndex < dhcpServers.Count)
+            {
+                dhcpSelecionado = dhcpServers[listBox8.SelectedIndex];
+
+                textBox16.Text = dhcpSelecionado.Name;
+                textBox17.Text = dhcpSelecionado.LeaseTime;
+                comboBox6.SelectedItem = dhcpSelecionado.Interface;
+                comboBox8.SelectedItem = dhcpSelecionado.AddressPool;
+            }
+        }
+
+
+        private async void button20_Click_1(object sender, EventArgs e)
+        {
+            if (dhcpSelecionado == null)
+            {
+                MessageBox.Show("Seleciona um servidor DHCP.");
+                return;
+            }
+
+            HttpResponseMessage response = await client.DeleteAsync($"{urlLink}ip/dhcp-server/{dhcpSelecionado.Id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Servidor DHCP removido com sucesso.");
+                await CarregarDhcpServersAsync();
+            }
+            else
+            {
+                string erro = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"Erro ao remover DHCP:\n{response.StatusCode}\n{erro}");
+            }
+        }
+
+        private async void button19_Click(object sender, EventArgs e)
+        {
+            if (dhcpSelecionado == null)
+            {
+                MessageBox.Show("Seleciona um servidor DHCP.");
+                return;
+            }
+
+            var update = new Dictionary<string, string>
+            {
+                ["name"] = textBox16.Text.Trim(),
+                ["lease-time"] = textBox17.Text.Trim(),
+                ["interface"] = comboBox6.SelectedItem?.ToString() ?? "",
+                ["address-pool"] = comboBox8.SelectedItem?.ToString() ?? ""
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(update), Encoding.UTF8, "application/json");
+            var request = new HttpRequestMessage(new HttpMethod("PATCH"), $"{urlLink}ip/dhcp-server/{dhcpSelecionado.Id}")
+            {
+                Content = content
+            };
+
+            HttpResponseMessage response = await client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("DHCP atualizado com sucesso.");
+                await CarregarDhcpServersAsync();
+            }
+            else
+            {
+                string erro = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"Erro ao atualizar DHCP:\n{response.StatusCode}\n{erro}");
+            }
+        }
+
+
+        private async Task CarregarAddressPoolsAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(urlLink + "ip/pool");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var pools = JsonSerializer.Deserialize<List<AddressPool>>(json);
+
+                    comboBox8.Items.Clear();
+                    comboBox7.Items.Clear();
+
+                    if (pools != null)
+                    {
+                        foreach (var pool in pools)
+                        {
+                            comboBox8.Items.Add(pool.Name);
+                            comboBox7.Items.Add(pool.Name);
+                        }
+                    }
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao obter address pools:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar address pools: " + ex.Message);
+            }
+        }
+
+        private async void button18_Click(object sender, EventArgs e)
+        {
+            string name = textBox14.Text.Trim();
+            string leaseTime = textBox15.Text.Trim();
+            string iface = comboBox5.SelectedItem?.ToString() ?? "";
+            string pool = comboBox7.SelectedItem?.ToString() ?? "";
+
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(leaseTime) || string.IsNullOrWhiteSpace(iface) || string.IsNullOrWhiteSpace(pool))
+            {
+                MessageBox.Show("Preenche todos os campos para criar o DHCP Server.");
+                return;
+            }
+
+            var novoDhcp = new Dictionary<string, string>
+            {
+                ["name"] = name,
+                ["lease-time"] = leaseTime,
+                ["interface"] = iface,
+                ["address-pool"] = pool
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(novoDhcp), Encoding.UTF8, "application/json");
+
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{urlLink}ip/dhcp-server")
+            {
+                Content = content
+            };
+
+            try
+            {
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("DHCP Server criado com sucesso.");
+                    await CarregarDhcpServersAsync(); // se tiveres esta função para atualizar a lista
+                    textBox14.Clear();
+                    textBox15.Clear();
+                    comboBox5.SelectedIndex = -1;
+                    comboBox7.SelectedIndex = -1;
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao criar DHCP Server:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+    }
+    public class AddressPool
+    {
+        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
     }
 
     public class WirelessInterface
@@ -992,6 +1197,22 @@ namespace LTI_Mikrotik
             return $"Name: {Name} -> Address: {Address}";
         }
     }
+
+
+    public class DhcpServer
+    {
+        [JsonPropertyName(".id")] public string Id { get; set; } = string.Empty;
+        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("interface")] public string Interface { get; set; } = string.Empty;
+        [JsonPropertyName("lease-time")] public string LeaseTime { get; set; } = string.Empty;
+        [JsonPropertyName("address-pool")] public string AddressPool { get; set; } = string.Empty;
+
+        public override string ToString()
+        {
+            return $"{Name} | Interface: {Interface} | Lease Time: {LeaseTime} | Pool: {AddressPool}";
+        }
+    }
+
 
 
 
