@@ -29,46 +29,45 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
-            label1 = new Label();
-            User = new TextBox();
-            Password = new TextBox();
+            username = new TextBox();
+            password = new TextBox();
             Login = new Button();
             pictureBox1 = new PictureBox();
             label2 = new Label();
             label3 = new Label();
-            macAddress = new Label();
-            runningLabel = new Label();
+            label4 = new Label();
+            name = new TextBox();
+            ipAddress = new TextBox();
+            label5 = new Label();
+            listBox1 = new ListBox();
+
+            MaximizeBox = false;
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
-            // label1
+            // username
             // 
-            label1.Location = new Point(0, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(101, 23);
-            label1.TabIndex = 2;
+            username.Location = new Point(939, 452);
+            username.Name = "username";
+            username.Size = new Size(125, 27);
+            username.TabIndex = 1;
             // 
-            // User
+            // password
             // 
-            User.Location = new Point(386, 371);
-            User.Name = "User";
-            User.Size = new Size(125, 27);
-            User.TabIndex = 1;
-            // 
-            // Password
-            // 
-            Password.Location = new Point(386, 435);
-            Password.Name = "Password";
-            Password.Size = new Size(125, 27);
-            Password.TabIndex = 3;
+            password.Location = new Point(939, 506);
+            password.Name = "password";
+            password.Size = new Size(125, 27);
+            password.TabIndex = 3;
             // 
             // Login
             // 
             Login.BackColor = Color.LightSkyBlue;
             Login.FlatAppearance.BorderColor = Color.Black;
-            Login.FlatStyle = FlatStyle.Popup;
+            Login.FlatStyle = FlatStyle.Flat;
+            Login.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             Login.ForeColor = SystemColors.ActiveCaptionText;
-            Login.Location = new Point(581, 445);
+            Login.Location = new Point(917, 565);
             Login.Name = "Login";
             Login.Size = new Size(104, 35);
             Login.TabIndex = 4;
@@ -82,7 +81,7 @@
             pictureBox1.ErrorImage = null;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
             pictureBox1.InitialImage = null;
-            pictureBox1.Location = new Point(291, 131);
+            pictureBox1.Location = new Point(850, 118);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(219, 205);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -92,70 +91,106 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(303, 375);
+            label2.BackColor = Color.Transparent;
+            label2.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(850, 455);
             label2.Name = "label2";
-            label2.Size = new Size(49, 20);
+            label2.Size = new Size(80, 20);
             label2.TabIndex = 6;
-            label2.Text = "Name";
+            label2.Text = "Username";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(297, 437);
+            label3.BackColor = Color.Transparent;
+            label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.Location = new Point(850, 508);
             label3.Name = "label3";
-            label3.Size = new Size(70, 20);
+            label3.Size = new Size(76, 20);
             label3.TabIndex = 7;
             label3.Text = "Password";
             // 
-            // macAddress
+            // label4
             // 
-            macAddress.AutoSize = true;
-            macAddress.Location = new Point(304, 47);
-            macAddress.Name = "macAddress";
-            macAddress.Size = new Size(0, 20);
-            macAddress.TabIndex = 8;
+            label4.AutoSize = true;
+            label4.BackColor = Color.Transparent;
+            label4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label4.ForeColor = Color.Black;
+            label4.Location = new Point(850, 349);
+            label4.Name = "label4";
+            label4.Size = new Size(51, 20);
+            label4.TabIndex = 10;
+            label4.Text = "Name";
             // 
-            // runningLabel
+            // name
             // 
-            runningLabel.AutoSize = true;
-            runningLabel.Location = new Point(527, 47);
-            runningLabel.Name = "runningLabel";
-            runningLabel.Size = new Size(50, 20);
-            runningLabel.TabIndex = 9;
-            runningLabel.Text = "label5";
+            name.Location = new Point(939, 346);
+            name.Name = "name";
+            name.Size = new Size(125, 27);
+            name.TabIndex = 11;
+            // 
+            // ipAddress
+            // 
+            ipAddress.Location = new Point(939, 398);
+            ipAddress.Name = "ipAddress";
+            ipAddress.Size = new Size(125, 27);
+            ipAddress.TabIndex = 12;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.BackColor = Color.Transparent;
+            label5.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.Location = new Point(850, 401);
+            label5.Name = "label5";
+            label5.Size = new Size(84, 20);
+            label5.TabIndex = 13;
+            label5.Text = "IP Address";
+            // 
+            // listBox1
+            // 
+            listBox1.FormattingEnabled = true;
+            listBox1.Location = new Point(168, 118);
+            listBox1.Name = "listBox1";
+            listBox1.Size = new Size(458, 484);
+            listBox1.TabIndex = 14;
+            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged_1;
             // 
             // LoginForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 533);
-            Controls.Add(runningLabel);
-            Controls.Add(macAddress);
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+            ClientSize = new Size(1327, 776);
+            Controls.Add(listBox1);
+            Controls.Add(label5);
+            Controls.Add(ipAddress);
+            Controls.Add(name);
+            Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(pictureBox1);
             Controls.Add(Login);
-            Controls.Add(Password);
-            Controls.Add(User);
-            Controls.Add(label1);
+            Controls.Add(password);
+            Controls.Add(username);
             Name = "LoginForm";
             Text = "LoginForm";
-            Load += Login_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private Label label1;
-        private TextBox User;
-        private TextBox Password;
+        private TextBox username;
+        private TextBox password;
         private Button Login;
         private PictureBox pictureBox1;
         private Label label2;
         private Label label3;
-        private Label macAddress;
-        private Label runningLabel;
+        private Label label4;
+        private TextBox name;
+        private TextBox ipAddress;
+        private Label label5;
+        private ListBox listBox1;
     }
 }

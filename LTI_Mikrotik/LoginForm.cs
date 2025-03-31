@@ -1,36 +1,110 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net;
 using System.Text;
-using System.Windows.Forms;
-using System.Text.Json;
-using System.Net.Mail;
 
 namespace LTI_Mikrotik
 {
     public partial class LoginForm : Form
     {
+        private List<Device> devices = new List<Device>();
+
         public LoginForm()
         {
             InitializeComponent();
-            Password.PasswordChar = '●'; // Protege a password
+            password.PasswordChar = '●'; // Protege a password
+
         }
+
+        private void listBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex >= 0 && listBox1.SelectedIndex < devices.Count)
+            {
+                var selecionado = devices[listBox1.SelectedIndex];
+                name.Text = selecionado.name;
+                ipAddress.Text = selecionado.ipAddress;
+                username.Text = selecionado.username;
+                password.Text = selecionado.password;
+            }
+        }
+
 
         private async void Login_Click_1(object sender, EventArgs e)
         {
-            var urlLogin = "http://192.168.1.145/rest/interface";
-            string username = User.Text;
-            string password = Password.Text;
+            string nameValue = name.Text.Trim();
+            string ipAddressValue = ipAddress.Text.Trim();
+            string usernameValue = username.Text.Trim();
+            string passwordValue = password.Text;
+
+            if (string.IsNullOrWhiteSpace(nameValue) ||
+                string.IsNullOrWhiteSpace(ipAddressValue) ||
+                string.IsNullOrWhiteSpace(usernameValue) ||
+                string.IsNullOrWhiteSpace(passwordValue))
+            {
+                MessageBox.Show("Preenche todos os campos antes de iniciar sessão.");
+                return;
+            }
+
+            // Limpa devices antigos
+            devices.Clear();
+
+            var device = new Device
+            {
+                name = nameValue,
+                ipAddress = ipAddressValue,
+                username = usernameValue,
+                password = passwordValue
+            };
+
+            // Só adiciona se o login for bem-sucedido
+            bool sucesso = await ConnectToDevice(device);
+            if (sucesso)
+            {
+                listBox1.Items.Clear();
+                devices.Add(device);
+                foreach (var d in devices)
+                {
+                    listBox1.Items.Add($"{d.name} ({d.ipAddress}) - {d.username}");
+                    System.Diagnostics.Debug.WriteLine($"Nome: {d.name}");
+                    System.Diagnostics.Debug.WriteLine($"IP: {d.ipAddress}");
+                    System.Diagnostics.Debug.WriteLine($"Username: {d.username}");
+                    System.Diagnostics.Debug.WriteLine($"Password: {d.password}");
+                    System.Diagnostics.Debug.WriteLine("------------------------------");
+                }
+            }
+        }
+
+        private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            TabControl tabControl = sender as TabControl;
+            TabPage tabPage = tabControl.TabPages[e.Index];
+            Rectangle tabRect = tabControl.GetTabRect(e.Index);
+
+            // Verificar se a aba é a aba ativa
+            if (e.Index == tabControl.SelectedIndex)
+            {
+                // Desenhar o fundo da aba ativa com uma cor diferente
+                e.Graphics.FillRectangle(Brushes.LightBlue, tabRect);
+            }
+            else
+            {
+                // Desenhar o fundo das outras abas
+                e.Graphics.FillRectangle(SystemBrushes.Control, tabRect);
+            }
+
+            // Desenhar o texto da aba
+            TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+        }
+
+        private async Task<bool> ConnectToDevice(Device device)
+        {
+            var urlLogin = $"http://{device.ipAddress}/rest/interface";
 
             using (HttpClient httpClient = new HttpClient())
             {
-                // Ignorar certificado SSL (caso uses HTTPS no futuro)
                 ServicePointManager.ServerCertificateValidationCallback += (sender2, cert, chain, sslPolicyErrors) => true;
 
-                var byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
-                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+                var byteArray = Encoding.ASCII.GetBytes($"{device.username}:{device.password}");
+                httpClient.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 
                 try
                 {
@@ -39,93 +113,31 @@ namespace LTI_Mikrotik
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        Form1 form1 = new Form1(username, password);
-                        form1.FormClosed += (s, args) => this.Show(); // Voltar ao Login ao fechar
+                        Form1 form1 = new Form1(device);
+                        form1.FormClosed += (s, args) =>
+                        {
+                            username.Text = "";
+                            password.Text = "";
+                            this.Show();
+                        };
+
                         form1.Show();
                         this.Hide();
+
+                        return true;
                     }
                     else
                     {
-                        MessageBox.Show("Login falhou: credenciais inválidas.");
+                        MessageBox.Show($"Login falhou para {device.name}: credenciais inválidas.");
+                        return false;
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Erro na ligação: " + ex.Message);
+                    MessageBox.Show($"Erro na ligação com {device.name}: " + ex.Message);
+                    return false;
                 }
             }
         }
-
-        private async void setMacAddress()
-        {
-            using (HttpClient httpClient = new HttpClient())
-            {
-                // Ignorar a validação do certificado SSL
-                ServicePointManager.ServerCertificateValidationCallback += (sender2, cert, chain, sslPolicyErrors) => true;
-
-                var byteArray = Encoding.ASCII.GetBytes("admin:proxmox123");
-                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
-
-                System.Diagnostics.Debug.WriteLine("testeeeeeeeee");
-                var endpoint = "http://192.168.1.145/rest/interface";
-
-                try
-                {
-                    HttpResponseMessage response = await httpClient.GetAsync(endpoint);
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    var jsonString = JsonSerializer.Deserialize<List<LoginInterface>>(responseBody);
-
-                    System.Diagnostics.Debug.WriteLine(responseBody);
-                    System.Diagnostics.Debug.WriteLine(jsonString);
-
-                    if (jsonString != null)
-                    {
-                        foreach (LoginInterface loginInterface in jsonString)
-                        {
-                            // Procurar a primeira interface ativa com MAC address válido
-                            if (loginInterface.Running == "true" && !string.IsNullOrWhiteSpace(loginInterface.MacAddress))
-                            {
-                                macAddress.Text = loginInterface.MacAddress;
-                                runningLabel.Text = loginInterface.DefaultName + " (ativa)";
-                                break; // Já encontrámos a interface desejada
-                            }
-                        }
-                    }
-
-
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("Erro: " + ex.Message);
-                }
-            }
-        }
-
-
-        private void Login_Load(object sender, EventArgs e)
-        {
-            setMacAddress();
-
-            MNDPDiscovery.DiscoverDevices(device =>
-            {
-                Invoke(new Action(() =>
-                {
-                    System.Diagnostics.Debug.WriteLine($"[MNDP] {device}");
-                    System.Diagnostics.Debug.WriteLine(device.Identity);
-                    System.Diagnostics.Debug.WriteLine(device.MacAddress);
-                   
-                }));
-            });
-        }
-
-
-        private void OnDeviceDiscovered(DeviceInfo deviceInfo)
-        {
-            Invoke(new Action(() =>
-            {
-                System.Diagnostics.Debug.WriteLine($"Dispositivo encontrado: {deviceInfo.Identity}, MAC: {deviceInfo.MacAddress}");
-            }));
-        }
-
     }
 }

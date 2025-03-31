@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace LTI_Mikrotik
 {
@@ -24,13 +25,21 @@ namespace LTI_Mikrotik
         private DnsStaticEntry? dnsStaticSelecionado;
         private List<DhcpServer> dhcpServers = new();
         private DhcpServer? dhcpSelecionado;
+        private AddressPool? poolSelecionada;
+        private List<Bridge> bridges = new List<Bridge>();
+        private Bridge? bridgeSelecionada;
+        private List<BridgePort> bridgePorts = new List<BridgePort>();
+        private BridgePort? portSelecionado;
+        private Device device;
 
 
-        public Form1(string username, string password)
+
+
+        public Form1(Device device)
         {
             InitializeComponent();
-
-            var byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
+            this.device = device;
+            var byteArray = Encoding.ASCII.GetBytes($"{device.username}:{device.password}");
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 
@@ -43,8 +52,8 @@ namespace LTI_Mikrotik
 
             if (loginForm != null)
             {
-                var userControl = loginForm.Controls["User"] as TextBox;
-                var passwordControl = loginForm.Controls["Password"] as TextBox;
+                var userControl = loginForm.Controls["User"] as System.Windows.Forms.TextBox;
+                var passwordControl = loginForm.Controls["Password"] as System.Windows.Forms.TextBox;
 
                 if (userControl != null && passwordControl != null)
                 {
@@ -57,6 +66,27 @@ namespace LTI_Mikrotik
         }
 
 
+        private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            TabControl tabControl = sender as TabControl;
+            TabPage tabPage = tabControl.TabPages[e.Index];
+            Rectangle tabRect = tabControl.GetTabRect(e.Index);
+
+            // Verificar se a aba é a aba ativa
+            if (e.Index == tabControl.SelectedIndex)
+            {
+                // Desenhar o fundo da aba ativa com uma cor diferente
+                e.Graphics.FillRectangle(Brushes.LightBlue, tabRect);
+            }
+            else
+            {
+                // Desenhar o fundo das outras abas
+                e.Graphics.FillRectangle(SystemBrushes.Control, tabRect);
+            }
+
+            // Desenhar o texto da aba
+            TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+        }
 
 
 
@@ -73,6 +103,9 @@ namespace LTI_Mikrotik
             await CarregarDnsStaticAsync();
             await CarregarDhcpServersAsync();
             await CarregarAddressPoolsAsync();
+            await CarregarBridgesAsync();
+            await CarregarPortsAsync();
+
 
 
 
@@ -295,6 +328,8 @@ namespace LTI_Mikrotik
                     comboBox2.Items.Clear();
                     comboBox6.Items.Clear();
                     comboBox5.Items.Clear();
+                    comboBox9.Items.Clear();
+                    comboBox11.Items.Clear();
 
                     if (todasInterfaces != null)
                     {
@@ -305,6 +340,8 @@ namespace LTI_Mikrotik
                             comboBox2.Items.Add(iface.Name);
                             comboBox6.Items.Add(iface.Name);
                             comboBox5.Items.Add(iface.Name);
+                            comboBox9.Items.Add(iface.Name);
+                            comboBox11.Items.Add(iface.Name);
                         }
                     }
                 }
@@ -1029,12 +1066,16 @@ namespace LTI_Mikrotik
                     comboBox8.Items.Clear();
                     comboBox7.Items.Clear();
 
+                    listBox9.Items.Clear();
+
                     if (pools != null)
                     {
                         foreach (var pool in pools)
                         {
                             comboBox8.Items.Add(pool.Name);
                             comboBox7.Items.Add(pool.Name);
+
+                            listBox9.Items.Add(pool);
                         }
                     }
                 }
@@ -1103,11 +1144,520 @@ namespace LTI_Mikrotik
             }
         }
 
+        private void listBox9_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (listBox9.SelectedItem is AddressPool selecionada)
+            {
+                poolSelecionada = selecionada;
+                textBox20.Text = selecionada.Name;
+                textBox21.Text = selecionada.Ranges;
+
+            }
+        }
+
+
+        private async void button22_Click(object sender, EventArgs e)
+        {
+            if (poolSelecionada == null)
+            {
+                MessageBox.Show("Seleciona uma pool primeiro.");
+                return;
+            }
+
+            var body = new Dictionary<string, string>
+            {
+                ["name"] = textBox20.Text.Trim(),
+                ["ranges"] = textBox21.Text.Trim(),
+
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+            var request = new HttpRequestMessage(new HttpMethod("PATCH"), $"{urlLink}ip/pool/{poolSelecionada.Id}")
+            {
+                Content = content
+            };
+
+            try
+            {
+                HttpResponseMessage response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Address pool atualizada com sucesso.");
+                    await CarregarAddressPoolsAsync();
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao atualizar:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+        private async void button23_Click(object sender, EventArgs e)
+        {
+            if (poolSelecionada == null)
+            {
+                MessageBox.Show("Seleciona uma pool primeiro.");
+                return;
+            }
+
+            var confirm = MessageBox.Show(
+                $"Tens a certeza que queres apagar a pool '{poolSelecionada.Name}'?",
+                "Confirmar eliminação",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+
+            if (confirm != DialogResult.Yes)
+                return;
+
+            try
+            {
+                HttpResponseMessage response = await client.DeleteAsync($"{urlLink}ip/pool/{poolSelecionada.Id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Address pool apagada com sucesso.");
+                    await CarregarAddressPoolsAsync();
+                    poolSelecionada = null;
+                    textBox20.Clear();
+                    textBox21.Clear();
+
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao apagar:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+        private async void button21_Click(object sender, EventArgs e)
+        {
+            string nome = textBox18.Text.Trim();
+            string enderecos = textBox19.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(nome) || string.IsNullOrWhiteSpace(enderecos))
+            {
+                MessageBox.Show("Preenche todos os campos.");
+                return;
+            }
+
+            var novaPool = new Dictionary<string, string>
+            {
+                ["name"] = nome,
+                ["ranges"] = enderecos
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(novaPool), Encoding.UTF8, "application/json");
+
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Put, $"{urlLink}ip/pool")
+                {
+                    Content = content
+                };
+
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Address pool criada com sucesso.");
+                    textBox18.Clear();
+                    textBox19.Clear();
+                    await CarregarAddressPoolsAsync();
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao criar address pool:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+        private void button24_Click_1(object sender, EventArgs e)
+        {
+            tabControl1.SelectedTab = tabPage9;
+        }
+
+        private void button25_Click(object sender, EventArgs e)
+        {
+            tabControl1.SelectedTab = tabPage9;
+        }
+
+        private void button26_Click(object sender, EventArgs e)
+        {
+            this.Close(); // Fecha o Form1 e ativa a lógica do FormClosed
+        }
+
+        private async Task CarregarBridgesAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(urlLink + "interface/bridge");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    bridges = JsonSerializer.Deserialize<List<Bridge>>(json) ?? new List<Bridge>();
+
+                    listBox2.Items.Clear();
+                    comboBox10.Items.Clear();
+                    comboBox12.Items.Clear();
+
+                    if (bridges != null)
+                    {
+                        foreach (var bridge in bridges)
+                        {
+                            listBox2.Items.Add(bridge);
+                            comboBox10.Items.Add(bridge.Name);
+                            comboBox12.Items.Add(bridge.Name);
+                        }
+                    }
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao carregar bridges:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar bridges: " + ex.Message);
+            }
+        }
+
+
+        private void listBox2_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (listBox2.SelectedIndex >= 0 && listBox2.SelectedIndex < bridges.Count)
+            {
+                bridgeSelecionada = bridges[listBox2.SelectedIndex];
+                textBox24.Text = bridgeSelecionada.Name;
+            }
+        }
+
+        private async void button4_Click_1(object sender, EventArgs e)
+        {
+            if (bridgeSelecionada == null)
+            {
+                MessageBox.Show("Seleciona uma bridge primeiro.");
+                return;
+            }
+
+            HttpResponseMessage response = await client.DeleteAsync($"{urlLink}interface/bridge/{bridgeSelecionada.Id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Bridge apagada com sucesso.");
+                await CarregarBridgesAsync();
+                await CarregarPortsAsync();
+                LimparCamposPortBridge();
+            }
+            else
+            {
+                string erro = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"Erro ao apagar:\n{response.StatusCode}\n{erro}");
+            }
+        }
+
+        private async void button28_Click_1(object sender, EventArgs e)
+        {
+            if (bridgeSelecionada == null)
+            {
+                MessageBox.Show("Seleciona uma bridge primeiro.");
+                return;
+            }
+
+            var body = new Dictionary<string, string>
+            {
+                ["name"] = textBox24.Text.Trim()
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+            var request = new HttpRequestMessage(new HttpMethod("PATCH"), $"{urlLink}interface/bridge/{bridgeSelecionada.Id}")
+            {
+                Content = content
+            };
+
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Bridge atualizada com sucesso.");
+                LimparCamposPortBridge();
+                textBox24.Clear();
+                await CarregarBridgesAsync();
+               
+            }
+            else
+            {
+                string erro = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"Erro ao atualizar:\n{response.StatusCode}\n{erro}");
+            }
+        }
+
+        private async void button27_Click(object sender, EventArgs e)
+        {
+            string nomeBridge = textBox22.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(nomeBridge))
+            {
+                MessageBox.Show("Insere um nome para a bridge.");
+                return;
+            }
+
+            var body = new Dictionary<string, string>
+            {
+                ["name"] = nomeBridge
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{urlLink}interface/bridge")
+            {
+                Content = content
+            };
+
+            try
+            {
+                HttpResponseMessage response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Bridge criada com sucesso.");
+                    await CarregarBridgesAsync();
+                    LimparCamposPortBridge();
+                    textBox22.Clear();
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao criar bridge:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+        private async Task CarregarPortsAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(urlLink + "interface/bridge/port");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var bridgePortsTemp = JsonSerializer.Deserialize<List<BridgePort>>(json);
+                    bridgePorts = bridgePortsTemp ?? new List<BridgePort>();
+
+                    listBox10.Items.Clear();
+
+                    if (bridgePorts != null)
+                    {
+                        foreach (var port in bridgePorts)
+                            listBox10.Items.Add(port);
+                    }
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao obter ports:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar ports: " + ex.Message);
+            }
+        }
+
+
+        private void listBox10_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            if (listBox10.SelectedIndex >= 0 && listBox10.SelectedIndex < bridgePorts.Count)
+            {
+                portSelecionado = bridgePorts[listBox10.SelectedIndex];
+
+                // Preencher as ComboBoxes se os valores existirem
+                if (!string.IsNullOrWhiteSpace(portSelecionado.Interface))
+                    comboBox9.SelectedItem = portSelecionado.Interface;
+
+                if (!string.IsNullOrWhiteSpace(portSelecionado.Bridge))
+                    comboBox10.SelectedItem = portSelecionado.Bridge;
+            }
+        }
+
+
+
+        private async void button5_Click_1(object sender, EventArgs e)
+        {
+            if (portSelecionado == null)
+            {
+                MessageBox.Show("Seleciona um port da lista.");
+                return;
+            }
+
+            HttpResponseMessage response = await client.DeleteAsync($"{urlLink}interface/bridge/port/{portSelecionado.Id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Port apagado com sucesso.");
+                await CarregarBridgesAsync();
+                await CarregarPortsAsync();
+                LimparCamposPortBridge();
+
+            }
+            else
+            {
+                string erro = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"Erro ao apagar port:\n{response.StatusCode}\n{erro}");
+            }
+        }
+
+        private async void button30_Click(object sender, EventArgs e)
+        {
+            if (portSelecionado == null)
+            {
+                MessageBox.Show("Seleciona um port primeiro.");
+                return;
+            }
+
+            string novaInterface = comboBox9.SelectedItem?.ToString() ?? "";
+            string novaBridge = comboBox10.SelectedItem?.ToString() ?? "";
+
+            if (string.IsNullOrWhiteSpace(novaInterface) || string.IsNullOrWhiteSpace(novaBridge))
+            {
+                MessageBox.Show("Seleciona a interface e a bridge.");
+                return;
+            }
+
+            var body = new Dictionary<string, string>
+            {
+                ["interface"] = novaInterface,
+                ["bridge"] = novaBridge
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+            var request = new HttpRequestMessage(new HttpMethod("PATCH"), $"{urlLink}interface/bridge/port/{portSelecionado.Id}")
+            {
+                Content = content
+            };
+
+            HttpResponseMessage response = await client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Port atualizado com sucesso.");
+                await CarregarPortsAsync();
+                LimparCamposPortBridge();
+            }
+            else
+            {
+                string erro = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"Erro ao atualizar o port:\n{response.StatusCode}\n{erro}");
+            }
+        }
+
+
+        private async void button29_Click(object sender, EventArgs e)
+        {
+            string iface = comboBox11.SelectedItem?.ToString() ?? "";
+            string bridge = comboBox12.SelectedItem?.ToString() ?? "";
+
+            if (string.IsNullOrWhiteSpace(iface) || string.IsNullOrWhiteSpace(bridge))
+            {
+                MessageBox.Show("Seleciona a interface e a bridge.");
+                return;
+            }
+
+            var novoPort = new Dictionary<string, string>
+            {
+                ["interface"] = iface,
+                ["bridge"] = bridge
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(novoPort), Encoding.UTF8, "application/json");
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{urlLink}interface/bridge/port")
+            {
+                Content = content
+            };
+
+            HttpResponseMessage response = await client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Port criado com sucesso.");
+                await CarregarPortsAsync();
+                LimparCamposPortBridge();
+            }
+            else
+            {
+                string erro = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"Erro ao criar o port:\n{response.StatusCode}\n{erro}");
+            }
+        }
+
+        private void LimparCamposPortBridge()
+        {
+            textBox22.Clear();   // para criar nova bridge
+            textBox24.Clear();   // para atualizar bridge
+            comboBox9.SelectedIndex = -1;  // Interface (update port)
+            comboBox10.SelectedIndex = -1; // Bridge (update port)
+            comboBox11.SelectedIndex = -1; // Interface (create port)
+            comboBox12.SelectedIndex = -1; // Bridge (create port)
+        }
+
+
     }
     public class AddressPool
     {
+        [JsonPropertyName(".id")] public string Id { get; set; } = string.Empty;
         [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("ranges")] public string Ranges { get; set; } = string.Empty;
+
+        public override string ToString()
+        {
+            return $"Name: {Name} - Addresses: {Ranges}";
+        }
     }
+
+    public class Bridge
+    {
+        [JsonPropertyName(".id")] public string Id { get; set; } = string.Empty;
+        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
+
+        public override string ToString()
+        {
+            return Name;
+        }
+    }
+
+    public class BridgePort
+    {
+        [JsonPropertyName(".id")] public string Id { get; set; } = string.Empty;
+        [JsonPropertyName("interface")] public string Interface { get; set; } = string.Empty;
+        [JsonPropertyName("bridge")] public string Bridge { get; set; } = string.Empty;
+
+        public override string ToString()
+        {
+            return $"Port: {Interface} -> Bridge: {Bridge}";
+        }
+    }
+
+
+
 
     public class WirelessInterface
     {
