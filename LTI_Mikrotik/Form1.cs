@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static LTI_Mikrotik.Form1;
 
 namespace LTI_Mikrotik
 {
@@ -111,7 +112,9 @@ namespace LTI_Mikrotik
             await CarregarBridgesAsync();
             await CarregarPortsAsync();
             await CarregarSecurityProfilesAsync();
-            comboBox16.SelectedIndexChanged += comboBox16_SelectedIndexChanged;
+            await CarregarWireGuardInterfacesAsync();
+            await CarregarWireguardPeersAsync();
+            comboBox16.SelectedIndexChanged += comboBox16_SelectedIndexChanged!;
             comboBox14.SelectedIndexChanged += comboBox14_SelectedIndexChanged;
 
             textBox25.Enabled = false;
@@ -1799,7 +1802,7 @@ namespace LTI_Mikrotik
             }
         }
 
-        private void comboBox14_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBox14_SelectedIndexChanged(object? sender, EventArgs e)
         {
             string authType = comboBox14.SelectedItem?.ToString()?.ToLower() ?? "";
 
@@ -1828,6 +1831,7 @@ namespace LTI_Mikrotik
                 textBox23.Clear();
             }
         }
+
 
 
 
@@ -1998,18 +2002,132 @@ namespace LTI_Mikrotik
 
         }
 
-    }
-    public class AddressPool
-    {
-        [JsonPropertyName(".id")] public string Id { get; set; } = string.Empty;
-        [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
-        [JsonPropertyName("ranges")] public string Ranges { get; set; } = string.Empty;
-
-        public override string ToString()
+        private void button31_Click(object sender, EventArgs e)
         {
-            return $"Name: {Name} - Addresses: {Ranges}";
+            tabControl1.SelectedTab = tabPage7;
         }
-    }
+
+        private async Task CarregarWireGuardInterfacesAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync($"{urlLink}interface/wireguard");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var interfaces = JsonSerializer.Deserialize<List<WireGuardInterface>>(json);
+
+                    listBox12.Items.Clear();
+
+                    if (interfaces != null)
+                    {
+                        foreach (var wg in interfaces)
+                            listBox12.Items.Add(wg);
+                    }
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao obter interfaces WireGuard:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar interfaces WireGuard: " + ex.Message);
+            }
+        }
+
+
+
+        public class WireGuardInterface
+        {
+            [JsonPropertyName("name")]
+            public string Name { get; set; } = string.Empty;
+
+            [JsonPropertyName("running")]
+            public string Running { get; set; } = string.Empty;
+
+            [JsonPropertyName("mtu")]
+            public string Mtu { get; set; } = string.Empty;
+
+            public override string ToString()
+            {
+                return $"Name: {Name} - Running: {Running} - MTU: {Mtu}";
+            }
+        }
+
+        private async Task CarregarWireguardPeersAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync($"{urlLink}interface/wireguard/peers");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var peers = JsonSerializer.Deserialize<List<WireguardPeer>>(json);
+
+                    listBox13.Items.Clear();
+
+                    if (peers != null)
+                    {
+                        foreach (var peer in peers)
+                        {
+                            listBox13.Items.Add($"Name: {peer.Name}");
+                            listBox13.Items.Add($"Public Key: {peer.PublicKey}");
+                            listBox13.Items.Add($"Private Key: {peer.PrivateKey}");
+                            listBox13.Items.Add("------------------------");
+                        }
+                    }
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao obter peers:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar peers: " + ex.Message);
+            }
+        }
+
+
+
+        public class WireguardPeer
+            {
+                [JsonPropertyName(".id")]
+                public string Id { get; set; } = string.Empty;
+
+                [JsonPropertyName("interface")]
+                public string Name { get; set; } = string.Empty;
+
+                [JsonPropertyName("public-key")]
+                public string PublicKey { get; set; } = string.Empty;
+
+                [JsonPropertyName("private-key")]
+                public string PrivateKey { get; set; } = string.Empty;
+
+                // Podes adicionar mais propriedades se necessário
+            }
+
+
+
+
+
+   }
+    public class AddressPool
+        {
+            [JsonPropertyName(".id")] public string Id { get; set; } = string.Empty;
+            [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
+            [JsonPropertyName("ranges")] public string Ranges { get; set; } = string.Empty;
+
+            public override string ToString()
+            {
+                return $"Name: {Name} - Addresses: {Ranges}";
+            }
+        }
 
     public class Bridge
     {
@@ -2091,7 +2209,7 @@ namespace LTI_Mikrotik
         }
     }
 
- 
+
     public class IpAddressEntry
     {
         [JsonPropertyName(".id")] public string Id { get; set; } = string.Empty;
@@ -2150,4 +2268,6 @@ namespace LTI_Mikrotik
         public string Id => this.ContainsKey(".id") ? this[".id"] : "";
         public string Name => this.ContainsKey("name") ? this["name"] : "(sem nome)";
     }
+
+    
 }
