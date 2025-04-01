@@ -40,6 +40,7 @@
             ipAddress = new TextBox();
             label5 = new Label();
             listBox1 = new ListBox();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -153,12 +154,24 @@
             listBox1.TabIndex = 14;
             listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged_1;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.BackColor = Color.Transparent;
+            label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(1144, 679);
+            label1.Name = "label1";
+            label1.Size = new Size(171, 100);
+            label1.TabIndex = 15;
+            label1.Text = "Made by: \r\n                João Tendeiro\r\n                Miguel Lopes\r\n                Primo : )\r\n\r\n";
+            // 
             // LoginForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(1327, 776);
+            Controls.Add(label1);
             Controls.Add(listBox1);
             Controls.Add(label5);
             Controls.Add(ipAddress);
@@ -193,5 +206,6 @@
         private TextBox ipAddress;
         private Label label5;
         private ListBox listBox1;
+        private Label label1;
     }
 }

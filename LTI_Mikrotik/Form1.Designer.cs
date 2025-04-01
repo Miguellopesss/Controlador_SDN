@@ -213,6 +213,11 @@ namespace LTI_Mikrotik
             button12 = new Button();
             label19 = new Label();
             listBox5 = new ListBox();
+            tabPage10 = new TabPage();
+            label64 = new Label();
+            listBox13 = new ListBox();
+            label63 = new Label();
+            listBox12 = new ListBox();
             button26 = new Button();
             tabControl1.SuspendLayout();
             tabPage6.SuspendLayout();
@@ -242,6 +247,7 @@ namespace LTI_Mikrotik
             tabPage8.SuspendLayout();
             groupBox4.SuspendLayout();
             groupBox5.SuspendLayout();
+            tabPage10.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl1
@@ -255,6 +261,7 @@ namespace LTI_Mikrotik
             tabControl1.Controls.Add(tabPage4);
             tabControl1.Controls.Add(tabPage5);
             tabControl1.Controls.Add(tabPage8);
+            tabControl1.Controls.Add(tabPage10);
             tabControl1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tabControl1.Location = new Point(31, 53);
             tabControl1.Name = "tabControl1";
@@ -278,7 +285,7 @@ namespace LTI_Mikrotik
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(245, 36);
+            label9.Location = new Point(588, 52);
             label9.Name = "label9";
             label9.Size = new Size(73, 20);
             label9.TabIndex = 2;
@@ -288,7 +295,7 @@ namespace LTI_Mikrotik
             // 
             listBox3.BackColor = Color.Gainsboro;
             listBox3.FormattingEnabled = true;
-            listBox3.Location = new Point(28, 74);
+            listBox3.Location = new Point(356, 91);
             listBox3.Name = "listBox3";
             listBox3.Size = new Size(550, 464);
             listBox3.TabIndex = 1;
@@ -343,6 +350,7 @@ namespace LTI_Mikrotik
             button31.TabIndex = 33;
             button31.Text = "+";
             button31.UseVisualStyleBackColor = true;
+            button31.Click += button31_Click;
             // 
             // Mode
             // 
@@ -2129,6 +2137,57 @@ namespace LTI_Mikrotik
             listBox5.TabIndex = 21;
             listBox5.SelectedIndexChanged += listBox5_SelectedIndexChanged;
             // 
+            // tabPage10
+            // 
+            tabPage10.Controls.Add(label64);
+            tabPage10.Controls.Add(listBox13);
+            tabPage10.Controls.Add(label63);
+            tabPage10.Controls.Add(listBox12);
+            tabPage10.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tabPage10.Location = new Point(4, 29);
+            tabPage10.Name = "tabPage10";
+            tabPage10.Size = new Size(1256, 668);
+            tabPage10.TabIndex = 9;
+            tabPage10.Text = "Wireguard";
+            tabPage10.UseVisualStyleBackColor = true;
+            // 
+            // label64
+            // 
+            label64.AutoSize = true;
+            label64.Location = new Point(723, 32);
+            label64.Name = "label64";
+            label64.Size = new Size(43, 20);
+            label64.TabIndex = 25;
+            label64.Text = "Peers";
+            // 
+            // listBox13
+            // 
+            listBox13.BackColor = Color.Gainsboro;
+            listBox13.FormattingEnabled = true;
+            listBox13.Location = new Point(512, 68);
+            listBox13.Name = "listBox13";
+            listBox13.Size = new Size(475, 464);
+            listBox13.TabIndex = 24;
+            // 
+            // label63
+            // 
+            label63.AutoSize = true;
+            label63.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label63.Location = new Point(140, 32);
+            label63.Name = "label63";
+            label63.Size = new Size(147, 20);
+            label63.TabIndex = 23;
+            label63.Text = "Interfaces Wireguard";
+            // 
+            // listBox12
+            // 
+            listBox12.BackColor = Color.Gainsboro;
+            listBox12.FormattingEnabled = true;
+            listBox12.Location = new Point(31, 68);
+            listBox12.Name = "listBox12";
+            listBox12.Size = new Size(399, 464);
+            listBox12.TabIndex = 22;
+            // 
             // button26
             // 
             button26.BackColor = Color.LightSkyBlue;
@@ -2213,6 +2272,8 @@ namespace LTI_Mikrotik
             groupBox4.PerformLayout();
             groupBox5.ResumeLayout(false);
             groupBox5.PerformLayout();
+            tabPage10.ResumeLayout(false);
+            tabPage10.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -2403,5 +2464,10 @@ namespace LTI_Mikrotik
         private TextBox textBox29;
         private Label label61;
         private Label label62;
+        private TabPage tabPage10;
+        private Label label63;
+        private ListBox listBox12;
+        private Label label64;
+        private ListBox listBox13;
     }
 }
