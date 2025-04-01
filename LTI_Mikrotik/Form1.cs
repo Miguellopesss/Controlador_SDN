@@ -18,7 +18,7 @@ namespace LTI_Mikrotik
         private List<SecurityProfile> perfisSeguranca = new List<SecurityProfile>();
         private RotaIP? rotaSelecionada;
         private List<IpAddressEntry> enderecosIp = new();
-        private string urlLink = "http://192.168.1.145/rest/";
+        private string urlLink = "";
         private IpAddressEntry? enderecoSelecionado;
         private List<InterfaceGenerica> todasInterfaces = new List<InterfaceGenerica>();
         private List<DnsStaticEntry> dnsStaticEntries = new List<DnsStaticEntry>();
@@ -32,13 +32,15 @@ namespace LTI_Mikrotik
         private BridgePort? portSelecionado;
         private Device device;
 
-
+        private string IP; 
 
 
         public Form1(Device device)
         {
             InitializeComponent();
             this.device = device;
+            this.IP = device.ipAddress;
+            urlLink = $"http://{IP}/rest/";
             var byteArray = Encoding.ASCII.GetBytes($"{device.username}:{device.password}");
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
@@ -68,7 +70,8 @@ namespace LTI_Mikrotik
 
         private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
         {
-            TabControl tabControl = sender as TabControl;
+            TabControl? tabControl = sender as TabControl;
+            if (tabControl == null) return;
             TabPage tabPage = tabControl.TabPages[e.Index];
             Rectangle tabRect = tabControl.GetTabRect(e.Index);
 
@@ -87,6 +90,7 @@ namespace LTI_Mikrotik
             // Desenhar o texto da aba
             TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
+
 
 
 

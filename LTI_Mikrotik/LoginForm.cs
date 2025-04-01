@@ -43,9 +43,6 @@ namespace LTI_Mikrotik
                 return;
             }
 
-            // Limpa devices antigos
-            devices.Clear();
-
             var device = new Device
             {
                 name = nameValue,
@@ -66,7 +63,6 @@ namespace LTI_Mikrotik
                     System.Diagnostics.Debug.WriteLine($"Nome: {d.name}");
                     System.Diagnostics.Debug.WriteLine($"IP: {d.ipAddress}");
                     System.Diagnostics.Debug.WriteLine($"Username: {d.username}");
-                    System.Diagnostics.Debug.WriteLine($"Password: {d.password}");
                     System.Diagnostics.Debug.WriteLine("------------------------------");
                 }
             }
