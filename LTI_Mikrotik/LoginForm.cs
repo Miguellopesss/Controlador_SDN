@@ -11,10 +11,23 @@ namespace LTI_Mikrotik
         public LoginForm()
         {
             InitializeComponent();
-            password.PasswordChar = '●'; 
+            password.PasswordChar = '●';
             LoadDevicesFromDatabase();
 
+            username.KeyDown += new KeyEventHandler(OnKeyDownHandler);
+            password.KeyDown += new KeyEventHandler(OnKeyDownHandler);
+            listBox1.KeyDown += new KeyEventHandler(OnKeyDownHandler);
         }
+
+        private void OnKeyDownHandler(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                Login_Click_1(sender ?? this, e);
+            }
+        }
+
+
 
         private async void LoadDevicesFromDatabase()
         {
@@ -29,6 +42,7 @@ namespace LTI_Mikrotik
                 listBox1.Items.Add($"{device.name} ({device.ipAddress}) - {device.username}");
             }
         }
+
         private void listBox1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex >= 0 && listBox1.SelectedIndex < devices.Count)
@@ -40,7 +54,6 @@ namespace LTI_Mikrotik
                 password.Text = selecionado.password;
             }
         }
-
 
         private async void Login_Click_1(object sender, EventArgs e)
         {
@@ -66,14 +79,12 @@ namespace LTI_Mikrotik
                 password = passwordValue
             };
 
-            // Só adiciona se o login for bem-sucedido
             bool sucesso = await ConnectToDevice(device);
             if (sucesso)
             {
                 MessageBox.Show("Login efetuado com sucesso!");
                 using (var context = new LTI_Mikrotik.Data.AppDbContext())
                 {
-                    // Verifica se já existe um dispositivo com o mesmo nome e username
                     var existingDevice = await context.Devices
                         .FirstOrDefaultAsync(d => d.name == device.name && d.ipAddress == device.ipAddress);
 
@@ -97,32 +108,6 @@ namespace LTI_Mikrotik
                 }
             }
         }
-
-
-        private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            if (sender is TabControl tabControl)
-            {
-                TabPage tabPage = tabControl.TabPages[e.Index];
-                Rectangle tabRect = tabControl.GetTabRect(e.Index);
-
-                // Verificar se a aba é a aba ativa
-                if (e.Index == tabControl.SelectedIndex)
-                {
-                    // Desenhar o fundo da aba ativa com uma cor diferente
-                    e.Graphics.FillRectangle(Brushes.LightBlue, tabRect);
-                }
-                else
-                {
-                    // Desenhar o fundo das outras abas
-                    e.Graphics.FillRectangle(SystemBrushes.Control, tabRect);
-                }
-
-                // Desenhar o texto da aba
-                TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-            }
-        }
-
 
         private async Task<bool> ConnectToDevice(Device device)
         {
@@ -170,4 +155,6 @@ namespace LTI_Mikrotik
             }
         }
     }
+
+
 }
