@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -1310,12 +1310,8 @@ namespace LTI_Mikrotik
 
         private void button26_Click(object sender, EventArgs e)
         {
-<<<<<<< HEAD
-            this.Close(); // Fecha o Form1 e ativa a lÃ³gica do FormClosed
-=======
-            this.Close(); // Fecha o Form1 e ativa a lógica do FormClosed
-            MessageBox.Show("Sessão fechada!");
->>>>>>> 888ca3fba4e3cd4af0ada9c605332481dc262cd2
+            this.Close(); // Fecha o Form1 e ativa a logica do FormClosed
+            MessageBox.Show("Sessao fechada!");
         }
 
         private async Task CarregarBridgesAsync()

@@ -1,4 +1,4 @@
-﻿namespace LTI_Mikrotik
+namespace LTI_Mikrotik
 {
     partial class Form1
     {
@@ -2146,12 +2146,8 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-<<<<<<< HEAD
-            BackColor = Color.LightSkyBlue;
-=======
             BackColor = SystemColors.ButtonFace;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
->>>>>>> 888ca3fba4e3cd4af0ada9c605332481dc262cd2
             ClientSize = new Size(1327, 776);
             Controls.Add(button26);
             Controls.Add(tabControl1);
