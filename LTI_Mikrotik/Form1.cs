@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -31,8 +31,9 @@ namespace LTI_Mikrotik
         private List<BridgePort> bridgePorts = new List<BridgePort>();
         private BridgePort? portSelecionado;
         private Device device;
+        private SecurityProfile? perfilSelecionado;
 
-        private string IP; 
+        private string IP;
 
 
         public Form1(Device device)
@@ -44,7 +45,7 @@ namespace LTI_Mikrotik
             var byteArray = Encoding.ASCII.GetBytes($"{device.username}:{device.password}");
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
-
+            PreencherComboboxSecurityProfile();
             this.FormClosed += Form1_FormClosed;
         }
 
@@ -75,7 +76,7 @@ namespace LTI_Mikrotik
             TabPage tabPage = tabControl.TabPages[e.Index];
             Rectangle tabRect = tabControl.GetTabRect(e.Index);
 
-            // Verificar se a aba È a aba ativa
+            // Verificar se a aba √© a aba ativa
             if (e.Index == tabControl.SelectedIndex)
             {
                 // Desenhar o fundo da aba ativa com uma cor diferente
@@ -109,8 +110,14 @@ namespace LTI_Mikrotik
             await CarregarAddressPoolsAsync();
             await CarregarBridgesAsync();
             await CarregarPortsAsync();
+            await CarregarSecurityProfilesAsync();
+            comboBox16.SelectedIndexChanged += comboBox16_SelectedIndexChanged;
+            comboBox14.SelectedIndexChanged += comboBox14_SelectedIndexChanged;
 
-
+            textBox25.Enabled = false;
+            textBox27.Enabled = false;
+            textBox28.Enabled = false;
+            textBox23.Enabled = false;
 
 
         }
@@ -142,7 +149,7 @@ namespace LTI_Mikrotik
                 else
                 {
                     string erro = await response.Content.ReadAsStringAsync();
-                    MessageBox.Show($"Erro ao aceder ‡ API:\n{response.StatusCode}\n{erro}");
+                    MessageBox.Show($"Erro ao aceder √† API:\n{response.StatusCode}\n{erro}");
                 }
             }
             catch (Exception ex)
@@ -249,7 +256,7 @@ namespace LTI_Mikrotik
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao carregar perfis de seguranÁa: " + ex.Message);
+                MessageBox.Show("Erro ao carregar perfis de seguran√ßa: " + ex.Message);
             }
         }
 
@@ -269,7 +276,7 @@ namespace LTI_Mikrotik
 
                 if (string.IsNullOrWhiteSpace(idPerfil))
                 {
-                    MessageBox.Show("Perfil de seguranÁa inv·lido ou n„o selecionado.");
+                    MessageBox.Show("Perfil de seguran√ßa inv√°lido ou n√£o selecionado.");
                     return;
                 }
 
@@ -299,13 +306,13 @@ namespace LTI_Mikrotik
 
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("ConfiguraÁ„o atualizada com sucesso.");
+                    MessageBox.Show("Configura√ß√£o atualizada com sucesso.");
                     await CarregarInterfacesWireless();
                 }
                 else
                 {
                     string erro = await response.Content.ReadAsStringAsync();
-                    MessageBox.Show($"Erro ao atualizar a configuraÁ„o:\n{response.StatusCode}\n{erro}");
+                    MessageBox.Show($"Erro ao atualizar a configura√ß√£o:\n{response.StatusCode}\n{erro}");
                 }
             }
             catch (Exception ex)
@@ -453,7 +460,7 @@ namespace LTI_Mikrotik
 
             var confirm = MessageBox.Show(
                 $"Tens a certeza que queres apagar a rota {rotaSelecionada.DstAddress} via {rotaSelecionada.Gateway}?",
-                "Confirmar remoÁ„o",
+                "Confirmar remo√ß√£o",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning
             );
@@ -576,7 +583,7 @@ namespace LTI_Mikrotik
         {
             if (enderecoSelecionado == null)
             {
-                MessageBox.Show("Seleciona um endereÁo IP da lista.");
+                MessageBox.Show("Seleciona um endere√ßo IP da lista.");
                 return;
             }
 
@@ -599,13 +606,13 @@ namespace LTI_Mikrotik
 
             if (response.IsSuccessStatusCode)
             {
-                MessageBox.Show("EndereÁo atualizado com sucesso.");
+                MessageBox.Show("Endere√ßo atualizado com sucesso.");
                 await CarregarEnderecosIP();
             }
             else
             {
                 string erro = await response.Content.ReadAsStringAsync();
-                MessageBox.Show($"Erro ao atualizar endereÁo:\n{response.StatusCode}\n{erro}");
+                MessageBox.Show($"Erro ao atualizar endere√ßo:\n{response.StatusCode}\n{erro}");
             }
         }
 
@@ -613,13 +620,13 @@ namespace LTI_Mikrotik
         {
             if (enderecoSelecionado == null)
             {
-                MessageBox.Show("Seleciona um endereÁo IP da lista.");
+                MessageBox.Show("Seleciona um endere√ßo IP da lista.");
                 return;
             }
 
             var confirm = MessageBox.Show(
-                $"Tens a certeza que queres apagar o endereÁo:\n{enderecoSelecionado.Address}?",
-                "ConfirmaÁ„o", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                $"Tens a certeza que queres apagar o endere√ßo:\n{enderecoSelecionado.Address}?",
+                "Confirma√ß√£o", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (confirm != DialogResult.Yes)
                 return;
@@ -630,7 +637,7 @@ namespace LTI_Mikrotik
 
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("EndereÁo apagado com sucesso.");
+                    MessageBox.Show("Endere√ßo apagado com sucesso.");
                     await CarregarEnderecosIP(); // atualiza a lista
                     enderecoSelecionado = null;
                     textBox7.Clear();
@@ -640,7 +647,7 @@ namespace LTI_Mikrotik
                 else
                 {
                     string erro = await response.Content.ReadAsStringAsync();
-                    MessageBox.Show($"Erro ao apagar o endereÁo:\n{response.StatusCode}\n{erro}");
+                    MessageBox.Show($"Erro ao apagar o endere√ßo:\n{response.StatusCode}\n{erro}");
                 }
             }
             catch (Exception ex)
@@ -691,7 +698,7 @@ namespace LTI_Mikrotik
 
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("EndereÁo criado com sucesso.");
+                    MessageBox.Show("Endere√ßo criado com sucesso.");
                     await CarregarEnderecosIP();
                     textBox5.Clear();
                     textBox6.Clear();
@@ -700,7 +707,7 @@ namespace LTI_Mikrotik
                 else
                 {
                     string erro = await response.Content.ReadAsStringAsync();
-                    MessageBox.Show($"Erro ao criar endereÁo:\n{response.StatusCode}\n{erro}");
+                    MessageBox.Show($"Erro ao criar endere√ßo:\n{response.StatusCode}\n{erro}");
                 }
             }
             catch (Exception ex)
@@ -787,7 +794,7 @@ namespace LTI_Mikrotik
                 // Preencher os campos
                 textBox11.Text = dnsStaticSelecionado.Name;
                 textBox13.Text = dnsStaticSelecionado.Address;
-                comboBox3.SelectedItem = "A"; // Fixo, se sÛ tiveres esse
+                comboBox3.SelectedItem = "A"; // Fixo, se s√≥ tiveres esse
             }
         }
 
@@ -1130,7 +1137,7 @@ namespace LTI_Mikrotik
                 if (response.IsSuccessStatusCode)
                 {
                     MessageBox.Show("DHCP Server criado com sucesso.");
-                    await CarregarDhcpServersAsync(); // se tiveres esta funÁ„o para atualizar a lista
+                    await CarregarDhcpServersAsync(); // se tiveres esta fun√ß√£o para atualizar a lista
                     textBox14.Clear();
                     textBox15.Clear();
                     comboBox5.SelectedIndex = -1;
@@ -1211,7 +1218,7 @@ namespace LTI_Mikrotik
 
             var confirm = MessageBox.Show(
                 $"Tens a certeza que queres apagar a pool '{poolSelecionada.Name}'?",
-                "Confirmar eliminaÁ„o",
+                "Confirmar elimina√ß√£o",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning
             );
@@ -1303,7 +1310,12 @@ namespace LTI_Mikrotik
 
         private void button26_Click(object sender, EventArgs e)
         {
+<<<<<<< HEAD
+            this.Close(); // Fecha o Form1 e ativa a l√≥gica do FormClosed
+=======
             this.Close(); // Fecha o Form1 e ativa a lÛgica do FormClosed
+            MessageBox.Show("Sess„o fechada!");
+>>>>>>> 888ca3fba4e3cd4af0ada9c605332481dc262cd2
         }
 
         private async Task CarregarBridgesAsync()
@@ -1404,7 +1416,7 @@ namespace LTI_Mikrotik
                 LimparCamposPortBridge();
                 textBox24.Clear();
                 await CarregarBridgesAsync();
-               
+
             }
             else
             {
@@ -1623,6 +1635,372 @@ namespace LTI_Mikrotik
             comboBox12.SelectedIndex = -1; // Bridge (create port)
         }
 
+        private async Task CarregarSecurityProfilesAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync($"{urlLink}interface/wireless/security-profiles");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    var perfis = JsonSerializer.Deserialize<List<SecurityProfile>>(json);
+
+                    listBox11.Items.Clear();
+
+                    if (perfis != null)
+                    {
+                        foreach (var perfil in perfis)
+                            listBox11.Items.Add(perfil);
+                    }
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao obter perfis de seguran√ßa:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao carregar perfis de seguran√ßa: " + ex.Message);
+            }
+        }
+
+
+
+        private void listBox11_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBox11.SelectedItem is SecurityProfile selectedProfile)
+            {
+                perfilSelecionado = selectedProfile;
+
+                textBox26.Text = selectedProfile.Name;
+
+                // Atualizar Mode
+                int modeIndex = comboBox17.Items.IndexOf(selectedProfile.Mode);
+                comboBox17.SelectedIndex = modeIndex >= 0 ? modeIndex : -1;
+
+                // Atualizar Authentication Type
+                // Verifica se o valor exato existe nos items
+                int authIndex = comboBox16.Items.IndexOf(selectedProfile.AuthenticationTypes);
+                if (authIndex >= 0)
+                {
+                    comboBox16.SelectedIndex = authIndex;
+                }
+                else
+                {
+                    comboBox16.SelectedIndex = -1;
+                    comboBox16.Text = selectedProfile.AuthenticationTypes; // mostra como texto mesmo que n√£o esteja na lista
+                }
+
+                // For√ßa atualiza√ß√£o dos textboxes WPA/WPA2
+                comboBox16_SelectedIndexChanged(comboBox16, EventArgs.Empty);
+            }
+        }
+
+
+        private void LimparCamposSecurityProfile()
+        {
+            textBox26.Clear();
+            comboBox17.SelectedIndex = -1;
+            comboBox16.SelectedIndex = -1;
+            textBox25.Clear(); // WPA
+            textBox27.Clear(); // WPA2
+            textBox25.Enabled = false;
+            textBox27.Enabled = false;
+
+            perfilSelecionado = null;
+        }
+
+
+        private async void button35_Click(object sender, EventArgs e)
+        {
+            if (perfilSelecionado == null)
+            {
+                MessageBox.Show("Seleciona um perfil de seguran√ßa.");
+                return;
+            }
+
+            var confirm = MessageBox.Show($"Deseja apagar o perfil '{perfilSelecionado.Name}'?",
+                                          "Confirmar elimina√ß√£o",
+                                          MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (confirm != DialogResult.Yes) return;
+
+            try
+            {
+                HttpResponseMessage response = await client.DeleteAsync($"{urlLink}interface/wireless/security-profiles/{perfilSelecionado.Id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Perfil apagado com sucesso.");
+                    await CarregarSecurityProfilesAsync(); // Atualiza lista
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao apagar:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao apagar: " + ex.Message);
+            }
+
+            LimparCamposSecurityProfile();
+        }
+
+        private void PreencherComboboxSecurityProfile()
+        {
+            // Para edi√ß√£o
+            comboBox17.Items.Clear(); // Mode
+            comboBox17.Items.AddRange(new object[] { "none", "static-keys-required", "static-keys-optional", "dynamic-keys" });
+
+            comboBox16.Items.Clear(); // Authentication Types
+            comboBox16.Items.AddRange(new object[] { "wpa-psk", "wpa2-psk", "wpa-eap", "wpa2-eap", "wpa2-psk,wpa-psk" });
+
+            // Para cria√ß√£o
+            comboBox13.Items.Clear();
+            comboBox13.Items.AddRange(new object[] { "none", "static-keys-required", "static-keys-optional", "dynamic-keys" });
+
+            comboBox14.Items.Clear();
+            comboBox14.Items.AddRange(new object[] { "wpa-psk", "wpa2-psk", "wpa-eap", "wpa2-eap", "wpa2-psk,wpa-psk" });
+        }
+
+
+
+        private void comboBox16_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string authType = comboBox16.SelectedItem?.ToString()?.ToLower() ?? "";
+
+            // WPA2-PSK ‚Üí Ativa WPA2 textbox, desativa WPA
+            if (authType.Contains("wpa2-psk") && !authType.Contains("wpa-psk"))
+            {
+                textBox27.Enabled = true;   // WPA2 Pre-shared key
+                textBox25.Enabled = false;  // WPA Pre-shared key
+                textBox25.Clear();
+            }
+            // WPA-PSK ‚Üí Ativa WPA textbox, desativa WPA2
+            else if (authType.Contains("wpa-psk") && !authType.Contains("wpa2-psk"))
+            {
+                textBox25.Enabled = true;
+                textBox27.Enabled = false;
+                textBox27.Clear();
+            }
+            // Ambos ‚Üí Ativa os dois
+            else if (authType.Contains("wpa2-psk") && authType.Contains("wpa-psk"))
+            {
+                textBox25.Enabled = true;
+                textBox27.Enabled = true;
+            }
+            else
+            {
+                // Nenhum ‚Üí Desativa ambos
+                textBox25.Enabled = false;
+                textBox27.Enabled = false;
+                textBox25.Clear();
+                textBox27.Clear();
+            }
+        }
+
+        private void comboBox14_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string authType = comboBox14.SelectedItem?.ToString()?.ToLower() ?? "";
+
+            if (authType.Contains("wpa2-psk") && !authType.Contains("wpa-psk"))
+            {
+                textBox23.Enabled = true;   // WPA2 Pre-shared key
+                textBox28.Enabled = false;  // WPA Pre-shared key
+                textBox28.Clear();
+            }
+            else if (authType.Contains("wpa-psk") && !authType.Contains("wpa2-psk"))
+            {
+                textBox28.Enabled = true;
+                textBox23.Enabled = false;
+                textBox23.Clear();
+            }
+            else if (authType.Contains("wpa2-psk") && authType.Contains("wpa-psk"))
+            {
+                textBox28.Enabled = true;
+                textBox23.Enabled = true;
+            }
+            else
+            {
+                textBox28.Enabled = false;
+                textBox23.Enabled = false;
+                textBox28.Clear();
+                textBox23.Clear();
+            }
+        }
+
+
+
+        public class SecurityProfile
+        {
+            [JsonPropertyName(".id")]
+            public string Id { get; set; } = string.Empty;
+
+            [JsonPropertyName("name")]
+            public string Name { get; set; } = string.Empty;
+
+            [JsonPropertyName("mode")]
+            public string Mode { get; set; } = string.Empty;
+
+            [JsonPropertyName("authentication-types")]
+            public string AuthenticationTypes { get; set; } = string.Empty;
+
+            public override string ToString()
+            {
+                return $"Name: {Name} - Mode: {Mode} - Authentication Type: {AuthenticationTypes}";
+            }
+        }
+
+        private async void button34_Click(object sender, EventArgs e)
+        {
+            if (perfilSelecionado == null)
+            {
+                MessageBox.Show("Seleciona um perfil de seguran√ßa.");
+                return;
+            }
+
+            string name = textBox26.Text.Trim();
+            string mode = comboBox17.SelectedItem?.ToString() ?? "";
+            string authType = comboBox16.SelectedItem?.ToString()?.ToLower() ?? "";
+
+            string wpaKey = textBox25.Text.Trim();
+            string wpa2Key = textBox27.Text.Trim();
+
+            var body = new Dictionary<string, string>
+            {
+                ["name"] = name,
+                ["mode"] = mode,
+                ["authentication-types"] = authType
+            };
+
+            if (authType.Contains("wpa-psk"))
+            {
+                if (wpaKey.Length < 8 || wpaKey.Length > 64)
+                {
+                    MessageBox.Show("WPA Pre-Shared Key deve ter entre 8 e 64 caracteres.");
+                    return;
+                }
+
+                body["wpa-pre-shared-key"] = wpaKey;
+            }
+
+            if (authType.Contains("wpa2-psk"))
+            {
+                if (wpa2Key.Length < 8 || wpa2Key.Length > 64)
+                {
+                    MessageBox.Show("WPA2 Pre-Shared Key deve ter entre 8 e 64 caracteres.");
+                    return;
+                }
+
+                body["wpa2-pre-shared-key"] = wpa2Key;
+            }
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+
+            try
+            {
+                var request = new HttpRequestMessage(HttpMethod.Patch, $"{urlLink}interface/wireless/security-profiles/{perfilSelecionado.Id}")
+                {
+                    Content = content
+                };
+
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Perfil atualizado com sucesso.");
+                    await CarregarSecurityProfilesAsync();
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao atualizar:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+
+            LimparCamposSecurityProfile();
+
+        }
+
+        private async void button32_Click(object sender, EventArgs e)
+        {
+            string name = textBox29.Text.Trim();
+            string mode = comboBox13.SelectedItem?.ToString() ?? "";
+            string authType = comboBox14.SelectedItem?.ToString()?.ToLower() ?? "";
+            string wpaKey = textBox28.Text.Trim();
+            string wpa2Key = textBox23.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(mode) || string.IsNullOrWhiteSpace(authType))
+            {
+                MessageBox.Show("Preenche todos os campos obrigat√≥rios.");
+                return;
+            }
+
+            var body = new Dictionary<string, string>
+            {
+                ["name"] = name,
+                ["mode"] = mode,
+                ["authentication-types"] = authType
+            };
+
+            if (authType.Contains("wpa-psk"))
+            {
+                if (wpaKey.Length < 8 || wpaKey.Length > 64)
+                {
+                    MessageBox.Show("WPA Pre-Shared Key deve ter entre 8 e 64 caracteres.");
+                    return;
+                }
+                body["wpa-pre-shared-key"] = wpaKey;
+            }
+
+            if (authType.Contains("wpa2-psk"))
+            {
+                if (wpa2Key.Length < 8 || wpa2Key.Length > 64)
+                {
+                    MessageBox.Show("WPA2 Pre-Shared Key deve ter entre 8 e 64 caracteres.");
+                    return;
+                }
+                body["wpa2-pre-shared-key"] = wpa2Key;
+            }
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+
+            try
+            {
+                HttpResponseMessage response = await client.PutAsync($"{urlLink}interface/wireless/security-profiles", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Perfil criado com sucesso.");
+                    await CarregarSecurityProfilesAsync();
+                    // Limpar campos
+                    textBox29.Clear();
+                    textBox28.Clear();
+                    textBox23.Clear();
+                    comboBox13.SelectedIndex = -1;
+                    comboBox14.SelectedIndex = -1;
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao criar:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+            LimparCamposSecurityProfile();
+
+        }
 
     }
     public class AddressPool

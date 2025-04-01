@@ -54,6 +54,33 @@
             label1 = new Label();
             listBox1 = new ListBox();
             tabPage7 = new TabPage();
+            groupBox17 = new GroupBox();
+            label52 = new Label();
+            label53 = new Label();
+            textBox23 = new TextBox();
+            textBox28 = new TextBox();
+            comboBox13 = new ComboBox();
+            comboBox14 = new ComboBox();
+            label55 = new Label();
+            textBox29 = new TextBox();
+            label61 = new Label();
+            label62 = new Label();
+            button32 = new Button();
+            groupBox18 = new GroupBox();
+            label56 = new Label();
+            label54 = new Label();
+            textBox27 = new TextBox();
+            textBox25 = new TextBox();
+            comboBox17 = new ComboBox();
+            comboBox16 = new ComboBox();
+            label57 = new Label();
+            textBox26 = new TextBox();
+            button34 = new Button();
+            label58 = new Label();
+            label59 = new Label();
+            button35 = new Button();
+            label60 = new Label();
+            listBox11 = new ListBox();
             tabPage2 = new TabPage();
             label49 = new Label();
             groupBox15 = new GroupBox();
@@ -191,6 +218,9 @@
             tabPage6.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox1.SuspendLayout();
+            tabPage7.SuspendLayout();
+            groupBox17.SuspendLayout();
+            groupBox18.SuspendLayout();
             tabPage2.SuspendLayout();
             groupBox15.SuspendLayout();
             groupBox16.SuspendLayout();
@@ -231,8 +261,7 @@
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(1264, 701);
             tabControl1.TabIndex = 0;
-            //this.tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
-            this.tabControl1.DrawItem += new DrawItemEventHandler(this.tabControl1_DrawItem);
+            tabControl1.DrawItem += tabControl1_DrawItem;
             // 
             // tabPage6
             // 
@@ -476,6 +505,11 @@
             // 
             // tabPage7
             // 
+            tabPage7.Controls.Add(groupBox17);
+            tabPage7.Controls.Add(groupBox18);
+            tabPage7.Controls.Add(button35);
+            tabPage7.Controls.Add(label60);
+            tabPage7.Controls.Add(listBox11);
             tabPage7.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             tabPage7.Location = new Point(4, 29);
             tabPage7.Name = "tabPage7";
@@ -483,6 +517,266 @@
             tabPage7.TabIndex = 6;
             tabPage7.Text = "Security Profile";
             tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // groupBox17
+            // 
+            groupBox17.BackColor = Color.Gainsboro;
+            groupBox17.Controls.Add(label52);
+            groupBox17.Controls.Add(label53);
+            groupBox17.Controls.Add(textBox23);
+            groupBox17.Controls.Add(textBox28);
+            groupBox17.Controls.Add(comboBox13);
+            groupBox17.Controls.Add(comboBox14);
+            groupBox17.Controls.Add(label55);
+            groupBox17.Controls.Add(textBox29);
+            groupBox17.Controls.Add(label61);
+            groupBox17.Controls.Add(label62);
+            groupBox17.Controls.Add(button32);
+            groupBox17.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox17.Location = new Point(786, 352);
+            groupBox17.Name = "groupBox17";
+            groupBox17.Size = new Size(389, 300);
+            groupBox17.TabIndex = 35;
+            groupBox17.TabStop = false;
+            groupBox17.Text = "Create Security Profile";
+            // 
+            // label52
+            // 
+            label52.AutoSize = true;
+            label52.Location = new Point(45, 186);
+            label52.Name = "label52";
+            label52.Size = new Size(145, 20);
+            label52.TabIndex = 44;
+            label52.Text = "WPA Pre-Shared Key";
+            // 
+            // label53
+            // 
+            label53.AutoSize = true;
+            label53.Location = new Point(45, 231);
+            label53.Name = "label53";
+            label53.Size = new Size(153, 20);
+            label53.TabIndex = 43;
+            label53.Text = "WPA2 Pre-Shared Key";
+            // 
+            // textBox23
+            // 
+            textBox23.Location = new Point(216, 228);
+            textBox23.Name = "textBox23";
+            textBox23.Size = new Size(128, 27);
+            textBox23.TabIndex = 42;
+            // 
+            // textBox28
+            // 
+            textBox28.Location = new Point(216, 183);
+            textBox28.Name = "textBox28";
+            textBox28.Size = new Size(128, 27);
+            textBox28.TabIndex = 41;
+            // 
+            // comboBox13
+            // 
+            comboBox13.FormattingEnabled = true;
+            comboBox13.Location = new Point(216, 90);
+            comboBox13.Name = "comboBox13";
+            comboBox13.Size = new Size(128, 28);
+            comboBox13.TabIndex = 40;
+            // 
+            // comboBox14
+            // 
+            comboBox14.FormattingEnabled = true;
+            comboBox14.Location = new Point(216, 138);
+            comboBox14.Name = "comboBox14";
+            comboBox14.Size = new Size(128, 28);
+            comboBox14.TabIndex = 39;
+            // 
+            // label55
+            // 
+            label55.AutoSize = true;
+            label55.Location = new Point(44, 141);
+            label55.Name = "label55";
+            label55.Size = new Size(141, 20);
+            label55.TabIndex = 38;
+            label55.Text = "Authentication Type";
+            // 
+            // textBox29
+            // 
+            textBox29.Location = new Point(216, 45);
+            textBox29.Name = "textBox29";
+            textBox29.Size = new Size(128, 27);
+            textBox29.TabIndex = 37;
+            // 
+            // label61
+            // 
+            label61.AutoSize = true;
+            label61.Location = new Point(44, 95);
+            label61.Name = "label61";
+            label61.Size = new Size(48, 20);
+            label61.TabIndex = 36;
+            label61.Text = "Mode";
+            // 
+            // label62
+            // 
+            label62.AutoSize = true;
+            label62.Location = new Point(44, 48);
+            label62.Name = "label62";
+            label62.Size = new Size(49, 20);
+            label62.TabIndex = 35;
+            label62.Text = "Name";
+            // 
+            // button32
+            // 
+            button32.Location = new Point(235, 261);
+            button32.Name = "button32";
+            button32.Size = new Size(100, 33);
+            button32.TabIndex = 17;
+            button32.Text = "Create";
+            button32.UseVisualStyleBackColor = true;
+            button32.Click += button32_Click;
+            // 
+            // groupBox18
+            // 
+            groupBox18.BackColor = Color.Gainsboro;
+            groupBox18.Controls.Add(label56);
+            groupBox18.Controls.Add(label54);
+            groupBox18.Controls.Add(textBox27);
+            groupBox18.Controls.Add(textBox25);
+            groupBox18.Controls.Add(comboBox17);
+            groupBox18.Controls.Add(comboBox16);
+            groupBox18.Controls.Add(label57);
+            groupBox18.Controls.Add(textBox26);
+            groupBox18.Controls.Add(button34);
+            groupBox18.Controls.Add(label58);
+            groupBox18.Controls.Add(label59);
+            groupBox18.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox18.Location = new Point(786, 19);
+            groupBox18.Name = "groupBox18";
+            groupBox18.Size = new Size(389, 314);
+            groupBox18.TabIndex = 34;
+            groupBox18.TabStop = false;
+            groupBox18.Text = "Edit Security Profile";
+            // 
+            // label56
+            // 
+            label56.AutoSize = true;
+            label56.Location = new Point(64, 188);
+            label56.Name = "label56";
+            label56.Size = new Size(145, 20);
+            label56.TabIndex = 34;
+            label56.Text = "WPA Pre-Shared Key";
+            // 
+            // label54
+            // 
+            label54.AutoSize = true;
+            label54.Location = new Point(64, 233);
+            label54.Name = "label54";
+            label54.Size = new Size(153, 20);
+            label54.TabIndex = 33;
+            label54.Text = "WPA2 Pre-Shared Key";
+            // 
+            // textBox27
+            // 
+            textBox27.Location = new Point(235, 230);
+            textBox27.Name = "textBox27";
+            textBox27.Size = new Size(128, 27);
+            textBox27.TabIndex = 32;
+            // 
+            // textBox25
+            // 
+            textBox25.Location = new Point(235, 185);
+            textBox25.Name = "textBox25";
+            textBox25.Size = new Size(128, 27);
+            textBox25.TabIndex = 31;
+            // 
+            // comboBox17
+            // 
+            comboBox17.FormattingEnabled = true;
+            comboBox17.Location = new Point(235, 92);
+            comboBox17.Name = "comboBox17";
+            comboBox17.Size = new Size(128, 28);
+            comboBox17.TabIndex = 30;
+            // 
+            // comboBox16
+            // 
+            comboBox16.FormattingEnabled = true;
+            comboBox16.Location = new Point(235, 140);
+            comboBox16.Name = "comboBox16";
+            comboBox16.Size = new Size(128, 28);
+            comboBox16.TabIndex = 26;
+            // 
+            // label57
+            // 
+            label57.AutoSize = true;
+            label57.Location = new Point(63, 143);
+            label57.Name = "label57";
+            label57.Size = new Size(141, 20);
+            label57.TabIndex = 20;
+            label57.Text = "Authentication Type";
+            // 
+            // textBox26
+            // 
+            textBox26.Location = new Point(235, 47);
+            textBox26.Name = "textBox26";
+            textBox26.Size = new Size(128, 27);
+            textBox26.TabIndex = 19;
+            // 
+            // button34
+            // 
+            button34.Location = new Point(253, 275);
+            button34.Name = "button34";
+            button34.Size = new Size(100, 33);
+            button34.TabIndex = 17;
+            button34.Text = "Update";
+            button34.UseVisualStyleBackColor = true;
+            button34.Click += button34_Click;
+            // 
+            // label58
+            // 
+            label58.AutoSize = true;
+            label58.Location = new Point(63, 97);
+            label58.Name = "label58";
+            label58.Size = new Size(48, 20);
+            label58.TabIndex = 12;
+            label58.Text = "Mode";
+            // 
+            // label59
+            // 
+            label59.AutoSize = true;
+            label59.Location = new Point(63, 50);
+            label59.Name = "label59";
+            label59.Size = new Size(49, 20);
+            label59.TabIndex = 11;
+            label59.Text = "Name";
+            // 
+            // button35
+            // 
+            button35.BackColor = Color.Red;
+            button35.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button35.ForeColor = Color.White;
+            button35.Location = new Point(631, 70);
+            button35.Name = "button35";
+            button35.Size = new Size(108, 43);
+            button35.TabIndex = 33;
+            button35.Text = "Delete";
+            button35.UseVisualStyleBackColor = false;
+            button35.Click += button35_Click;
+            // 
+            // label60
+            // 
+            label60.AutoSize = true;
+            label60.Location = new Point(205, 36);
+            label60.Name = "label60";
+            label60.Size = new Size(108, 20);
+            label60.TabIndex = 32;
+            label60.Text = "Security Profile";
+            // 
+            // listBox11
+            // 
+            listBox11.BackColor = Color.Gainsboro;
+            listBox11.FormattingEnabled = true;
+            listBox11.Location = new Point(40, 70);
+            listBox11.Name = "listBox11";
+            listBox11.Size = new Size(568, 444);
+            listBox11.TabIndex = 31;
+            listBox11.SelectedIndexChanged += listBox11_SelectedIndexChanged;
             // 
             // tabPage2
             // 
@@ -1852,15 +2146,21 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+<<<<<<< HEAD
             BackColor = Color.LightSkyBlue;
+=======
+            BackColor = SystemColors.ButtonFace;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+>>>>>>> 888ca3fba4e3cd4af0ada9c605332481dc262cd2
             ClientSize = new Size(1327, 776);
             Controls.Add(button26);
             Controls.Add(tabControl1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "Form1";
-            Text = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Mikrotik";
             Load += Form1_Load;
             tabControl1.ResumeLayout(false);
             tabPage6.ResumeLayout(false);
@@ -1869,6 +2169,12 @@
             tabPage1.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            tabPage7.ResumeLayout(false);
+            tabPage7.PerformLayout();
+            groupBox17.ResumeLayout(false);
+            groupBox17.PerformLayout();
+            groupBox18.ResumeLayout(false);
+            groupBox18.PerformLayout();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
             groupBox15.ResumeLayout(false);
@@ -2074,5 +2380,32 @@
         private ComboBox comboBox9;
         private Button button30;
         private Button button31;
+        private GroupBox groupBox17;
+        private Button button32;
+        private GroupBox groupBox18;
+        private ComboBox comboBox16;
+        private Label label57;
+        private TextBox textBox26;
+        private Button button34;
+        private Label label58;
+        private Label label59;
+        private Button button35;
+        private Label label60;
+        private ListBox listBox11;
+        private ComboBox comboBox17;
+        private Label label56;
+        private Label label54;
+        private TextBox textBox27;
+        private TextBox textBox25;
+        private Label label52;
+        private Label label53;
+        private TextBox textBox23;
+        private TextBox textBox28;
+        private ComboBox comboBox13;
+        private ComboBox comboBox14;
+        private Label label55;
+        private TextBox textBox29;
+        private Label label61;
+        private Label label62;
     }
 }
