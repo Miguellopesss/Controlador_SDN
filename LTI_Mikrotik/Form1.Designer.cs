@@ -231,8 +231,7 @@
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(1264, 701);
             tabControl1.TabIndex = 0;
-            //this.tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
-            this.tabControl1.DrawItem += new DrawItemEventHandler(this.tabControl1_DrawItem);
+            tabControl1.DrawItem += tabControl1_DrawItem;
             // 
             // tabPage6
             // 
@@ -1852,7 +1851,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.LightSkyBlue;
+            BackColor = SystemColors.ButtonFace;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new Size(1327, 776);
             Controls.Add(button26);

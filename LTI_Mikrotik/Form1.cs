@@ -1304,6 +1304,7 @@ namespace LTI_Mikrotik
         private void button26_Click(object sender, EventArgs e)
         {
             this.Close(); // Fecha o Form1 e ativa a lógica do FormClosed
+            MessageBox.Show("Sessão fechada!");
         }
 
         private async Task CarregarBridgesAsync()

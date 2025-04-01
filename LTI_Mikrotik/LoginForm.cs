@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace LTI_Mikrotik
 {
@@ -10,10 +11,24 @@ namespace LTI_Mikrotik
         public LoginForm()
         {
             InitializeComponent();
-            password.PasswordChar = '●'; // Protege a password
+            password.PasswordChar = '●'; 
+            LoadDevicesFromDatabase();
 
         }
 
+        private async void LoadDevicesFromDatabase()
+        {
+            using (var context = new LTI_Mikrotik.Data.AppDbContext())
+            {
+                devices = await context.Devices.ToListAsync();
+            }
+
+            listBox1.Items.Clear();
+            foreach (var device in devices)
+            {
+                listBox1.Items.Add($"{device.name} ({device.ipAddress}) - {device.username}");
+            }
+        }
         private void listBox1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex >= 0 && listBox1.SelectedIndex < devices.Count)
@@ -39,7 +54,7 @@ namespace LTI_Mikrotik
                 string.IsNullOrWhiteSpace(usernameValue) ||
                 string.IsNullOrWhiteSpace(passwordValue))
             {
-                MessageBox.Show("Preenche todos os campos antes de iniciar sessão.");
+                MessageBox.Show("Preencha todos os campos antes de iniciar sessão.");
                 return;
             }
 
@@ -55,6 +70,21 @@ namespace LTI_Mikrotik
             bool sucesso = await ConnectToDevice(device);
             if (sucesso)
             {
+                MessageBox.Show("Login efetuado com sucesso!");
+                using (var context = new LTI_Mikrotik.Data.AppDbContext())
+                {
+                    // Verifica se já existe um dispositivo com o mesmo nome e username
+                    var existingDevice = await context.Devices
+                        .FirstOrDefaultAsync(d => d.name == device.name && d.ipAddress == device.ipAddress);
+
+                    if (existingDevice != null)
+                    {
+                        return;
+                    }
+
+                    context.Devices.Add(device);
+                    await context.SaveChangesAsync();
+                }
                 listBox1.Items.Clear();
                 devices.Add(device);
                 foreach (var d in devices)
@@ -68,27 +98,31 @@ namespace LTI_Mikrotik
             }
         }
 
+
         private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
         {
-            TabControl tabControl = sender as TabControl;
-            TabPage tabPage = tabControl.TabPages[e.Index];
-            Rectangle tabRect = tabControl.GetTabRect(e.Index);
-
-            // Verificar se a aba é a aba ativa
-            if (e.Index == tabControl.SelectedIndex)
+            if (sender is TabControl tabControl)
             {
-                // Desenhar o fundo da aba ativa com uma cor diferente
-                e.Graphics.FillRectangle(Brushes.LightBlue, tabRect);
-            }
-            else
-            {
-                // Desenhar o fundo das outras abas
-                e.Graphics.FillRectangle(SystemBrushes.Control, tabRect);
-            }
+                TabPage tabPage = tabControl.TabPages[e.Index];
+                Rectangle tabRect = tabControl.GetTabRect(e.Index);
 
-            // Desenhar o texto da aba
-            TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                // Verificar se a aba é a aba ativa
+                if (e.Index == tabControl.SelectedIndex)
+                {
+                    // Desenhar o fundo da aba ativa com uma cor diferente
+                    e.Graphics.FillRectangle(Brushes.LightBlue, tabRect);
+                }
+                else
+                {
+                    // Desenhar o fundo das outras abas
+                    e.Graphics.FillRectangle(SystemBrushes.Control, tabRect);
+                }
+
+                // Desenhar o texto da aba
+                TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+            }
         }
+
 
         private async Task<bool> ConnectToDevice(Device device)
         {
