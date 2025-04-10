@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,12 +52,67 @@ namespace LTI_Mikrotik
                 name.Text = selecionado.name;
                 ipAddress.Text = selecionado.ipAddress;
                 username.Text = selecionado.username;
-                password.Text = selecionado.password;
+
+                string encryptionKey = "ChaveSimetrica123"; 
+                try
+                {
+                    password.Text = DecryptPassword(selecionado.password, encryptionKey);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao descriptografar a senha: {ex.Message}");
+                    password.Text = string.Empty; 
+                }
+            }
+        }
+
+        private string EncryptPassword(string plainText, string key)
+        {
+            using (var aes = Aes.Create())
+            {
+                aes.Key = Encoding.UTF8.GetBytes(key.PadRight(16).Substring(0, 16));
+                aes.GenerateIV(); 
+
+                using (var encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
+                using (var ms = new MemoryStream())
+                {
+                    ms.Write(aes.IV, 0, aes.IV.Length); 
+                    using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    using (var writer = new StreamWriter(cs))
+                    {
+                        writer.Write(plainText);
+                    }
+                    return Convert.ToBase64String(ms.ToArray());
+                }
+            }
+        }
+
+        private string DecryptPassword(string cipherText, string key)
+        {
+            using (var aes = Aes.Create())
+            {
+                aes.Key = Encoding.UTF8.GetBytes(key.PadRight(16).Substring(0, 16)); 
+
+                var cipherBytes = Convert.FromBase64String(cipherText);
+                using (var ms = new MemoryStream(cipherBytes))
+                {
+                    var iv = new byte[16];
+                    ms.Read(iv, 0, iv.Length); 
+                    aes.IV = iv;
+
+                    using (var decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
+                    using (var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+                    using (var reader = new StreamReader(cs))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
             }
         }
 
         private async void Login_Click_1(object sender, EventArgs e)
         {
+            string encryptionKey = "ChaveSimetrica123"; 
             string nameValue = name.Text.Trim();
             string ipAddressValue = ipAddress.Text.Trim();
             string usernameValue = username.Text.Trim();
@@ -71,15 +127,24 @@ namespace LTI_Mikrotik
                 return;
             }
 
+            var encryptedPassword = EncryptPassword(passwordValue, encryptionKey);
+
             var device = new Device
             {
                 name = nameValue,
                 ipAddress = ipAddressValue,
                 username = usernameValue,
-                password = passwordValue
+                password = encryptedPassword
             };
 
-            bool sucesso = await ConnectToDevice(device);
+            bool sucesso = await ConnectToDevice(new Device
+            {
+                name = device.name,
+                ipAddress = device.ipAddress,
+                username = device.username,
+                password = DecryptPassword(device.password, encryptionKey)
+            });
+
             if (sucesso)
             {
                 MessageBox.Show("Login efetuado com sucesso!");
