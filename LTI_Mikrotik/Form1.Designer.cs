@@ -151,6 +151,8 @@ namespace LTI_Mikrotik
             label48 = new Label();
             listBox9 = new ListBox();
             tabPage4 = new TabPage();
+            button33 = new Button();
+            button36 = new Button();
             groupBox8 = new GroupBox();
             comboBox3 = new ComboBox();
             label29 = new Label();
@@ -214,6 +216,19 @@ namespace LTI_Mikrotik
             label19 = new Label();
             listBox5 = new ListBox();
             tabPage10 = new TabPage();
+            button37 = new Button();
+            groupBox19 = new GroupBox();
+            textBox34 = new TextBox();
+            textBox33 = new TextBox();
+            textBox32 = new TextBox();
+            textBox30 = new TextBox();
+            label70 = new Label();
+            label69 = new Label();
+            label68 = new Label();
+            label67 = new Label();
+            comboBox15 = new ComboBox();
+            button3 = new Button();
+            label66 = new Label();
             label64 = new Label();
             listBox13 = new ListBox();
             label63 = new Label();
@@ -248,6 +263,7 @@ namespace LTI_Mikrotik
             groupBox4.SuspendLayout();
             groupBox5.SuspendLayout();
             tabPage10.SuspendLayout();
+            groupBox19.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl1
@@ -262,6 +278,7 @@ namespace LTI_Mikrotik
             tabControl1.Controls.Add(tabPage5);
             tabControl1.Controls.Add(tabPage8);
             tabControl1.Controls.Add(tabPage10);
+            tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
             tabControl1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tabControl1.Location = new Point(31, 53);
             tabControl1.Name = "tabControl1";
@@ -442,7 +459,6 @@ namespace LTI_Mikrotik
             // Frequency
             // 
             Frequency.FormattingEnabled = true;
-            Frequency.Items.AddRange(new object[] { "auto", "2412", "2417", "2422", "2427", "2432", "2437", "2442", "2447", "2452" });
             Frequency.Location = new Point(190, 221);
             Frequency.Name = "Frequency";
             Frequency.Size = new Size(151, 28);
@@ -1499,6 +1515,8 @@ namespace LTI_Mikrotik
             // 
             // tabPage4
             // 
+            tabPage4.Controls.Add(button33);
+            tabPage4.Controls.Add(button36);
             tabPage4.Controls.Add(groupBox8);
             tabPage4.Controls.Add(label27);
             tabPage4.Controls.Add(listBox7);
@@ -1515,6 +1533,32 @@ namespace LTI_Mikrotik
             tabPage4.TabIndex = 3;
             tabPage4.Text = "DNS";
             tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // button33
+            // 
+            button33.BackColor = Color.Red;
+            button33.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button33.ForeColor = SystemColors.Control;
+            button33.Location = new Point(465, 131);
+            button33.Name = "button33";
+            button33.Size = new Size(112, 44);
+            button33.TabIndex = 31;
+            button33.Text = "Disable";
+            button33.UseVisualStyleBackColor = false;
+            button33.Click += button33_Click;
+            // 
+            // button36
+            // 
+            button36.BackColor = Color.FromArgb(0, 192, 0);
+            button36.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button36.ForeColor = SystemColors.Control;
+            button36.Location = new Point(465, 67);
+            button36.Name = "button36";
+            button36.Size = new Size(112, 44);
+            button36.TabIndex = 30;
+            button36.Text = "Enable";
+            button36.UseVisualStyleBackColor = false;
+            button36.Click += button36_Click;
             // 
             // groupBox8
             // 
@@ -1772,6 +1816,7 @@ namespace LTI_Mikrotik
             listBox6.Name = "listBox6";
             listBox6.Size = new Size(406, 204);
             listBox6.TabIndex = 21;
+            listBox6.SelectedIndexChanged += listBox6_SelectedIndexChanged;
             // 
             // tabPage5
             // 
@@ -2139,6 +2184,8 @@ namespace LTI_Mikrotik
             // 
             // tabPage10
             // 
+            tabPage10.Controls.Add(button37);
+            tabPage10.Controls.Add(groupBox19);
             tabPage10.Controls.Add(label64);
             tabPage10.Controls.Add(listBox13);
             tabPage10.Controls.Add(label63);
@@ -2151,10 +2198,136 @@ namespace LTI_Mikrotik
             tabPage10.Text = "Wireguard";
             tabPage10.UseVisualStyleBackColor = true;
             // 
+            // button37
+            // 
+            button37.BackColor = Color.Red;
+            button37.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button37.ForeColor = Color.White;
+            button37.Location = new Point(1078, 68);
+            button37.Name = "button37";
+            button37.Size = new Size(105, 38);
+            button37.TabIndex = 27;
+            button37.Text = "Delete";
+            button37.UseVisualStyleBackColor = false;
+            button37.Click += button37_Click;
+            // 
+            // groupBox19
+            // 
+            groupBox19.BackColor = Color.Gainsboro;
+            groupBox19.Controls.Add(textBox34);
+            groupBox19.Controls.Add(textBox33);
+            groupBox19.Controls.Add(textBox32);
+            groupBox19.Controls.Add(textBox30);
+            groupBox19.Controls.Add(label70);
+            groupBox19.Controls.Add(label69);
+            groupBox19.Controls.Add(label68);
+            groupBox19.Controls.Add(label67);
+            groupBox19.Controls.Add(comboBox15);
+            groupBox19.Controls.Add(button3);
+            groupBox19.Controls.Add(label66);
+            groupBox19.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox19.Location = new Point(470, 289);
+            groupBox19.Name = "groupBox19";
+            groupBox19.Size = new Size(698, 358);
+            groupBox19.TabIndex = 26;
+            groupBox19.TabStop = false;
+            groupBox19.Text = "Create Peer";
+            // 
+            // textBox34
+            // 
+            textBox34.Location = new Point(143, 307);
+            textBox34.Name = "textBox34";
+            textBox34.Size = new Size(165, 27);
+            textBox34.TabIndex = 30;
+            // 
+            // textBox33
+            // 
+            textBox33.Location = new Point(143, 254);
+            textBox33.Name = "textBox33";
+            textBox33.Size = new Size(165, 27);
+            textBox33.TabIndex = 29;
+            // 
+            // textBox32
+            // 
+            textBox32.Location = new Point(143, 203);
+            textBox32.Name = "textBox32";
+            textBox32.Size = new Size(165, 27);
+            textBox32.TabIndex = 28;
+            // 
+            // textBox30
+            // 
+            textBox30.Location = new Point(143, 154);
+            textBox30.Name = "textBox30";
+            textBox30.Size = new Size(165, 27);
+            textBox30.TabIndex = 27;
+            // 
+            // label70
+            // 
+            label70.AutoSize = true;
+            label70.Location = new Point(16, 206);
+            label70.Name = "label70";
+            label70.Size = new Size(104, 20);
+            label70.TabIndex = 26;
+            label70.Text = "Client Address";
+            // 
+            // label69
+            // 
+            label69.AutoSize = true;
+            label69.Location = new Point(16, 257);
+            label69.Name = "label69";
+            label69.Size = new Size(81, 20);
+            label69.TabIndex = 25;
+            label69.Text = "Client DNS";
+            // 
+            // label68
+            // 
+            label68.AutoSize = true;
+            label68.Location = new Point(16, 310);
+            label68.Name = "label68";
+            label68.Size = new Size(111, 20);
+            label68.TabIndex = 24;
+            label68.Text = "Client Endpoint";
+            // 
+            // label67
+            // 
+            label67.AutoSize = true;
+            label67.Location = new Point(16, 157);
+            label67.Name = "label67";
+            label67.Size = new Size(121, 20);
+            label67.TabIndex = 23;
+            label67.Text = "Allowed Address";
+            // 
+            // comboBox15
+            // 
+            comboBox15.FormattingEnabled = true;
+            comboBox15.Location = new Point(122, 49);
+            comboBox15.Name = "comboBox15";
+            comboBox15.Size = new Size(125, 28);
+            comboBox15.TabIndex = 22;
+            // 
+            // button3
+            // 
+            button3.Location = new Point(592, 319);
+            button3.Name = "button3";
+            button3.Size = new Size(100, 33);
+            button3.TabIndex = 17;
+            button3.Text = "Create";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click_2;
+            // 
+            // label66
+            // 
+            label66.AutoSize = true;
+            label66.Location = new Point(16, 52);
+            label66.Name = "label66";
+            label66.Size = new Size(67, 20);
+            label66.TabIndex = 11;
+            label66.Text = "Interface";
+            // 
             // label64
             // 
             label64.AutoSize = true;
-            label64.Location = new Point(723, 32);
+            label64.Location = new Point(669, 32);
             label64.Name = "label64";
             label64.Size = new Size(43, 20);
             label64.TabIndex = 25;
@@ -2164,10 +2337,11 @@ namespace LTI_Mikrotik
             // 
             listBox13.BackColor = Color.Gainsboro;
             listBox13.FormattingEnabled = true;
-            listBox13.Location = new Point(512, 68);
+            listBox13.Location = new Point(470, 68);
             listBox13.Name = "listBox13";
-            listBox13.Size = new Size(475, 464);
+            listBox13.Size = new Size(581, 184);
             listBox13.TabIndex = 24;
+            listBox13.SelectedIndexChanged += listBox13_SelectedIndexChanged;
             // 
             // label63
             // 
@@ -2185,7 +2359,7 @@ namespace LTI_Mikrotik
             listBox12.FormattingEnabled = true;
             listBox12.Location = new Point(31, 68);
             listBox12.Name = "listBox12";
-            listBox12.Size = new Size(399, 464);
+            listBox12.Size = new Size(363, 384);
             listBox12.TabIndex = 22;
             // 
             // button26
@@ -2193,7 +2367,7 @@ namespace LTI_Mikrotik
             button26.BackColor = Color.LightSkyBlue;
             button26.FlatStyle = FlatStyle.Flat;
             button26.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button26.Location = new Point(1197, 23);
+            button26.Location = new Point(1193, 9);
             button26.Name = "button26";
             button26.Size = new Size(98, 35);
             button26.TabIndex = 1;
@@ -2274,6 +2448,8 @@ namespace LTI_Mikrotik
             groupBox5.PerformLayout();
             tabPage10.ResumeLayout(false);
             tabPage10.PerformLayout();
+            groupBox19.ResumeLayout(false);
+            groupBox19.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -2469,5 +2645,20 @@ namespace LTI_Mikrotik
         private ListBox listBox12;
         private Label label64;
         private ListBox listBox13;
+        private GroupBox groupBox19;
+        private Button button3;
+        private Label label66;
+        private ComboBox comboBox15;
+        private Button button33;
+        private Button button36;
+        private Button button37;
+        private Label label70;
+        private Label label69;
+        private Label label68;
+        private Label label67;
+        private TextBox textBox33;
+        private TextBox textBox32;
+        private TextBox textBox30;
+        private TextBox textBox34;
     }
 }

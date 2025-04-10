@@ -159,11 +159,11 @@
             label1.AutoSize = true;
             label1.BackColor = Color.Transparent;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(1144, 679);
+            label1.Location = new Point(1144, 707);
             label1.Name = "label1";
-            label1.Size = new Size(171, 100);
+            label1.Size = new Size(171, 60);
             label1.TabIndex = 15;
-            label1.Text = "Made by: \r\n                João Tendeiro\r\n                Miguel Lopes\r\n                Primo : )\r\n\r\n";
+            label1.Text = "Made by: \r\n                João Tendeiro\r\n                Miguel Lopes\r\n";
             // 
             // LoginForm
             // 
