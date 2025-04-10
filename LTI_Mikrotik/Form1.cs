@@ -33,8 +33,11 @@ namespace LTI_Mikrotik
         private BridgePort? portSelecionado;
         private Device device;
         private SecurityProfile? perfilSelecionado;
-
+        private DnsInfo? dnsAtual;
         private string IP;
+
+        private WireguardPeer? peerSelecionado = null;
+        private List<WireguardPeer> wireguardPeers = new();
 
 
         public Form1(Device device)
@@ -227,6 +230,32 @@ namespace LTI_Mikrotik
                 "2ghz-b/g/n", "2ghz-g/n"
             });
                 }
+
+                Frequency.Items.Clear();
+                Frequency.Items.Add("auto");
+
+                if (iface.Name == "wlan2")
+                {
+                    for (int freq = 5180; freq <= 5320; freq += 5)
+                    {
+                        Frequency.Items.Add(freq.ToString());
+                    }
+
+                    for (int freq = 5500; freq <= 5700; freq += 5)
+                    {
+                        Frequency.Items.Add(freq.ToString());
+                    }
+                }
+                else
+                {
+                    Frequency.Items.AddRange(new object[]
+                    {
+        "2412", "2417", "2422", "2427", "2432", "2437", "2442", "2447", "2452"
+                    });
+                }
+
+                Frequency.Text = iface.Frequency;
+
 
                 Band.Text = iface.Band;
             }
@@ -728,11 +757,13 @@ namespace LTI_Mikrotik
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
-                    var dnsInfo = JsonSerializer.Deserialize<DnsInfo>(json);
+                    dnsAtual = JsonSerializer.Deserialize<DnsInfo>(json);
 
                     listBox6.Items.Clear();
-                    listBox6.Items.Add($"Servers: {dnsInfo?.Servers}");
-                    listBox6.Items.Add($"Dynamic Servers: {dnsInfo?.DynamicServers}");
+                    listBox6.Items.Add($"Servers: {dnsAtual?.Servers}");
+                    listBox6.Items.Add($"Dynamic Servers: {dnsAtual?.DynamicServers}");
+                    listBox6.Items.Add($"Allow Remote Requests: {dnsAtual?.RemoteRequestStatus}");
+
                 }
                 else
                 {
@@ -1379,6 +1410,7 @@ namespace LTI_Mikrotik
                 MessageBox.Show("Bridge apagada com sucesso.");
                 await CarregarBridgesAsync();
                 await CarregarPortsAsync();
+                await CarregarTodasInterfaces();
                 LimparCamposPortBridge();
             }
             else
@@ -1453,6 +1485,7 @@ namespace LTI_Mikrotik
                 {
                     MessageBox.Show("Bridge criada com sucesso.");
                     await CarregarBridgesAsync();
+                    await CarregarTodasInterfaces();
                     LimparCamposPortBridge();
                     textBox22.Clear();
                 }
@@ -2019,11 +2052,15 @@ namespace LTI_Mikrotik
                     var interfaces = JsonSerializer.Deserialize<List<WireGuardInterface>>(json);
 
                     listBox12.Items.Clear();
+                    comboBox15.Items.Clear();
 
                     if (interfaces != null)
                     {
                         foreach (var wg in interfaces)
+                        {
                             listBox12.Items.Add(wg);
+                            comboBox15.Items.Add(wg.Name);
+                        }
                     }
                 }
                 else
@@ -2066,19 +2103,15 @@ namespace LTI_Mikrotik
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
-                    var peers = JsonSerializer.Deserialize<List<WireguardPeer>>(json);
+                    wireguardPeers = JsonSerializer.Deserialize<List<WireguardPeer>>(json) ?? new();
 
                     listBox13.Items.Clear();
 
-                    if (peers != null)
+                    foreach (var peer in wireguardPeers)
                     {
-                        foreach (var peer in peers)
-                        {
-                            listBox13.Items.Add($"Name: {peer.Name}");
-                            listBox13.Items.Add($"Public Key: {peer.PublicKey}");
-                            listBox13.Items.Add($"Private Key: {peer.PrivateKey}");
-                            listBox13.Items.Add("------------------------");
-                        }
+                        listBox13.Items.Add($"Name: {peer.Name}");
+                        listBox13.Items.Add($"Public Key: {peer.PublicKey}");
+                        listBox13.Items.Add("------------------------");
                     }
                 }
                 else
@@ -2095,28 +2128,224 @@ namespace LTI_Mikrotik
 
 
 
+
+
+
         public class WireguardPeer
+        {
+            [JsonPropertyName(".id")]
+            public string Id { get; set; } = string.Empty;
+
+            [JsonPropertyName("interface")]
+            public string Name { get; set; } = string.Empty;
+
+            [JsonPropertyName("public-key")]
+            public string PublicKey { get; set; } = string.Empty;
+
+            [JsonPropertyName("private-key")]
+            public string PrivateKey { get; set; } = string.Empty;
+
+            // Podes adicionar mais propriedades se necessário
+        }
+
+        private async void button36_Click(object sender, EventArgs e)
+        {
+            var body = new Dictionary<string, string>
             {
-                [JsonPropertyName(".id")]
-                public string Id { get; set; } = string.Empty;
+                ["allow-remote-requests"] = "true"
+            };
 
-                [JsonPropertyName("interface")]
-                public string Name { get; set; } = string.Empty;
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
 
-                [JsonPropertyName("public-key")]
-                public string PublicKey { get; set; } = string.Empty;
+            try
+            {
+                HttpResponseMessage response = await client.PostAsync(urlLink + "ip/dns/set", content);
 
-                [JsonPropertyName("private-key")]
-                public string PrivateKey { get; set; } = string.Empty;
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("DNS ativado com sucesso.");
+                    await CarregarDnsAsync();
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao ativar DNS:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao ativar DNS: " + ex.Message);
+            }
+        }
 
-                // Podes adicionar mais propriedades se necessário
+
+
+
+        private async void button33_Click(object sender, EventArgs e)
+        {
+            var body = new Dictionary<string, string>
+            {
+                ["allow-remote-requests"] = "false"
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+
+            try
+            {
+                HttpResponseMessage response = await client.PostAsync(urlLink + "ip/dns/set", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("DNS ativado com sucesso.");
+                    await CarregarDnsAsync();
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao ativar DNS:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao ativar DNS: " + ex.Message);
+            }
+        }
+
+
+
+
+        private void listBox6_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private async void button3_Click_2(object sender, EventArgs e)
+        {
+            string selectedInterface = comboBox15.SelectedItem?.ToString() ?? "";
+            string allowedAddress = textBox30.Text.Trim(); // Allowed Address
+            string clientAddress = textBox32.Text.Trim();  // Client Address
+            string clientDns = textBox33.Text.Trim();      // Client DNS
+            string clientEndpoint = textBox34.Text.Trim(); // Client Endpoint
+
+            if (string.IsNullOrWhiteSpace(selectedInterface))
+            {
+                MessageBox.Show("Preenche pelo a interface");
+                return;
             }
 
+            var body = new Dictionary<string, string>
+            {
+                ["interface"] = selectedInterface,
+                ["private-key"] = "auto",    // "auto" será a Private Key
+                ["allowed-address"] = string.IsNullOrWhiteSpace(allowedAddress) ? "::/0" : allowedAddress
+            };
+
+            if (!string.IsNullOrWhiteSpace(clientAddress))
+                body["client-address"] = clientAddress;
+
+            if (!string.IsNullOrWhiteSpace(clientDns))
+                body["client-dns"] = clientDns;
+
+            if (!string.IsNullOrWhiteSpace(clientEndpoint))
+                body["client-endpoint"] = clientEndpoint;
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{urlLink}interface/wireguard/peers")
+            {
+                Content = content
+            };
+
+            try
+            {
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Peer criado com sucesso.");
+                    await CarregarWireguardPeersAsync();
+
+                    // Gerar texto da configuração com a chave privada como "auto"
+                    string config = "[Interface]\n";
+                    config += "PrivateKey = auto\n";  // PrivateKey definida como "auto"
+                    config += $"Address = {clientAddress}/32\n";
+                    if (!string.IsNullOrWhiteSpace(clientDns))
+                        config += $"DNS = {clientDns}\n";
+
+                    config += "\n[Peer]\n";
+                    config += $"PublicKey = iDq4OJoEHI2u2i0wmOCLqGN/gtHibMR7JFKzvSQcCwc=\n"; // Removida a chave pública do código
+                    config += $"AllowedIPs = {allowedAddress}/0, ::/0\n";
+                    config += $"Endpoint = {clientEndpoint}\n";
+
+                    // Guardar em ficheiro .txt
+                    string fileName = $"wg_client_config_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
+                    string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName);
+                    await File.WriteAllTextAsync(filePath, config);
+
+                    MessageBox.Show($"Configuração exportada para:\n{filePath}", "Exportação concluída");
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao criar peer:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
 
 
+        private async void button37_Click(object sender, EventArgs e)
+        {
+            if (peerSelecionado == null)
+            {
+                MessageBox.Show("Seleciona um peer para apagar.");
+                return;
+            }
+
+            var confirm = MessageBox.Show($"Deseja apagar o peer com public key:\n{peerSelecionado.PublicKey}?",
+                                          "Confirmar eliminação", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (confirm != DialogResult.Yes) return;
+
+            try
+            {
+                HttpResponseMessage response = await client.DeleteAsync($"{urlLink}interface/wireguard/peers/{peerSelecionado.Id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Peer apagado com sucesso.");
+                    await CarregarWireguardPeersAsync(); // Atualiza a listBox
+                }
+                else
+                {
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao apagar peer:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
 
 
-   }
+        private void listBox13_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = listBox13.SelectedIndex;
+
+            // Cada peer tem 4 linhas: Name, PubKey, PrivKey, separador
+            int peerIndex = index / 4;
+
+            if (peerIndex >= 0 && peerIndex < wireguardPeers.Count)
+            {
+                peerSelecionado = wireguardPeers[peerIndex];
+            }
+        }
+
+    }
     public class AddressPool
         {
             [JsonPropertyName(".id")] public string Id { get; set; } = string.Empty;
@@ -2171,7 +2400,7 @@ namespace LTI_Mikrotik
         public override string ToString()
         {
             string estado = Disabled ? "Disable" : "Enable";
-            return $"{Name} - {Mode} - {Band} - {ChannelWidth} - {SSID} - {Frequency} - {estado}";
+            return $"[{estado}] {Name} - {Mode} - {Band} - {ChannelWidth} - {SSID} - {Frequency}";
         }
     }
 
@@ -2225,9 +2454,20 @@ namespace LTI_Mikrotik
 
     public class DnsInfo
     {
-        [JsonPropertyName("servers")] public string Servers { get; set; } = string.Empty;
-        [JsonPropertyName("dynamic-servers")] public string DynamicServers { get; set; } = string.Empty;
+        [JsonPropertyName("servers")]
+        public string Servers { get; set; } = "";
+
+        [JsonPropertyName("dynamic-servers")]
+        public string DynamicServers { get; set; } = "";
+
+        [JsonPropertyName("allow-remote-requests")]
+        public string AllowRemoteRequests { get; set; } = "";
+
+        // Propriedade auxiliar legível
+        public string RemoteRequestStatus => AllowRemoteRequests == "true" ? "Enabled" : "Disabled";
     }
+
+
 
 
 
@@ -2237,12 +2477,15 @@ namespace LTI_Mikrotik
         [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
         [JsonPropertyName("type")] public string Type { get; set; } = string.Empty;
         [JsonPropertyName("address")] public string Address { get; set; } = string.Empty;
+        [JsonPropertyName("disabled")] public string Disabled { get; set; } = "false"; // <- Adicionado
 
         public override string ToString()
         {
-            return $"Name: {Name} -> Address: {Address}";
+            string status = Disabled == "true" ? "Disabled" : "Enabled";
+            return $"[{status}] Name: {Name} -> Address: {Address}";
         }
     }
+
 
 
     public class DhcpServer
