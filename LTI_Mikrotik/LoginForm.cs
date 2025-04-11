@@ -180,7 +180,6 @@ namespace LTI_Mikrotik
 
             var byteArray = Encoding.ASCII.GetBytes($"{device.username}:{device.password}");
 
-            // Handler que ignora problemas com certificado (autoassinado, etc.)
             var handler = new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true

@@ -63,9 +63,29 @@ namespace LTI_Mikrotik.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _438b4141_d7f6_4e2a_9f56_6233ba93d680 {
+            get {
+                object obj = ResourceManager.GetObject("438b4141-d7f6-4e2a-9f56-6233ba93d680", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap istockphoto_1200064810_170667a {
             get {
                 object obj = ResourceManager.GetObject("istockphoto-1200064810-170667a", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap mikrotik_uploaded_icon {
+            get {
+                object obj = ResourceManager.GetObject("mikrotik_uploaded_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
