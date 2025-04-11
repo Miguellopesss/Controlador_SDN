@@ -76,6 +76,7 @@
             // pictureBox1
             // 
             pictureBox1.BackColor = SystemColors.Control;
+            pictureBox1.BackgroundImage = Properties.Resources.istockphoto_1200064810_170667a;
             pictureBox1.ErrorImage = null;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
             pictureBox1.InitialImage = null;
@@ -170,7 +171,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
-            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+            BackgroundImage = Properties.Resources._438b4141_d7f6_4e2a_9f56_6233ba93d680;
             ClientSize = new Size(1327, 776);
             Controls.Add(label1);
             Controls.Add(listBox1);
@@ -185,6 +186,7 @@
             Controls.Add(password);
             Controls.Add(username);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "LoginForm";
             StartPosition = FormStartPosition.CenterScreen;

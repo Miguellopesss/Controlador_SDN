@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static LTI_Mikrotik.Form1;
+using static LTI_Mikrotik.MainForm;
+using QRCoder;
+using Microsoft.VisualBasic;
 
 namespace LTI_Mikrotik
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private readonly HttpClient client = new HttpClient();
         private List<SecurityProfile> perfisSeguranca = new List<SecurityProfile>();
@@ -40,18 +42,28 @@ namespace LTI_Mikrotik
         private List<WireguardPeer> wireguardPeers = new();
 
 
-        public Form1(Device device)
+        public MainForm(Device device)
         {
             InitializeComponent();
             this.device = device;
             this.IP = device.ipAddress;
-            urlLink = $"http://{IP}/rest/";
+            urlLink = $"https://{IP}/rest/";
+
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
+            };
+
+            client = new HttpClient(handler);
+
             var byteArray = Encoding.ASCII.GetBytes($"{device.username}:{device.password}");
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
-            PreencherComboboxSecurityProfile();
+
+            
             this.FormClosed += Form1_FormClosed;
         }
+
 
         private void Form1_FormClosed(object? sender, FormClosedEventArgs e)
         {
@@ -80,19 +92,14 @@ namespace LTI_Mikrotik
             TabPage tabPage = tabControl.TabPages[e.Index];
             Rectangle tabRect = tabControl.GetTabRect(e.Index);
 
-            // Verificar se a aba é a aba ativa
             if (e.Index == tabControl.SelectedIndex)
             {
-                // Desenhar o fundo da aba ativa com uma cor diferente
                 e.Graphics.FillRectangle(Brushes.LightBlue, tabRect);
             }
             else
             {
-                // Desenhar o fundo das outras abas
                 e.Graphics.FillRectangle(SystemBrushes.Control, tabRect);
             }
-
-            // Desenhar o texto da aba
             TextRenderer.DrawText(e.Graphics, tabPage.Text, tabPage.Font, tabRect, tabPage.ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
 
@@ -102,7 +109,7 @@ namespace LTI_Mikrotik
         private async void Form1_Load(object sender, EventArgs e)
         {
 
-
+            PreencherComboboxSecurityProfile();
             await CarregarPerfisDeSegurancaAsync();
             await CarregarInterfacesWireless();
             await CarregarTodasInterfaces();
@@ -117,6 +124,8 @@ namespace LTI_Mikrotik
             await CarregarSecurityProfilesAsync();
             await CarregarWireGuardInterfacesAsync();
             await CarregarWireguardPeersAsync();
+            await PreencherComboBoxComIpsDisponiveisAsync();
+            
             comboBox16.SelectedIndexChanged += comboBox16_SelectedIndexChanged!;
             comboBox14.SelectedIndexChanged += comboBox14_SelectedIndexChanged;
 
@@ -463,7 +472,7 @@ namespace LTI_Mikrotik
             if (response.IsSuccessStatusCode)
             {
                 MessageBox.Show("Rota atualizada com sucesso.");
-                await CarregarRotas(); // Atualiza a listBox4
+                await CarregarRotas();
             }
             else
             {
@@ -670,7 +679,7 @@ namespace LTI_Mikrotik
                 if (response.IsSuccessStatusCode)
                 {
                     MessageBox.Show("Endereço apagado com sucesso.");
-                    await CarregarEnderecosIP(); // atualiza a lista
+                    await CarregarEnderecosIP();
                     enderecoSelecionado = null;
                     textBox7.Clear();
                     textBox8.Clear();
@@ -700,7 +709,6 @@ namespace LTI_Mikrotik
                 return;
             }
 
-            // Preenche o network automaticamente se estiver vazio
             if (string.IsNullOrWhiteSpace(network))
             {
                 int barraIndex = address.IndexOf('/');
@@ -825,10 +833,9 @@ namespace LTI_Mikrotik
             {
                 dnsStaticSelecionado = dnsStaticEntries[index];
 
-                // Preencher os campos
                 textBox11.Text = dnsStaticSelecionado.Name;
                 textBox13.Text = dnsStaticSelecionado.Address;
-                comboBox3.SelectedItem = "A"; // Fixo, se só tiveres esse
+                comboBox3.SelectedItem = "A";
             }
         }
 
@@ -1047,6 +1054,15 @@ namespace LTI_Mikrotik
                 return;
             }
 
+            var confirmar = MessageBox.Show(
+                $"Tens a certeza que queres remover o servidor DHCP '{dhcpSelecionado.Name}'?",
+                "Confirmar remoção",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (confirmar != DialogResult.Yes)
+                return;
+
             HttpResponseMessage response = await client.DeleteAsync($"{urlLink}ip/dhcp-server/{dhcpSelecionado.Id}");
 
             if (response.IsSuccessStatusCode)
@@ -1060,6 +1076,7 @@ namespace LTI_Mikrotik
                 MessageBox.Show($"Erro ao remover DHCP:\n{response.StatusCode}\n{erro}");
             }
         }
+
 
         private async void button19_Click(object sender, EventArgs e)
         {
@@ -1171,7 +1188,7 @@ namespace LTI_Mikrotik
                 if (response.IsSuccessStatusCode)
                 {
                     MessageBox.Show("DHCP Server criado com sucesso.");
-                    await CarregarDhcpServersAsync(); // se tiveres esta função para atualizar a lista
+                    await CarregarDhcpServersAsync();
                     textBox14.Clear();
                     textBox15.Clear();
                     comboBox5.SelectedIndex = -1;
@@ -1344,7 +1361,7 @@ namespace LTI_Mikrotik
 
         private void button26_Click(object sender, EventArgs e)
         {
-            this.Close(); // Fecha o Form1 e ativa a logica do FormClosed
+            this.Close();
             MessageBox.Show("Sessao fechada!");
         }
 
@@ -1403,6 +1420,15 @@ namespace LTI_Mikrotik
                 return;
             }
 
+            var confirmar = MessageBox.Show(
+                $"Tens a certeza que queres remover a bridge '{bridgeSelecionada.Name}'?",
+                "Confirmar remoção",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (confirmar != DialogResult.Yes)
+                return;
+
             HttpResponseMessage response = await client.DeleteAsync($"{urlLink}interface/bridge/{bridgeSelecionada.Id}");
 
             if (response.IsSuccessStatusCode)
@@ -1419,6 +1445,7 @@ namespace LTI_Mikrotik
                 MessageBox.Show($"Erro ao apagar:\n{response.StatusCode}\n{erro}");
             }
         }
+
 
         private async void button28_Click_1(object sender, EventArgs e)
         {
@@ -1540,7 +1567,6 @@ namespace LTI_Mikrotik
             {
                 portSelecionado = bridgePorts[listBox10.SelectedIndex];
 
-                // Preencher as ComboBoxes se os valores existirem
                 if (!string.IsNullOrWhiteSpace(portSelecionado.Interface))
                     comboBox9.SelectedItem = portSelecionado.Interface;
 
@@ -1559,6 +1585,15 @@ namespace LTI_Mikrotik
                 return;
             }
 
+            var confirmar = MessageBox.Show(
+                $"Tens a certeza que queres remover o port '{portSelecionado.Interface}' da bridge '{portSelecionado.Bridge}'?",
+                "Confirmar remoção",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (confirmar != DialogResult.Yes)
+                return;
+
             HttpResponseMessage response = await client.DeleteAsync($"{urlLink}interface/bridge/port/{portSelecionado.Id}");
 
             if (response.IsSuccessStatusCode)
@@ -1567,7 +1602,6 @@ namespace LTI_Mikrotik
                 await CarregarBridgesAsync();
                 await CarregarPortsAsync();
                 LimparCamposPortBridge();
-
             }
             else
             {
@@ -1575,6 +1609,7 @@ namespace LTI_Mikrotik
                 MessageBox.Show($"Erro ao apagar port:\n{response.StatusCode}\n{erro}");
             }
         }
+
 
         private async void button30_Click(object sender, EventArgs e)
         {
@@ -1659,12 +1694,12 @@ namespace LTI_Mikrotik
 
         private void LimparCamposPortBridge()
         {
-            textBox22.Clear();   // para criar nova bridge
-            textBox24.Clear();   // para atualizar bridge
-            comboBox9.SelectedIndex = -1;  // Interface (update port)
-            comboBox10.SelectedIndex = -1; // Bridge (update port)
-            comboBox11.SelectedIndex = -1; // Interface (create port)
-            comboBox12.SelectedIndex = -1; // Bridge (create port)
+            textBox22.Clear(); 
+            textBox24.Clear();  
+            comboBox9.SelectedIndex = -1; 
+            comboBox10.SelectedIndex = -1; 
+            comboBox11.SelectedIndex = -1;
+            comboBox12.SelectedIndex = -1; 
         }
 
         private async Task CarregarSecurityProfilesAsync()
@@ -1708,12 +1743,9 @@ namespace LTI_Mikrotik
 
                 textBox26.Text = selectedProfile.Name;
 
-                // Atualizar Mode
                 int modeIndex = comboBox17.Items.IndexOf(selectedProfile.Mode);
                 comboBox17.SelectedIndex = modeIndex >= 0 ? modeIndex : -1;
 
-                // Atualizar Authentication Type
-                // Verifica se o valor exato existe nos items
                 int authIndex = comboBox16.Items.IndexOf(selectedProfile.AuthenticationTypes);
                 if (authIndex >= 0)
                 {
@@ -1722,10 +1754,9 @@ namespace LTI_Mikrotik
                 else
                 {
                     comboBox16.SelectedIndex = -1;
-                    comboBox16.Text = selectedProfile.AuthenticationTypes; // mostra como texto mesmo que não esteja na lista
+                    comboBox16.Text = selectedProfile.AuthenticationTypes;
                 }
 
-                // Força atualização dos textboxes WPA/WPA2
                 comboBox16_SelectedIndexChanged(comboBox16, EventArgs.Empty);
             }
         }
@@ -1736,8 +1767,8 @@ namespace LTI_Mikrotik
             textBox26.Clear();
             comboBox17.SelectedIndex = -1;
             comboBox16.SelectedIndex = -1;
-            textBox25.Clear(); // WPA
-            textBox27.Clear(); // WPA2
+            textBox25.Clear();
+            textBox27.Clear(); 
             textBox25.Enabled = false;
             textBox27.Enabled = false;
 
@@ -1766,7 +1797,7 @@ namespace LTI_Mikrotik
                 if (response.IsSuccessStatusCode)
                 {
                     MessageBox.Show("Perfil apagado com sucesso.");
-                    await CarregarSecurityProfilesAsync(); // Atualiza lista
+                    await CarregarSecurityProfilesAsync();
                 }
                 else
                 {
@@ -1784,14 +1815,12 @@ namespace LTI_Mikrotik
 
         private void PreencherComboboxSecurityProfile()
         {
-            // Para edição
-            comboBox17.Items.Clear(); // Mode
+            comboBox17.Items.Clear();
             comboBox17.Items.AddRange(new object[] { "none", "static-keys-required", "static-keys-optional", "dynamic-keys" });
 
-            comboBox16.Items.Clear(); // Authentication Types
+            comboBox16.Items.Clear();
             comboBox16.Items.AddRange(new object[] { "wpa-psk", "wpa2-psk", "wpa-eap", "wpa2-eap", "wpa2-psk,wpa-psk" });
 
-            // Para criação
             comboBox13.Items.Clear();
             comboBox13.Items.AddRange(new object[] { "none", "static-keys-required", "static-keys-optional", "dynamic-keys" });
 
@@ -1805,21 +1834,18 @@ namespace LTI_Mikrotik
         {
             string authType = comboBox16.SelectedItem?.ToString()?.ToLower() ?? "";
 
-            // WPA2-PSK → Ativa WPA2 textbox, desativa WPA
             if (authType.Contains("wpa2-psk") && !authType.Contains("wpa-psk"))
             {
-                textBox27.Enabled = true;   // WPA2 Pre-shared key
-                textBox25.Enabled = false;  // WPA Pre-shared key
+                textBox27.Enabled = true; 
+                textBox25.Enabled = false; 
                 textBox25.Clear();
             }
-            // WPA-PSK → Ativa WPA textbox, desativa WPA2
             else if (authType.Contains("wpa-psk") && !authType.Contains("wpa2-psk"))
             {
                 textBox25.Enabled = true;
                 textBox27.Enabled = false;
                 textBox27.Clear();
             }
-            // Ambos → Ativa os dois
             else if (authType.Contains("wpa2-psk") && authType.Contains("wpa-psk"))
             {
                 textBox25.Enabled = true;
@@ -1827,7 +1853,6 @@ namespace LTI_Mikrotik
             }
             else
             {
-                // Nenhum → Desativa ambos
                 textBox25.Enabled = false;
                 textBox27.Enabled = false;
                 textBox25.Clear();
@@ -1841,8 +1866,8 @@ namespace LTI_Mikrotik
 
             if (authType.Contains("wpa2-psk") && !authType.Contains("wpa-psk"))
             {
-                textBox23.Enabled = true;   // WPA2 Pre-shared key
-                textBox28.Enabled = false;  // WPA Pre-shared key
+                textBox23.Enabled = true;
+                textBox28.Enabled = false;
                 textBox28.Clear();
             }
             else if (authType.Contains("wpa-psk") && !authType.Contains("wpa2-psk"))
@@ -2014,7 +2039,6 @@ namespace LTI_Mikrotik
                 {
                     MessageBox.Show("Perfil criado com sucesso.");
                     await CarregarSecurityProfilesAsync();
-                    // Limpar campos
                     textBox29.Clear();
                     textBox28.Clear();
                     textBox23.Clear();
@@ -2111,6 +2135,7 @@ namespace LTI_Mikrotik
                     {
                         listBox13.Items.Add($"Name: {peer.Name}");
                         listBox13.Items.Add($"Public Key: {peer.PublicKey}");
+                        listBox13.Items.Add($"Client Address: {peer.ClientAddress}");
                         listBox13.Items.Add("------------------------");
                     }
                 }
@@ -2145,7 +2170,9 @@ namespace LTI_Mikrotik
             [JsonPropertyName("private-key")]
             public string PrivateKey { get; set; } = string.Empty;
 
-            // Podes adicionar mais propriedades se necessário
+            [JsonPropertyName("client-address")]
+            public string ClientAddress { get; set; } = string.Empty;
+
         }
 
         private async void button36_Click(object sender, EventArgs e)
@@ -2220,29 +2247,126 @@ namespace LTI_Mikrotik
         }
 
 
+        private async Task MostrarQrCodeDoPeerAsync(WireguardPeer peer)
+        {
+            try
+            {
+                var configRequestBody = new Dictionary<string, string>
+                {
+                    [".id"] = peer.Id 
+                };
+
+                var content = new StringContent(JsonSerializer.Serialize(configRequestBody), Encoding.UTF8, "application/json");
+                var configResponse = await client.PostAsync($"{urlLink}interface/wireguard/peers/show-client-config", content);
+
+                if (configResponse.IsSuccessStatusCode)
+                {
+                    string configJson = await configResponse.Content.ReadAsStringAsync();
+
+                    using var doc = JsonDocument.Parse(configJson);
+                    var root = doc.RootElement;
+
+                    string? configText = root[0].GetProperty("conf").GetString();
+                    if (configText == null)
+                    {
+                        MessageBox.Show("A configuração do peer não foi encontrada.", "Erro");
+                        return;
+                    }
+
+
+
+                    if (Encoding.UTF8.GetByteCount(configText) < 1663)
+                    {
+                        QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                        QRCodeData qrCodeData = qrGenerator.CreateQrCode(configText, QRCodeGenerator.ECCLevel.Q);
+                        QRCode qrCode = new QRCode(qrCodeData);
+                        Bitmap qrImage = qrCode.GetGraphic(20);
+
+                        pictureBoxQrCode.Image = qrImage;
+                    }
+                    else
+                    {
+                        pictureBoxQrCode.Image = null;
+                        MessageBox.Show("A configuração é demasiado grande para gerar QR Code.", "Aviso");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Falha ao obter configuração do peer para QR Code.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao mostrar QR Code do peer: " + ex.Message);
+            }
+        }
+
+        private async Task PreencherComboBoxComIpsDisponiveisAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync($"{urlLink}interface/wireguard/peers");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Erro ao obter peers para verificar IPs usados.");
+                    return;
+                }
+
+                string json = await response.Content.ReadAsStringAsync();
+                var peers = JsonSerializer.Deserialize<List<WireguardPeer>>(json);
+                var ipsEmUso = new HashSet<string>();
+
+                if (peers != null)
+                {
+                    foreach (var peer in peers)
+                    {
+                        if (!string.IsNullOrWhiteSpace(peer.ClientAddress))
+                        {
+                            string ip = peer.ClientAddress.Split('/')[0];
+                            ipsEmUso.Add(ip);
+                        }
+                    }
+                }
+
+                List<string> ipsDisponiveis = new List<string>();
+                for (int i = 2; i <= 20; i++)
+                {
+                    string ip = $"10.10.1.{i}";
+                    if (!ipsEmUso.Contains(ip))
+                        ipsDisponiveis.Add(ip);
+                }
+                comboBox18.Items.Clear();
+                comboBox18.Items.AddRange(ipsDisponiveis.ToArray());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao preencher IPs disponíveis: " + ex.Message);
+            }
+        }
+
+
         private async void button3_Click_2(object sender, EventArgs e)
         {
             string selectedInterface = comboBox15.SelectedItem?.ToString() ?? "";
-            string allowedAddress = textBox30.Text.Trim(); // Allowed Address
-            string clientAddress = textBox32.Text.Trim();  // Client Address
-            string clientDns = textBox33.Text.Trim();      // Client DNS
-            string clientEndpoint = textBox34.Text.Trim(); // Client Endpoint
+            string selectedIp = comboBox18.SelectedItem?.ToString() ?? ""; 
 
-            if (string.IsNullOrWhiteSpace(selectedInterface))
+            string clientDns = textBox33.Text.Trim();
+            string clientEndpoint = textBox34.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(selectedInterface) || string.IsNullOrWhiteSpace(selectedIp))
             {
-                MessageBox.Show("Preenche pelo a interface");
+                MessageBox.Show("Seleciona uma Interface e um IP disponível.");
                 return;
             }
 
             var body = new Dictionary<string, string>
             {
                 ["interface"] = selectedInterface,
-                ["private-key"] = "auto",    // "auto" será a Private Key
-                ["allowed-address"] = string.IsNullOrWhiteSpace(allowedAddress) ? "::/0" : allowedAddress
+                ["private-key"] = "auto",
+                ["allowed-address"] = $"{selectedIp}/32",
+                ["client-address"] = $"{selectedIp}/32"
             };
-
-            if (!string.IsNullOrWhiteSpace(clientAddress))
-                body["client-address"] = clientAddress;
 
             if (!string.IsNullOrWhiteSpace(clientDns))
                 body["client-dns"] = clientDns;
@@ -2262,27 +2386,69 @@ namespace LTI_Mikrotik
 
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("Peer criado com sucesso.");
-                    await CarregarWireguardPeersAsync();
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var jsonDoc = JsonDocument.Parse(jsonResponse);
+                    string? peerId = jsonDoc.RootElement.GetProperty(".id").GetString();
+                    if (peerId == null)
+                    {
+                        MessageBox.Show("O ID do peer não foi encontrado.", "Erro");
+                        return;
+                    }
 
-                    // Gerar texto da configuração com a chave privada como "auto"
-                    string config = "[Interface]\n";
-                    config += "PrivateKey = auto\n";  // PrivateKey definida como "auto"
-                    config += $"Address = {clientAddress}/32\n";
-                    if (!string.IsNullOrWhiteSpace(clientDns))
-                        config += $"DNS = {clientDns}\n";
 
-                    config += "\n[Peer]\n";
-                    config += $"PublicKey = iDq4OJoEHI2u2i0wmOCLqGN/gtHibMR7JFKzvSQcCwc=\n"; // Removida a chave pública do código
-                    config += $"AllowedIPs = {allowedAddress}/0, ::/0\n";
-                    config += $"Endpoint = {clientEndpoint}\n";
+                    var configRequestBody = new Dictionary<string, string> { [".id"] = peerId };
+                    var configContent = new StringContent(JsonSerializer.Serialize(configRequestBody), Encoding.UTF8, "application/json");
+                    var configResponse = await client.PostAsync($"{urlLink}interface/wireguard/peers/show-client-config", configContent);
 
-                    // Guardar em ficheiro .txt
-                    string fileName = $"wg_client_config_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
-                    string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName);
-                    await File.WriteAllTextAsync(filePath, config);
+                    if (configResponse.IsSuccessStatusCode)
+                    {
+                        string configJson = await configResponse.Content.ReadAsStringAsync();
+                        var doc = JsonDocument.Parse(configJson);
+                        var root = doc.RootElement;
+                        string? configText = root[0].GetProperty("conf").GetString();
+                        if (configText == null)
+                        {
+                            MessageBox.Show("A configuração do peer não foi encontrada.", "Erro");
+                            return;
+                        }
 
-                    MessageBox.Show($"Configuração exportada para:\n{filePath}", "Exportação concluída");
+
+                        string fileName = $"wg_client_config_{DateTime.Now:yyyyMMdd_HHmmss}.conf";
+                        string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), fileName);
+                        await File.WriteAllTextAsync(filePath, configText);
+
+                        try
+                        {
+                            if (Encoding.UTF8.GetByteCount(configText) < 1663)
+                            {
+                                QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                                QRCodeData qrCodeData = qrGenerator.CreateQrCode(configText, QRCodeGenerator.ECCLevel.Q);
+                                QRCode qrCode = new QRCode(qrCodeData);
+                                Bitmap qrImage = qrCode.GetGraphic(20);
+                                pictureBoxQrCode.Image = qrImage;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Configuração criada, mas é demasiado grande para QR Code.", "Aviso");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Erro ao gerar QR Code: " + ex.Message);
+                        }
+
+                        MessageBox.Show($"Peer criado e configuração guardada:\n{filePath}", "Sucesso");
+                        await CarregarWireguardPeersAsync();
+                        comboBox15.SelectedIndex = -1;
+                        comboBox18.SelectedIndex = -1;
+                        textBox33.Clear();
+                        textBox34.Clear();
+                        await PreencherComboBoxComIpsDisponiveisAsync();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Peer criado, mas falhou a exportação da configuração.");
+                    }
                 }
                 else
                 {
@@ -2295,6 +2461,7 @@ namespace LTI_Mikrotik
                 MessageBox.Show("Erro: " + ex.Message);
             }
         }
+
 
 
         private async void button37_Click(object sender, EventArgs e)
@@ -2317,7 +2484,8 @@ namespace LTI_Mikrotik
                 if (response.IsSuccessStatusCode)
                 {
                     MessageBox.Show("Peer apagado com sucesso.");
-                    await CarregarWireguardPeersAsync(); // Atualiza a listBox
+                    await CarregarWireguardPeersAsync();
+                    await PreencherComboBoxComIpsDisponiveisAsync();
                 }
                 else
                 {
@@ -2332,19 +2500,29 @@ namespace LTI_Mikrotik
         }
 
 
-        private void listBox13_SelectedIndexChanged(object sender, EventArgs e)
+        private async void listBox13_SelectedIndexChanged(object sender, EventArgs e)
         {
             int index = listBox13.SelectedIndex;
 
-            // Cada peer tem 4 linhas: Name, PubKey, PrivKey, separador
             int peerIndex = index / 4;
 
             if (peerIndex >= 0 && peerIndex < wireguardPeers.Count)
             {
                 peerSelecionado = wireguardPeers[peerIndex];
+
+                await MostrarQrCodeDoPeerAsync(peerSelecionado);
             }
         }
 
+        private void label60_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label64_Click(object sender, EventArgs e)
+        {
+
+        }
     }
     public class AddressPool
         {
@@ -2380,8 +2558,6 @@ namespace LTI_Mikrotik
             return $"Port: {Interface} -> Bridge: {Bridge}";
         }
     }
-
-
 
 
     public class WirelessInterface
@@ -2463,11 +2639,8 @@ namespace LTI_Mikrotik
         [JsonPropertyName("allow-remote-requests")]
         public string AllowRemoteRequests { get; set; } = "";
 
-        // Propriedade auxiliar legível
         public string RemoteRequestStatus => AllowRemoteRequests == "true" ? "Enabled" : "Disabled";
     }
-
-
 
 
 
@@ -2477,7 +2650,7 @@ namespace LTI_Mikrotik
         [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
         [JsonPropertyName("type")] public string Type { get; set; } = string.Empty;
         [JsonPropertyName("address")] public string Address { get; set; } = string.Empty;
-        [JsonPropertyName("disabled")] public string Disabled { get; set; } = "false"; // <- Adicionado
+        [JsonPropertyName("disabled")] public string Disabled { get; set; } = "false";
 
         public override string ToString()
         {
@@ -2485,7 +2658,6 @@ namespace LTI_Mikrotik
             return $"[{status}] Name: {Name} -> Address: {Address}";
         }
     }
-
 
 
     public class DhcpServer
@@ -2501,8 +2673,6 @@ namespace LTI_Mikrotik
             return $"{Name} | Interface: {Interface} | Lease Time: {LeaseTime} | Pool: {AddressPool}";
         }
     }
-
-
 
 
 

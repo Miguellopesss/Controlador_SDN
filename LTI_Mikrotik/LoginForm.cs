@@ -176,13 +176,18 @@ namespace LTI_Mikrotik
 
         private async Task<bool> ConnectToDevice(Device device)
         {
-            var urlLogin = $"http://{device.ipAddress}/rest/interface";
+            var urlLogin = $"https://{device.ipAddress}/rest/interface";
 
-            using (HttpClient httpClient = new HttpClient())
+            var byteArray = Encoding.ASCII.GetBytes($"{device.username}:{device.password}");
+
+            // Handler que ignora problemas com certificado (autoassinado, etc.)
+            var handler = new HttpClientHandler
             {
-                ServicePointManager.ServerCertificateValidationCallback += (sender2, cert, chain, sslPolicyErrors) => true;
+                ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true
+            };
 
-                var byteArray = Encoding.ASCII.GetBytes($"{device.username}:{device.password}");
+            using (HttpClient httpClient = new HttpClient(handler))
+            {
                 httpClient.DefaultRequestHeaders.Authorization =
                     new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 
@@ -193,7 +198,7 @@ namespace LTI_Mikrotik
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        Form1 form1 = new Form1(device);
+                        MainForm form1 = new MainForm(device);
                         form1.FormClosed += (s, args) =>
                         {
                             username.Text = "";
@@ -219,6 +224,7 @@ namespace LTI_Mikrotik
                 }
             }
         }
+
     }
 
 
