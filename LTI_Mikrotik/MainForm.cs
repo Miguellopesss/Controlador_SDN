@@ -60,7 +60,7 @@ namespace LTI_Mikrotik
             client.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 
-            
+
             this.FormClosed += Form1_FormClosed;
         }
 
@@ -125,7 +125,7 @@ namespace LTI_Mikrotik
             await CarregarWireGuardInterfacesAsync();
             await CarregarWireguardPeersAsync();
             await PreencherComboBoxComIpsDisponiveisAsync();
-            
+
             comboBox16.SelectedIndexChanged += comboBox16_SelectedIndexChanged!;
             comboBox14.SelectedIndexChanged += comboBox14_SelectedIndexChanged;
 
@@ -836,6 +836,7 @@ namespace LTI_Mikrotik
                 textBox11.Text = dnsStaticSelecionado.Name;
                 textBox13.Text = dnsStaticSelecionado.Address;
                 comboBox3.SelectedItem = "A";
+
             }
         }
 
@@ -1474,6 +1475,7 @@ namespace LTI_Mikrotik
                 LimparCamposPortBridge();
                 textBox24.Clear();
                 await CarregarBridgesAsync();
+                await CarregarPortsAsync();
 
             }
             else
@@ -1694,12 +1696,12 @@ namespace LTI_Mikrotik
 
         private void LimparCamposPortBridge()
         {
-            textBox22.Clear(); 
-            textBox24.Clear();  
-            comboBox9.SelectedIndex = -1; 
-            comboBox10.SelectedIndex = -1; 
+            textBox22.Clear();
+            textBox24.Clear();
+            comboBox9.SelectedIndex = -1;
+            comboBox10.SelectedIndex = -1;
             comboBox11.SelectedIndex = -1;
-            comboBox12.SelectedIndex = -1; 
+            comboBox12.SelectedIndex = -1;
         }
 
         private async Task CarregarSecurityProfilesAsync()
@@ -1768,7 +1770,7 @@ namespace LTI_Mikrotik
             comboBox17.SelectedIndex = -1;
             comboBox16.SelectedIndex = -1;
             textBox25.Clear();
-            textBox27.Clear(); 
+            textBox27.Clear();
             textBox25.Enabled = false;
             textBox27.Enabled = false;
 
@@ -1836,8 +1838,8 @@ namespace LTI_Mikrotik
 
             if (authType.Contains("wpa2-psk") && !authType.Contains("wpa-psk"))
             {
-                textBox27.Enabled = true; 
-                textBox25.Enabled = false; 
+                textBox27.Enabled = true;
+                textBox25.Enabled = false;
                 textBox25.Clear();
             }
             else if (authType.Contains("wpa-psk") && !authType.Contains("wpa2-psk"))
@@ -1972,6 +1974,7 @@ namespace LTI_Mikrotik
                 {
                     MessageBox.Show("Perfil atualizado com sucesso.");
                     await CarregarSecurityProfilesAsync();
+                    await CarregarPerfisDeSegurancaAsync();
                 }
                 else
                 {
@@ -2039,6 +2042,7 @@ namespace LTI_Mikrotik
                 {
                     MessageBox.Show("Perfil criado com sucesso.");
                     await CarregarSecurityProfilesAsync();
+                    await CarregarPerfisDeSegurancaAsync();
                     textBox29.Clear();
                     textBox28.Clear();
                     textBox23.Clear();
@@ -2223,18 +2227,18 @@ namespace LTI_Mikrotik
 
                 if (response.IsSuccessStatusCode)
                 {
-                    MessageBox.Show("DNS ativado com sucesso.");
+                    MessageBox.Show("DNS desativado com sucesso.");
                     await CarregarDnsAsync();
                 }
                 else
                 {
                     string erro = await response.Content.ReadAsStringAsync();
-                    MessageBox.Show($"Erro ao ativar DNS:\n{response.StatusCode}\n{erro}");
+                    MessageBox.Show($"Erro ao desativar DNS:\n{response.StatusCode}\n{erro}");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erro ao ativar DNS: " + ex.Message);
+                MessageBox.Show("Erro ao desativar DNS: " + ex.Message);
             }
         }
 
@@ -2253,7 +2257,7 @@ namespace LTI_Mikrotik
             {
                 var configRequestBody = new Dictionary<string, string>
                 {
-                    [".id"] = peer.Id 
+                    [".id"] = peer.Id
                 };
 
                 var content = new StringContent(JsonSerializer.Serialize(configRequestBody), Encoding.UTF8, "application/json");
@@ -2349,7 +2353,7 @@ namespace LTI_Mikrotik
         private async void button3_Click_2(object sender, EventArgs e)
         {
             string selectedInterface = comboBox15.SelectedItem?.ToString() ?? "";
-            string selectedIp = comboBox18.SelectedItem?.ToString() ?? ""; 
+            string selectedIp = comboBox18.SelectedItem?.ToString() ?? "";
 
             string clientDns = textBox33.Text.Trim();
             string clientEndpoint = textBox34.Text.Trim();
@@ -2520,6 +2524,101 @@ namespace LTI_Mikrotik
         }
 
         private void label64_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void button13_Click_1(object sender, EventArgs e)
+        {
+            string name = textBox9.Text.Trim();
+            string type = "A";
+            string address = textBox10.Text.Trim();
+
+
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(address))
+            {
+                MessageBox.Show("Preenche todos os campos.");
+                return;
+            }
+
+
+            var body = new Dictionary<string, string>
+            {
+                ["name"] = name,
+                ["type"] = type,
+                ["address"] = address
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{urlLink}ip/dns/static")
+            {
+                Content = content
+            };
+
+            try
+            {
+
+                HttpResponseMessage response = await client.SendAsync(request);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Entrada DNS estática criada/atualizada com sucesso.");
+                    await CarregarDnsStaticAsync();
+                }
+                else
+                {
+
+                    string erro = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Erro ao criar/atualizar:\n{response.StatusCode}\n{erro}");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro: " + ex.Message);
+            }
+        }
+
+        private async void button38_Click(object sender, EventArgs e)
+        {
+            if (dnsStaticSelecionado == null)
+            {
+                MessageBox.Show("Selecione um DNS estático para apagar.");
+                return;
+            }
+
+            var result = MessageBox.Show("Tem certeza que deseja apagar o DNS estático?", "Confirmação", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    HttpResponseMessage response = await client.DeleteAsync($"{urlLink}ip/dns/static/{dnsStaticSelecionado.Id}");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("DNS estático excluído com sucesso.");
+                        await CarregarDnsStaticAsync();
+                    }
+                    else
+                    {
+                        string erro = await response.Content.ReadAsStringAsync();
+                        MessageBox.Show($"Erro ao apagar DNS estático:\n{response.StatusCode}\n{erro}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro ao tentar apagar: " + ex.Message);
+                }
+            }
+        }
+
+        private void tabPage6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

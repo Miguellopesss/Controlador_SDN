@@ -28,11 +28,13 @@ namespace LTI_Mikrotik
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             tabControl1 = new TabControl();
             tabPage6 = new TabPage();
             label9 = new Label();
             listBox3 = new ListBox();
             tabPage1 = new TabPage();
+            label71 = new Label();
             groupBox1 = new GroupBox();
             button31 = new Button();
             Mode = new ComboBox();
@@ -53,6 +55,8 @@ namespace LTI_Mikrotik
             label1 = new Label();
             listBox1 = new ListBox();
             tabPage7 = new TabPage();
+            label73 = new Label();
+            label72 = new Label();
             groupBox17 = new GroupBox();
             label52 = new Label();
             label53 = new Label();
@@ -81,6 +85,10 @@ namespace LTI_Mikrotik
             label60 = new Label();
             listBox11 = new ListBox();
             tabPage2 = new TabPage();
+            label77 = new Label();
+            label76 = new Label();
+            label75 = new Label();
+            label74 = new Label();
             label49 = new Label();
             groupBox15 = new GroupBox();
             label51 = new Label();
@@ -108,6 +116,8 @@ namespace LTI_Mikrotik
             button4 = new Button();
             listBox2 = new ListBox();
             tabPage3 = new TabPage();
+            label67 = new Label();
+            label65 = new Label();
             groupBox9 = new GroupBox();
             button25 = new Button();
             label38 = new Label();
@@ -134,6 +144,8 @@ namespace LTI_Mikrotik
             label37 = new Label();
             listBox8 = new ListBox();
             tabPage9 = new TabPage();
+            label79 = new Label();
+            label78 = new Label();
             groupBox11 = new GroupBox();
             textBox18 = new TextBox();
             textBox19 = new TextBox();
@@ -150,6 +162,10 @@ namespace LTI_Mikrotik
             label48 = new Label();
             listBox9 = new ListBox();
             tabPage4 = new TabPage();
+            button38 = new Button();
+            label82 = new Label();
+            label81 = new Label();
+            label80 = new Label();
             button33 = new Button();
             button36 = new Button();
             groupBox8 = new GroupBox();
@@ -179,6 +195,8 @@ namespace LTI_Mikrotik
             label26 = new Label();
             listBox6 = new ListBox();
             tabPage5 = new TabPage();
+            label84 = new Label();
+            label83 = new Label();
             groupBox3 = new GroupBox();
             textBox3 = new TextBox();
             textBox4 = new TextBox();
@@ -195,6 +213,8 @@ namespace LTI_Mikrotik
             label10 = new Label();
             listBox4 = new ListBox();
             tabPage8 = new TabPage();
+            label86 = new Label();
+            label85 = new Label();
             groupBox4 = new GroupBox();
             label21 = new Label();
             comboBox2 = new ComboBox();
@@ -215,6 +235,7 @@ namespace LTI_Mikrotik
             label19 = new Label();
             listBox5 = new ListBox();
             tabPage10 = new TabPage();
+            label87 = new Label();
             pictureBoxQrCode = new PictureBox();
             button37 = new Button();
             groupBox19 = new GroupBox();
@@ -232,25 +253,6 @@ namespace LTI_Mikrotik
             label63 = new Label();
             listBox12 = new ListBox();
             button26 = new Button();
-            label65 = new Label();
-            label67 = new Label();
-            label71 = new Label();
-            label72 = new Label();
-            label73 = new Label();
-            label74 = new Label();
-            label75 = new Label();
-            label76 = new Label();
-            label77 = new Label();
-            label78 = new Label();
-            label79 = new Label();
-            label80 = new Label();
-            label81 = new Label();
-            label82 = new Label();
-            label83 = new Label();
-            label84 = new Label();
-            label85 = new Label();
-            label86 = new Label();
-            label87 = new Label();
             tabControl1.SuspendLayout();
             tabPage6.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -316,6 +318,7 @@ namespace LTI_Mikrotik
             tabPage6.TabIndex = 5;
             tabPage6.Text = "Interfaces";
             tabPage6.UseVisualStyleBackColor = true;
+            tabPage6.Click += tabPage6_Click;
             // 
             // label9
             // 
@@ -352,6 +355,16 @@ namespace LTI_Mikrotik
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Wireless";
             tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label71
+            // 
+            label71.AutoSize = true;
+            label71.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label71.Location = new Point(820, 56);
+            label71.Name = "label71";
+            label71.Size = new Size(99, 20);
+            label71.TabIndex = 19;
+            label71.Text = "Edit Wireless";
             // 
             // groupBox1
             // 
@@ -563,6 +576,26 @@ namespace LTI_Mikrotik
             tabPage7.TabIndex = 6;
             tabPage7.Text = "Security Profile";
             tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // label73
+            // 
+            label73.AutoSize = true;
+            label73.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label73.Location = new Point(820, 348);
+            label73.Name = "label73";
+            label73.Size = new Size(164, 20);
+            label73.TabIndex = 37;
+            label73.Text = "Create Security Profile";
+            // 
+            // label72
+            // 
+            label72.AutoSize = true;
+            label72.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label72.Location = new Point(820, 13);
+            label72.Name = "label72";
+            label72.Size = new Size(146, 20);
+            label72.TabIndex = 36;
+            label72.Text = "Edit Security Profile";
             // 
             // groupBox17
             // 
@@ -849,6 +882,46 @@ namespace LTI_Mikrotik
             tabPage2.Text = "Bridge";
             tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label77
+            // 
+            label77.AutoSize = true;
+            label77.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label77.Location = new Point(960, 333);
+            label77.Name = "label77";
+            label77.Size = new Size(88, 20);
+            label77.TabIndex = 44;
+            label77.Text = "Create Port";
+            // 
+            // label76
+            // 
+            label76.AutoSize = true;
+            label76.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label76.Location = new Point(666, 333);
+            label76.Name = "label76";
+            label76.Size = new Size(70, 20);
+            label76.TabIndex = 43;
+            label76.Text = "Edit Port";
+            // 
+            // label75
+            // 
+            label75.AutoSize = true;
+            label75.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label75.Location = new Point(312, 333);
+            label75.Name = "label75";
+            label75.Size = new Size(104, 20);
+            label75.TabIndex = 42;
+            label75.Text = "Create Bridge";
+            // 
+            // label74
+            // 
+            label74.AutoSize = true;
+            label74.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label74.Location = new Point(28, 333);
+            label74.Name = "label74";
+            label74.Size = new Size(86, 20);
+            label74.TabIndex = 41;
+            label74.Text = "Edit Bridge";
+            // 
             // label49
             // 
             label49.AutoSize = true;
@@ -1128,6 +1201,26 @@ namespace LTI_Mikrotik
             tabPage3.Text = "DHCP";
             tabPage3.UseVisualStyleBackColor = true;
             // 
+            // label67
+            // 
+            label67.AutoSize = true;
+            label67.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label67.Location = new Point(727, 33);
+            label67.Name = "label67";
+            label67.Size = new Size(129, 20);
+            label67.TabIndex = 32;
+            label67.Text = "Edit DHCP Server";
+            // 
+            // label65
+            // 
+            label65.AutoSize = true;
+            label65.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label65.Location = new Point(727, 354);
+            label65.Name = "label65";
+            label65.Size = new Size(147, 20);
+            label65.TabIndex = 31;
+            label65.Text = "Create DHCP Server";
+            // 
             // groupBox9
             // 
             groupBox9.BackColor = Color.Gainsboro;
@@ -1392,6 +1485,26 @@ namespace LTI_Mikrotik
             tabPage9.Text = "Address Pool";
             tabPage9.UseVisualStyleBackColor = true;
             // 
+            // label79
+            // 
+            label79.AutoSize = true;
+            label79.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label79.Location = new Point(717, 283);
+            label79.Name = "label79";
+            label79.Size = new Size(150, 20);
+            label79.TabIndex = 37;
+            label79.Text = "Create Address Pool";
+            // 
+            // label78
+            // 
+            label78.AutoSize = true;
+            label78.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label78.Location = new Point(717, 43);
+            label78.Name = "label78";
+            label78.Size = new Size(132, 20);
+            label78.TabIndex = 36;
+            label78.Text = "Edit Address Pool";
+            // 
             // groupBox11
             // 
             groupBox11.BackColor = Color.Gainsboro;
@@ -1541,6 +1654,7 @@ namespace LTI_Mikrotik
             // 
             // tabPage4
             // 
+            tabPage4.Controls.Add(button38);
             tabPage4.Controls.Add(label82);
             tabPage4.Controls.Add(label81);
             tabPage4.Controls.Add(label80);
@@ -1562,6 +1676,49 @@ namespace LTI_Mikrotik
             tabPage4.TabIndex = 3;
             tabPage4.Text = "DNS";
             tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // button38
+            // 
+            button38.BackColor = Color.Red;
+            button38.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button38.ForeColor = SystemColors.Control;
+            button38.Location = new Point(1099, 227);
+            button38.Name = "button38";
+            button38.Size = new Size(112, 44);
+            button38.TabIndex = 35;
+            button38.Text = "Delete";
+            button38.UseVisualStyleBackColor = false;
+            button38.Click += button38_Click;
+            // 
+            // label82
+            // 
+            label82.AutoSize = true;
+            label82.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label82.Location = new Point(911, 280);
+            label82.Name = "label82";
+            label82.Size = new Size(132, 20);
+            label82.TabIndex = 34;
+            label82.Text = "Create DNS Static";
+            // 
+            // label81
+            // 
+            label81.AutoSize = true;
+            label81.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label81.Location = new Point(541, 280);
+            label81.Name = "label81";
+            label81.Size = new Size(114, 20);
+            label81.TabIndex = 33;
+            label81.Text = "Edit DNS Static";
+            // 
+            // label80
+            // 
+            label80.AutoSize = true;
+            label80.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label80.Location = new Point(36, 289);
+            label80.Name = "label80";
+            label80.Size = new Size(120, 20);
+            label80.TabIndex = 32;
+            label80.Text = "Edit DNS Server";
             // 
             // button33
             // 
@@ -1732,6 +1889,7 @@ namespace LTI_Mikrotik
             // comboBox4
             // 
             comboBox4.FormattingEnabled = true;
+            comboBox4.Items.AddRange(new object[] { "A" });
             comboBox4.Location = new Point(132, 81);
             comboBox4.Name = "comboBox4";
             comboBox4.Size = new Size(125, 28);
@@ -1768,6 +1926,7 @@ namespace LTI_Mikrotik
             button13.TabIndex = 26;
             button13.Text = "Create";
             button13.UseVisualStyleBackColor = true;
+            button13.Click += button13_Click_1;
             // 
             // label23
             // 
@@ -1862,6 +2021,26 @@ namespace LTI_Mikrotik
             tabPage5.TabIndex = 4;
             tabPage5.Text = "Static Route";
             tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // label84
+            // 
+            label84.AutoSize = true;
+            label84.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label84.Location = new Point(714, 291);
+            label84.Name = "label84";
+            label84.Size = new Size(100, 20);
+            label84.TabIndex = 22;
+            label84.Text = "Create Route";
+            // 
+            // label83
+            // 
+            label83.AutoSize = true;
+            label83.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label83.Location = new Point(714, 40);
+            label83.Name = "label83";
+            label83.Size = new Size(82, 20);
+            label83.TabIndex = 21;
+            label83.Text = "Edit Route";
             // 
             // groupBox3
             // 
@@ -2027,6 +2206,26 @@ namespace LTI_Mikrotik
             tabPage8.Text = "IP Address";
             tabPage8.UseVisualStyleBackColor = true;
             // 
+            // label86
+            // 
+            label86.AutoSize = true;
+            label86.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label86.Location = new Point(707, 301);
+            label86.Name = "label86";
+            label86.Size = new Size(133, 20);
+            label86.TabIndex = 27;
+            label86.Text = "Create IP Address";
+            // 
+            // label85
+            // 
+            label85.AutoSize = true;
+            label85.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label85.Location = new Point(707, 39);
+            label85.Name = "label85";
+            label85.Size = new Size(115, 20);
+            label85.TabIndex = 26;
+            label85.Text = "Edit IP Address";
+            // 
             // groupBox4
             // 
             groupBox4.BackColor = Color.Gainsboro;
@@ -2127,6 +2326,7 @@ namespace LTI_Mikrotik
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(128, 28);
             comboBox1.TabIndex = 26;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // label20
             // 
@@ -2229,6 +2429,16 @@ namespace LTI_Mikrotik
             tabPage10.TabIndex = 9;
             tabPage10.Text = "Wireguard";
             tabPage10.UseVisualStyleBackColor = true;
+            // 
+            // label87
+            // 
+            label87.AutoSize = true;
+            label87.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label87.Location = new Point(226, 298);
+            label87.Name = "label87";
+            label87.Size = new Size(89, 20);
+            label87.TabIndex = 29;
+            label87.Text = "Create Peer";
             // 
             // pictureBoxQrCode
             // 
@@ -2400,196 +2610,6 @@ namespace LTI_Mikrotik
             button26.UseVisualStyleBackColor = false;
             button26.Click += button26_Click;
             // 
-            // label65
-            // 
-            label65.AutoSize = true;
-            label65.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label65.Location = new Point(727, 354);
-            label65.Name = "label65";
-            label65.Size = new Size(147, 20);
-            label65.TabIndex = 31;
-            label65.Text = "Create DHCP Server";
-            // 
-            // label67
-            // 
-            label67.AutoSize = true;
-            label67.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label67.Location = new Point(727, 33);
-            label67.Name = "label67";
-            label67.Size = new Size(129, 20);
-            label67.TabIndex = 32;
-            label67.Text = "Edit DHCP Server";
-            // 
-            // label71
-            // 
-            label71.AutoSize = true;
-            label71.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label71.Location = new Point(820, 56);
-            label71.Name = "label71";
-            label71.Size = new Size(99, 20);
-            label71.TabIndex = 19;
-            label71.Text = "Edit Wireless";
-            // 
-            // label72
-            // 
-            label72.AutoSize = true;
-            label72.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label72.Location = new Point(820, 13);
-            label72.Name = "label72";
-            label72.Size = new Size(146, 20);
-            label72.TabIndex = 36;
-            label72.Text = "Edit Security Profile";
-            // 
-            // label73
-            // 
-            label73.AutoSize = true;
-            label73.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label73.Location = new Point(820, 348);
-            label73.Name = "label73";
-            label73.Size = new Size(164, 20);
-            label73.TabIndex = 37;
-            label73.Text = "Create Security Profile";
-            // 
-            // label74
-            // 
-            label74.AutoSize = true;
-            label74.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label74.Location = new Point(28, 333);
-            label74.Name = "label74";
-            label74.Size = new Size(86, 20);
-            label74.TabIndex = 41;
-            label74.Text = "Edit Bridge";
-            // 
-            // label75
-            // 
-            label75.AutoSize = true;
-            label75.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label75.Location = new Point(312, 333);
-            label75.Name = "label75";
-            label75.Size = new Size(104, 20);
-            label75.TabIndex = 42;
-            label75.Text = "Create Bridge";
-            // 
-            // label76
-            // 
-            label76.AutoSize = true;
-            label76.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label76.Location = new Point(666, 333);
-            label76.Name = "label76";
-            label76.Size = new Size(70, 20);
-            label76.TabIndex = 43;
-            label76.Text = "Edit Port";
-            // 
-            // label77
-            // 
-            label77.AutoSize = true;
-            label77.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label77.Location = new Point(960, 333);
-            label77.Name = "label77";
-            label77.Size = new Size(88, 20);
-            label77.TabIndex = 44;
-            label77.Text = "Create Port";
-            // 
-            // label78
-            // 
-            label78.AutoSize = true;
-            label78.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label78.Location = new Point(717, 43);
-            label78.Name = "label78";
-            label78.Size = new Size(132, 20);
-            label78.TabIndex = 36;
-            label78.Text = "Edit Address Pool";
-            // 
-            // label79
-            // 
-            label79.AutoSize = true;
-            label79.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label79.Location = new Point(717, 283);
-            label79.Name = "label79";
-            label79.Size = new Size(150, 20);
-            label79.TabIndex = 37;
-            label79.Text = "Create Address Pool";
-            // 
-            // label80
-            // 
-            label80.AutoSize = true;
-            label80.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label80.Location = new Point(36, 289);
-            label80.Name = "label80";
-            label80.Size = new Size(120, 20);
-            label80.TabIndex = 32;
-            label80.Text = "Edit DNS Server";
-            // 
-            // label81
-            // 
-            label81.AutoSize = true;
-            label81.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label81.Location = new Point(541, 280);
-            label81.Name = "label81";
-            label81.Size = new Size(114, 20);
-            label81.TabIndex = 33;
-            label81.Text = "Edit DNS Static";
-            // 
-            // label82
-            // 
-            label82.AutoSize = true;
-            label82.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label82.Location = new Point(911, 280);
-            label82.Name = "label82";
-            label82.Size = new Size(132, 20);
-            label82.TabIndex = 34;
-            label82.Text = "Create DNS Static";
-            // 
-            // label83
-            // 
-            label83.AutoSize = true;
-            label83.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label83.Location = new Point(714, 40);
-            label83.Name = "label83";
-            label83.Size = new Size(82, 20);
-            label83.TabIndex = 21;
-            label83.Text = "Edit Route";
-            // 
-            // label84
-            // 
-            label84.AutoSize = true;
-            label84.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label84.Location = new Point(714, 291);
-            label84.Name = "label84";
-            label84.Size = new Size(100, 20);
-            label84.TabIndex = 22;
-            label84.Text = "Create Route";
-            // 
-            // label85
-            // 
-            label85.AutoSize = true;
-            label85.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label85.Location = new Point(707, 39);
-            label85.Name = "label85";
-            label85.Size = new Size(115, 20);
-            label85.TabIndex = 26;
-            label85.Text = "Edit IP Address";
-            // 
-            // label86
-            // 
-            label86.AutoSize = true;
-            label86.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label86.Location = new Point(707, 301);
-            label86.Name = "label86";
-            label86.Size = new Size(133, 20);
-            label86.TabIndex = 27;
-            label86.Text = "Create IP Address";
-            // 
-            // label87
-            // 
-            label87.AutoSize = true;
-            label87.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label87.Location = new Point(226, 298);
-            label87.Name = "label87";
-            label87.Size = new Size(89, 20);
-            label87.TabIndex = 29;
-            label87.Text = "Create Peer";
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -2600,6 +2620,7 @@ namespace LTI_Mikrotik
             Controls.Add(button26);
             Controls.Add(tabControl1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -2893,5 +2914,6 @@ namespace LTI_Mikrotik
         private Label label86;
         private Label label85;
         private Label label87;
+        private Button button38;
     }
 }
