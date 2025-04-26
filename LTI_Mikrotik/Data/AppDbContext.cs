@@ -8,7 +8,8 @@ namespace LTI_Mikrotik.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\Documentos\\Universidade\\LTI\\LTI-TL1\\LTI_Mikrotik\\Data\\Mikrotik.mdf;Integrated Security=True;Connect Timeout=30");
+            //ALTERAR O CAMINHO DA BASE DE DADOS AQUI
+            optionsBuilder.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\joaom\\Documents\\GitHub\\LTI-TL1\\LTI_Mikrotik\\Data\\Mikrotik.mdf;Integrated Security=True");
         }
     }
 }

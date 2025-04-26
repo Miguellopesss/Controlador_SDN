@@ -77,8 +77,8 @@
             // 
             pictureBox1.BackColor = SystemColors.Control;
             pictureBox1.BackgroundImage = Properties.Resources.istockphoto_1200064810_170667a;
+            pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
             pictureBox1.ErrorImage = null;
-            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
             pictureBox1.InitialImage = null;
             pictureBox1.Location = new Point(850, 118);
             pictureBox1.Name = "pictureBox1";
